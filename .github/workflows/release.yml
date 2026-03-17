@@ -71,14 +71,14 @@ jobs:
         shell: bash
 
       - name: Upload wheel artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheel-${{ matrix.os }}
           path: dist/*.whl
 
       - name: Upload sdist artifact (Ubuntu only)
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sdist
           path: dist/*.tar.gz
