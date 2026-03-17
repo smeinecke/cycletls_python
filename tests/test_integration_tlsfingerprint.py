@@ -1,8 +1,8 @@
 """
-Integration Tests against tlsfingerprint.com
+Integration Tests against tls.peet.ws
 
 Tests HTTP methods, headers, response parsing, and other integration
-functionality against the live tlsfingerprint.com service.
+functionality against the live tls.peet.ws service.
 
 Run with: pytest tests/test_integration_tlsfingerprint.py -v -m live
 Skip with: pytest -m "not live"
@@ -15,8 +15,8 @@ from cycletls import CycleTLS
 # Mark all tests in this module as live tests
 pytestmark = pytest.mark.live
 
-# Base URL for tlsfingerprint.com
-BASE_URL = "https://tlsfingerprint.com"
+# Base URL for tls.peet.ws
+BASE_URL = "https://tls.peet.ws"
 
 
 @pytest.fixture(scope="module")
@@ -244,7 +244,7 @@ class TestClientArchitecture:
 
 
 class TestAPIEndpoints:
-    """Test all tlsfingerprint.com API endpoints"""
+    """Test all tls.peet.ws API endpoints"""
 
     def test_api_all(self, cycle_client):
         """Test /api/all endpoint returns comprehensive data"""
@@ -279,7 +279,7 @@ class TestAPIEndpoints:
 
 
 class TestResponseMetadata:
-    """Test response metadata from tlsfingerprint.com"""
+    """Test response metadata from tls.peet.ws"""
 
     def test_ip_returned(self, cycle_client):
         """Test that client IP is returned"""
