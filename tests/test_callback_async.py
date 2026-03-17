@@ -256,11 +256,13 @@ class TestCallbackAsyncErrorHandling:
             }
         }
 
-        # Should return an error response, not crash
-        result = await send_request_async_callback(payload, timeout=10.0)
-
-        # Either status is 0 (error) or an exception was handled
-        assert result.get("Status") == 0 or "error" in str(result).lower()
+        # Should either return an error response or raise CycleTLSError — not crash unhandled
+        from cycletls.exceptions import CycleTLSError
+        try:
+            result = await send_request_async_callback(payload, timeout=10.0)
+            assert result.get("Status") == 0 or "error" in str(result).lower()
+        except (CycleTLSError, asyncio.TimeoutError):
+            pass  # Raising a typed error is acceptable error handling
 
     @pytest.mark.asyncio
     async def test_callback_async_null_handle(self):

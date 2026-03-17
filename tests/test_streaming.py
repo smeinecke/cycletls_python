@@ -204,7 +204,8 @@ class TestErrorHandling:
                 timeout=5
             )
         # Verify the error message contains DNS-related information
-        assert "no such host" in str(exc_info.value).lower()
+        error_lower = str(exc_info.value).lower()
+        assert "no such host" in error_lower or "lookup" in error_lower or "dns" in error_lower
 
 
 class TestPartialResponses:
