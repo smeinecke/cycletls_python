@@ -507,6 +507,21 @@ def _raise_for_error_response(data: dict) -> None:
     if not is_error_response:
         return  # Not an error, don't raise
 
+    # DNS/lookup failure (status 421 or DNS patterns) — check before timeout because a DNS
+    # lookup that times out contains both "lookup" and "i/o timeout"; DNS is more specific.
+    if status == 421 or _matches_any(
+        error_lower,
+        (
+            "no such host",
+            "lookup",
+            "dnserror",
+            "getaddrinfo",
+            "could not resolve",
+            "dns",
+        ),
+    ):
+        raise ConnectionError(f"DNS lookup failed: {error_msg}")
+
     # Timeout errors (status 408 or timeout patterns)
     if status == 408 or _matches_any(
         error_lower,
@@ -520,20 +535,6 @@ def _raise_for_error_response(data: dict) -> None:
         ),
     ):
         raise Timeout(f"Request timed out: {error_msg}")
-
-    # DNS/lookup failure (status 421 or DNS patterns)
-    if status == 421 or _matches_any(
-        error_lower,
-        (
-            "no such host",
-            "lookup",
-            "dnserror",
-            "getaddrinfo",
-            "could not resolve",
-            "dns",
-        ),
-    ):
-        raise ConnectionError(f"DNS lookup failed: {error_msg}")
 
     # Connection errors (general) - check BEFORE TLS status code to handle EOF, etc.
     # that might come with TLS-related status codes due to connection issues during handshake
