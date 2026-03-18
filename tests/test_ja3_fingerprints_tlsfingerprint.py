@@ -13,14 +13,15 @@ Skip with: pytest -m "not live"
 
 Based on: test_ja3_fingerprints.py
 """
+import os
 import pytest
 from cycletls import CycleTLS
 
 # Mark all tests in this module as live tests
 pytestmark = pytest.mark.live
 
-# Base URL for tls.peet.ws
-BASE_URL = "https://tls.peet.ws"
+# Base URL — override with TRACKME_URL to point at a local TrackMe instance
+BASE_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
 
 # Same test data as test_ja3_fingerprints.py
 JA3_FINGERPRINTS = [

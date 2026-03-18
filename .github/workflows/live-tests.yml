@@ -36,5 +36,28 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --all-extras --dev
 
+      - name: Generate TLS certificates for TrackMe
+        run: |
+          mkdir -p docker/trackme/certs
+          openssl req -x509 -newkey rsa:2048 \
+            -keyout docker/trackme/certs/key.pem \
+            -out docker/trackme/certs/chain.pem \
+            -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          # Combine system CAs with test CA so Go trusts the self-signed cert
+          cat /etc/ssl/certs/ca-certificates.crt docker/trackme/certs/chain.pem \
+            > /tmp/combined-test-cas.crt
+
+      - name: Build and start TrackMe
+        run: |
+          docker compose -f docker-compose.test.yml up -d --build
+          echo "Waiting for TrackMe to become ready..."
+          timeout 90 bash -c 'until curl -sf https://localhost:8443/api/clean >/dev/null 2>&1; do sleep 2; done'
+          echo "TrackMe is ready."
+
       - name: Run live tests
+        env:
+          TRACKME_URL: https://localhost:8443
+          SSL_CERT_FILE: /tmp/combined-test-cas.crt
         run: uv run pytest -v --color=yes --reruns=3 -m "live and not blocking" tests/

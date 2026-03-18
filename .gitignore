@@ -67,3 +67,6 @@ site/
 
 # Continuous Claude cache (local only)
 .claude/cache/
+
+# Generated test certificates for local TrackMe instance
+docker/trackme/certs/
