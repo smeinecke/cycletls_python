@@ -13,5 +13,6 @@ RUN apk add --no-cache libpcap ca-certificates
 
 WORKDIR /app
 COPY --from=builder /out/trackme .
+COPY --from=builder /trackme/static ./static/
 
 CMD ["./trackme"]
