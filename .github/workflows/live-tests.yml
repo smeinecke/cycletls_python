@@ -53,7 +53,7 @@ jobs:
         run: |
           docker compose -f docker-compose.test.yml up -d --build
           echo "Waiting for TrackMe to become ready..."
-          if ! timeout 90 bash -c 'until curl -sf https://localhost:8443/api/clean >/dev/null 2>&1; do sleep 2; done'; then
+          if ! timeout 90 bash -c 'until docker inspect --format "{{.State.Health.Status}}" cycletls_python-trackme-1 2>/dev/null | grep -q healthy; do sleep 2; done'; then
             echo "TrackMe did not become ready in time. Container logs:"
             docker logs cycletls_python-trackme-1
             exit 1
