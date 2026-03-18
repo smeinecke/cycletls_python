@@ -6,6 +6,10 @@ Based on CycleTLS/tests/insecureSkipVerify.test.ts
 import pytest
 from cycletls import CycleTLS
 
+# badssl.com is an external service that occasionally drops connections (EOF).
+# Retry up to 5 times with a short delay before treating a failure as real.
+pytestmark = pytest.mark.flaky(reruns=5, reruns_delay=2)
+
 
 @pytest.fixture
 def client():
