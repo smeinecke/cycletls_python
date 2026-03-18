@@ -1,0 +1,16 @@
+services:
+  trackme:
+    build:
+      context: ./docker/trackme
+    volumes:
+      - ./docker/trackme/certs:/app/certs:ro
+      - ./docker/trackme/config.json:/app/config.json:ro
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost:8443/api/clean && echo ok || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 12
+      start_period: 60s
