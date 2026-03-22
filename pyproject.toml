@@ -137,6 +137,10 @@ exclude = [
     "tests/",
     "examples/",
     "scripts/",
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.venv",
+    "**/.*"
 ]
 reportMissingImports = true
 reportMissingTypeStubs = false
