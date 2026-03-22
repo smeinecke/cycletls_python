@@ -17,15 +17,15 @@ jobs:
         python-version: ['3.12']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.26'
 
@@ -34,8 +34,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install build wheel setuptools
 
+      - name: Install Zig (Linux, for glibc 2.17 target)
+        if: runner.os == 'Linux'
+        run: |
+          ZIG_VERSION=0.13.0
+          wget -q "https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          tar xf "zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          ZIG="$PWD/zig-linux-x86_64-${ZIG_VERSION}/zig"
+          mkdir -p "$HOME/.local/bin"
+          printf '#!/bin/sh\nexec "%s" cc -target x86_64-linux-gnu.2.17 "$@"\n' "$ZIG" > "$HOME/.local/bin/zcc"
+          chmod +x "$HOME/.local/bin/zcc"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Build Go shared library (Linux)
         if: runner.os == 'Linux'
+        env:
+          CC: zcc
         run: |
           cd golang
           mkdir -p ../cycletls/dist
@@ -71,14 +85,14 @@ jobs:
         shell: bash
 
       - name: Upload wheel artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheel-${{ matrix.os }}
           path: dist/*.whl
 
       - name: Upload sdist artifact (Ubuntu only)
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sdist
           path: dist/*.tar.gz
@@ -105,7 +119,7 @@ jobs:
 
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist-artifacts
 
@@ -128,10 +142,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist-artifacts
 

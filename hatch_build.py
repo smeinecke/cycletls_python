@@ -8,6 +8,7 @@ the right binary for each OS/arch combination.
 from __future__ import annotations
 
 import platform
+import subprocess
 from pathlib import Path
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
@@ -72,6 +73,39 @@ class CycleTLSBuildHook(BuildHookInterface):
 
     PLUGIN_NAME = "cycletls-platform"
 
+    def _ensure_platform_binary(self, binary_name: str, dist_dir: Path) -> Path:
+        """Ensure the platform shared library exists, building it if needed."""
+        binary_path = dist_dir / binary_name
+        if binary_path.exists():
+            return binary_path
+
+        build_script = Path(self.root) / "scripts" / "build_shared_lib.sh"
+        if not build_script.exists():
+            raise RuntimeError(
+                f"Required shared library '{binary_name}' is missing and build script was not found "
+                f"at '{build_script}'."
+            )
+
+        try:
+            subprocess.run(
+                ["bash", str(build_script)],
+                cwd=self.root,
+                check=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            raise RuntimeError(
+                "Failed to build CycleTLS Go shared library during wheel build. "
+                "Ensure Go is installed and CGO can compile on this platform."
+            ) from exc
+
+        if not binary_path.exists():
+            raise RuntimeError(
+                f"Go build completed but expected shared library '{binary_name}' was not generated "
+                f"in '{dist_dir}'."
+            )
+
+        return binary_path
+
     def initialize(self, version: str, build_data: dict) -> None:
         """Configure the wheel tag and shared artifacts for this platform."""
         # --- Set platform wheel tag ---
@@ -85,10 +119,7 @@ class CycleTLSBuildHook(BuildHookInterface):
             return
 
         dist_dir = Path(self.root) / "cycletls" / "dist"
-        binary_path = dist_dir / binary_name
-
-        if not binary_path.exists():
-            return
+        binary_path = self._ensure_platform_binary(binary_name, dist_dir)
 
         # Force-include just this platform binary (and its header, if present)
         build_data["force_include"] = {
