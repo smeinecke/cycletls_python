@@ -1,4 +1,6 @@
 SHELL := /bin/bash
+DOCKER_ANDROID_ADB := ./scripts/android_docker_adb.sh
+DOCKER_ANDROID_EXPOSE_CDP := ./scripts/android_docker_expose_cdp.sh
 
 .PHONY : docs
 docs :
@@ -49,9 +51,10 @@ android-capture-docker : trackme-certs
 	@echo "==> Tearing down any previous run ..."
 	docker compose -f docker-compose.android-capture.yml down 2>/dev/null || true
 	docker compose -f docker-compose.fingerprint-tests.yml down -v 2>/dev/null || true
+	-$(DOCKER_ANDROID_ADB) disconnect emulator-5554 2>/dev/null || true
 	adb disconnect localhost:5555 2>/dev/null || true
 	@echo "==> Starting TrackMe ..."
-	docker compose -f docker-compose.fingerprint-tests.yml up -d --remove-orphans --build trackme
+	docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
 	@for i in $$(seq 1 40); do \
 		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
 		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
@@ -62,22 +65,21 @@ android-capture-docker : trackme-certs
 
 	@echo "==> Building + starting Android emulator (first run downloads ~3 GB) ..."
 	@echo "    noVNC → http://localhost:6080"
-	docker compose -f docker-compose.android-capture.yml up -d --build --remove-orphans
+	docker compose -f docker-compose.android-capture.yml up -d --build
 	@echo "Waiting for emulator to boot (3-5 min) ..."
 	@for i in $$(seq 1 120); do \
-		if adb connect localhost:5555 2>/dev/null | grep -q "connected"; then \
-			BOOT=$$(adb -s localhost:5555 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r\n'); \
-			if [ "$$BOOT" = "1" ]; then echo "Emulator booted."; break; fi; \
-		fi; \
+		BOOT=$$($(DOCKER_ANDROID_ADB) -s emulator-5554 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r\n'); \
+		if [ "$$BOOT" = "1" ]; then echo "Emulator booted."; break; fi; \
 		if [ $$i -eq 120 ]; then echo "Emulator did not boot in time."; exit 1; fi; \
 		sleep 5; \
 	done
 
 	@echo "==> Running Android capture ..."
 	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
-	uv run python scripts/capture_browser_fingerprints.py \
+	ADB_BIN="$(DOCKER_ANDROID_ADB)" ADB_REVERSE_TCP_PORTS="8443" ANDROID_CDP_EXPOSE_CMD="$(DOCKER_ANDROID_EXPOSE_CDP)" uv run python scripts/capture_browser_fingerprints.py \
 		--android-only \
-		--url https://10.0.2.2:8443 \
+		--adb-serial emulator-5554 \
+		--url https://127.0.0.1:8443 \
 		--output $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json \
 		--ignore-https-errors
 	@echo "--- Captured Android fingerprints ---"
@@ -87,11 +89,13 @@ android-capture-docker : trackme-certs
 android-capture-docker-stop :
 	docker compose -f docker-compose.android-capture.yml down || true
 	docker compose -f docker-compose.fingerprint-tests.yml down -v || true
+	-$(DOCKER_ANDROID_ADB) disconnect emulator-5554 2>/dev/null || true
 	adb disconnect localhost:5555 2>/dev/null || true
 
 .PHONY : android-capture-docker-reset
 android-capture-docker-reset :
 	docker compose -f docker-compose.android-capture.yml down -v || true
+	-$(DOCKER_ANDROID_ADB) disconnect emulator-5554 2>/dev/null || true
 	adb disconnect localhost:5555 2>/dev/null || true
 
 # Run Android Chrome fingerprint capture against a locally connected ADB device.

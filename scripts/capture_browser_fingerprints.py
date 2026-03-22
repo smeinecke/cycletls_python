@@ -33,7 +33,9 @@ Usage:
 
 import argparse
 import json
+import os
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -46,6 +48,43 @@ from playwright.sync_api import sync_playwright
 
 _CHROME_PACKAGE = "com.android.chrome"
 _CHROME_ACTIVITY = "com.google.android.apps.chrome.Main"
+
+
+def _adb_base_command() -> list[str]:
+    override = os.environ.get("ADB_BIN")
+    if override:
+        return shlex.split(override)
+    return ["adb"]
+
+
+def _adb_command(*args: str) -> list[str]:
+    return [*_adb_base_command(), *args]
+
+
+def _maybe_expose_cdp_port(local_port: int) -> None:
+    expose_cmd = os.environ.get("ANDROID_CDP_EXPOSE_CMD")
+    if not expose_cmd:
+        return
+    exposed_port = os.environ.get("ANDROID_CDP_HOST_PORT", "9222")
+    subprocess.run(
+        [*shlex.split(expose_cmd), exposed_port, str(local_port)],
+        check=True,
+        timeout=15,
+        capture_output=True,
+    )
+
+
+def _configure_adb_reverse(serial: str) -> None:
+    ports = os.environ.get("ADB_REVERSE_TCP_PORTS", "").strip()
+    if not ports:
+        return
+    for port in [item.strip() for item in ports.split(",") if item.strip()]:
+        subprocess.run(
+            _adb_command("-s", serial, "reverse", f"tcp:{port}", f"tcp:{port}"),
+            check=True,
+            timeout=10,
+            capture_output=True,
+        )
 
 
 def _extract_header_order(data: dict) -> list[str]:
@@ -146,7 +185,14 @@ def _candidate_targets() -> list[dict]:
     ]
 
 
-def _discover_available_targets(playwright_instance) -> tuple[list[dict], dict[str, str]]:
+def _is_headless_target(target: dict, headless_chrome: bool) -> bool:
+    """Chromium-family targets can run in headed mode; others remain headless."""
+    if target["type"] == "chromium":
+        return headless_chrome
+    return True
+
+
+def _discover_available_targets(playwright_instance, headless_chrome: bool) -> tuple[list[dict], dict[str, str]]:
     available: list[dict] = []
     unavailable: dict[str, str] = {}
 
@@ -156,7 +202,7 @@ def _discover_available_targets(playwright_instance) -> tuple[list[dict], dict[s
             unavailable[target["label"]] = "browser type not available"
             continue
 
-        launch_kwargs = {"headless": True}
+        launch_kwargs = {"headless": _is_headless_target(target, headless_chrome)}
         if target["channel"]:
             launch_kwargs["channel"] = target["channel"]
         if target.get("executable_path"):
@@ -174,9 +220,15 @@ def _discover_available_targets(playwright_instance) -> tuple[list[dict], dict[s
     return available, unavailable
 
 
-def capture_fingerprint(playwright_instance, target: dict, url: str, ignore_https_errors: bool) -> dict:
+def capture_fingerprint(
+    playwright_instance,
+    target: dict,
+    url: str,
+    ignore_https_errors: bool,
+    headless_chrome: bool,
+) -> dict:
     browser_type = getattr(playwright_instance, target["type"])
-    launch_kwargs = {"headless": True}
+    launch_kwargs = {"headless": _is_headless_target(target, headless_chrome)}
     if target["channel"]:
         launch_kwargs["channel"] = target["channel"]
     if target.get("executable_path"):
@@ -238,9 +290,31 @@ def _wait_for_cdp(port: int, timeout: float = 45.0) -> None:
     raise RuntimeError(f"Chrome CDP endpoint {url} did not respond within {timeout:.0f}s")
 
 
+def _wait_for_cdp_with_fre_handling(
+    serial: str,
+    label: str,
+    local_port: int,
+    timeout: float = 90.0,
+) -> None:
+    """Wait for CDP while continuing to dismiss Chrome first-run dialogs."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            _wait_for_cdp(local_port, timeout=min(5.0, max(1.0, deadline - time.monotonic())))
+            return
+        except RuntimeError:
+            _dismiss_chrome_fre_ui(serial, label)
+            _log_chrome_sockets(serial, label)
+            time.sleep(2)
+    raise RuntimeError(f"Chrome CDP endpoint http://localhost:{local_port}/json did not respond within {timeout:.0f}s")
+
+
 def _adb_devices() -> list[str]:
     """Return serials of connected ADB devices (state == 'device')."""
-    result = subprocess.run(["adb", "devices"], capture_output=True, text=True, timeout=15)
+    serial_override = os.environ.get("ADB_SERIAL")
+    if serial_override:
+        return [serial_override]
+    result = subprocess.run(_adb_command("devices"), capture_output=True, text=True, timeout=15)
     serials: list[str] = []
     for line in result.stdout.splitlines()[1:]:
         parts = line.split()
@@ -259,9 +333,9 @@ def _write_chrome_cmdline_flags(serial: str, label: str) -> None:
     """
     flags = "chrome --disable-fre --no-first-run --no-default-browser-check"
     result = subprocess.run(
-        ["adb", "-s", serial, "shell",
+        _adb_command("-s", serial, "shell",
          f"echo '{flags}' > /data/local/tmp/chrome-command-line"
-         " && chmod 664 /data/local/tmp/chrome-command-line"],
+         " && chmod 664 /data/local/tmp/chrome-command-line"),
         capture_output=True, text=True, timeout=10,
     )
     if result.returncode == 0:
@@ -279,7 +353,7 @@ def _dismiss_chrome_fre_ui(serial: str, label: str) -> bool:
     _UI_DUMP = "/data/local/tmp/ui_dump.xml"
     # Dump the live UI hierarchy to a file on device.
     dump = subprocess.run(
-        ["adb", "-s", serial, "shell", "uiautomator", "dump", _UI_DUMP],
+        _adb_command("-s", serial, "shell", "uiautomator", "dump", _UI_DUMP),
         capture_output=True, text=True, timeout=20,
     )
     if dump.returncode != 0:
@@ -287,7 +361,7 @@ def _dismiss_chrome_fre_ui(serial: str, label: str) -> bool:
         return False
 
     xml_result = subprocess.run(
-        ["adb", "-s", serial, "shell", "cat", _UI_DUMP],
+        _adb_command("-s", serial, "shell", "cat", _UI_DUMP),
         capture_output=True, text=True, timeout=15,
     )
     xml_text = xml_result.stdout.strip()
@@ -301,26 +375,73 @@ def _dismiss_chrome_fre_ui(serial: str, label: str) -> bool:
         print(f"[{label}] UI dump XML parse error: {exc}", flush=True)
         return False
 
-    _ACCEPT_KEYWORDS = ("accept", "continue", "agree", "yes, i'm in", "got it", "next")
+    exact_targets = (
+        "use without an account",
+        "continue without an account",
+        "no thanks",
+        "accept & continue",
+        "accept and continue",
+        "accept",
+        "continue",
+        "next",
+        "yes, i'm in",
+        "got it",
+    )
+    keyword_targets = ("without an account", "no thanks", "accept", "continue", "next", "got it")
+    candidates: list[tuple[int, str, int, int]] = []
+
     for node in root.iter("node"):
         text = (node.get("text") or "").strip().lower()
-        if not text:
+        desc = (node.get("content-desc") or "").strip().lower()
+        label_text = text or desc
+        if not label_text:
             continue
-        if any(kw in text for kw in _ACCEPT_KEYWORDS):
-            bounds = node.get("bounds", "")
-            m = re.match(r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", bounds)
-            if not m:
-                continue
-            x = (int(m.group(1)) + int(m.group(3))) // 2
-            y = (int(m.group(2)) + int(m.group(4))) // 2
-            print(f"[{label}] Tapping FRE button '{text}' at ({x}, {y})", flush=True)
-            subprocess.run(
-                ["adb", "-s", serial, "shell", "input", "tap", str(x), str(y)],
-                capture_output=True, timeout=5,
-            )
-            return True
 
-    print(f"[{label}] No FRE button found in UI dump (Chrome may already be past FRE)", flush=True)
+        # Ignore large explanatory paragraphs; FRE actions are short controls.
+        if len(label_text) > 40:
+            continue
+
+        clickable = node.get("clickable") == "true"
+        enabled = node.get("enabled") == "true"
+        if not clickable or not enabled:
+            continue
+
+        score = -1
+        if label_text in exact_targets:
+            score = 100
+        elif any(target in label_text for target in keyword_targets):
+            score = 50
+        if score < 0:
+            continue
+
+        bounds = node.get("bounds", "")
+        m = re.match(r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", bounds)
+        if not m:
+            continue
+        x = (int(m.group(1)) + int(m.group(3))) // 2
+        y = (int(m.group(2)) + int(m.group(4))) // 2
+        candidates.append((score, label_text, x, y))
+
+    if candidates:
+        candidates.sort(key=lambda item: (-item[0], item[3], item[2]))
+        score, button_text, x, y = candidates[0]
+        print(f"[{label}] Tapping FRE button '{button_text}' at ({x}, {y})", flush=True)
+        subprocess.run(
+            _adb_command("-s", serial, "shell", "input", "tap", str(x), str(y)),
+            capture_output=True, timeout=5,
+        )
+        return True
+
+    page_text = xml_text.lower()
+    if "https://policies.google.com/" in page_text or "google terms of service" in page_text:
+        print(f"[{label}] Chrome opened the Terms page; sending Back to return to FRE", flush=True)
+        subprocess.run(
+            _adb_command("-s", serial, "shell", "input", "keyevent", "4"),
+            capture_output=True, timeout=5,
+        )
+        return True
+
+    print(f"[{label}] No actionable FRE button found in UI dump", flush=True)
     return False
 
 
@@ -328,7 +449,7 @@ def _log_chrome_sockets(serial: str, label: str) -> None:
     """Print Chrome-related abstract Unix sockets for diagnostics."""
     # Read /proc/net/unix directly (no pipe to avoid shell timeout issues).
     result = subprocess.run(
-        ["adb", "-s", serial, "shell", "cat", "/proc/net/unix"],
+        _adb_command("-s", serial, "shell", "cat", "/proc/net/unix"),
         capture_output=True, text=True, timeout=20,
     )
     chrome_lines = [
@@ -346,7 +467,7 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
 
     # Verify Chrome is installed before attempting to start it.
     pkg_check = subprocess.run(
-        ["adb", "-s", serial, "shell", "pm", "list", "packages", _CHROME_PACKAGE],
+        _adb_command("-s", serial, "shell", "pm", "list", "packages", _CHROME_PACKAGE),
         capture_output=True, text=True, timeout=15,
     )
     if _CHROME_PACKAGE not in pkg_check.stdout:
@@ -357,26 +478,25 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
 
     # Try writing Chrome command-line flags (works on ro.debuggable=1 builds).
     _write_chrome_cmdline_flags(serial, label)
+    _configure_adb_reverse(serial)
 
     # Force-stop any previous Chrome session so we start fresh.
     subprocess.run(
-        ["adb", "-s", serial, "shell", "am", "force-stop", _CHROME_PACKAGE],
+        _adb_command("-s", serial, "shell", "am", "force-stop", _CHROME_PACKAGE),
         capture_output=True, timeout=10,
     )
     time.sleep(1)
 
     print(f"[{label}] Starting Chrome (about:blank) ...", flush=True)
     start_result = subprocess.run(
-        [
-            "adb", "-s", serial, "shell",
+        _adb_command(
+            "-s", serial, "shell",
             "am", "start",
             "-n", f"{_CHROME_PACKAGE}/{_CHROME_ACTIVITY}",
             "-a", "android.intent.action.VIEW",
             "-d", "about:blank",
             "--activity-clear-task",
-            # Pass disable-fre via intent extra (Chrome release builds may honor this).
-            "--es", "commandLineFlags", "--disable-fre --no-first-run",
-        ],
+        ),
         capture_output=True, text=True, timeout=20,
     )
     if start_result.stdout.strip():
@@ -390,8 +510,10 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
 
     # Try the testing broadcast first (works on Chromium test builds).
     fre_bcast = subprocess.run(
-        ["adb", "-s", serial, "shell", "am", "broadcast",
-         "-a", "com.google.chrome.testing.ACCEPT_TERMS_OF_SERVICE"],
+        _adb_command(
+            "-s", serial, "shell", "am", "broadcast",
+            "-a", "com.google.chrome.testing.ACCEPT_TERMS_OF_SERVICE",
+        ),
         capture_output=True, text=True, timeout=10,
     )
     print(f"[{label}] FRE broadcast: {fre_bcast.stdout.strip()}", flush=True)
@@ -406,27 +528,40 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
         if attempt < 3:
             time.sleep(3)
 
-    print(f"[{label}] Forwarding CDP port {local_port} ...", flush=True)
+    forwarded_port = local_port
+    if os.environ.get("ANDROID_CDP_EXPOSE_CMD"):
+        # When adb runs inside the emulator container, keep the adb forward on a
+        # separate loopback port and expose the public host port via socat.
+        forwarded_port = int(os.environ.get("ANDROID_CDP_FORWARD_PORT", str(local_port + 1)))
+
+    print(f"[{label}] Forwarding CDP port {forwarded_port} ...", flush=True)
     subprocess.run(
-        ["adb", "-s", serial, "forward", f"tcp:{local_port}", "localabstract:chrome_devtools_remote"],
+        _adb_command("-s", serial, "forward", f"tcp:{forwarded_port}", "localabstract:chrome_devtools_remote"),
         check=True, timeout=10, capture_output=True,
     )
+    _maybe_expose_cdp_port(forwarded_port)
 
     _log_chrome_sockets(serial, label)
 
     print(f"[{label}] Waiting for Chrome DevTools to be ready ...", flush=True)
-    _wait_for_cdp(local_port, timeout=90.0)
+    _wait_for_cdp_with_fre_handling(serial, label, local_port, timeout=90.0)
 
     data: dict = {}
     try:
         with sync_playwright() as pw:
             print(f"[{label}] Connecting via CDP ...", flush=True)
             browser = pw.chromium.connect_over_cdp(f"http://localhost:{local_port}")
-            context = browser.contexts[0] if browser.contexts else browser.new_context()
-            page = context.new_page()
+            if not browser.contexts:
+                raise RuntimeError("Chrome CDP session exposed no browser contexts")
+            context = browser.contexts[0]
+            page = context.pages[0] if context.pages else context.new_page()
 
             if ignore_https_errors:
+                browser_cdp = browser.new_browser_cdp_session()
+                browser_cdp.send("Security.enable")
+                browser_cdp.send("Security.setIgnoreCertificateErrors", {"ignore": True})
                 cdp = context.new_cdp_session(page)
+                cdp.send("Security.enable")
                 cdp.send("Security.setIgnoreCertificateErrors", {"ignore": True})
 
             api_url = f"{url}/api/all"
@@ -441,7 +576,7 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
             browser.close()
     finally:
         subprocess.run(
-            ["adb", "-s", serial, "forward", "--remove", f"tcp:{local_port}"],
+            _adb_command("-s", serial, "forward", "--remove", f"tcp:{forwarded_port}"),
             capture_output=True, timeout=10,
         )
 
@@ -545,7 +680,21 @@ def main() -> int:
         default=True,
         help="Ignore HTTPS certificate errors (default: True for self-signed certs)",
     )
+    parser.add_argument(
+        "--headless-chrome",
+        action="store_true",
+        help="Run Chromium-family targets in headless mode. "
+        "By default, Chrome/Edge/Chromium are launched headed.",
+    )
+    parser.add_argument(
+        "--adb-serial",
+        default="",
+        help="Optional Android device serial to use instead of adb discovery.",
+    )
     args = parser.parse_args()
+
+    if args.adb_serial:
+        os.environ["ADB_SERIAL"] = args.adb_serial
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -557,7 +706,9 @@ def main() -> int:
     errors: dict[str, str] = {}
 
     with sync_playwright() as pw:
-        available_targets, unavailable_targets = _discover_available_targets(pw)
+        available_targets, unavailable_targets = _discover_available_targets(
+            pw, args.headless_chrome
+        )
         if not available_targets:
             print("ERROR: no playable browser targets found", file=sys.stderr, flush=True)
             payload = {
@@ -607,7 +758,9 @@ def main() -> int:
         for target in available_targets:
             label = target["label"]
             try:
-                fp = capture_fingerprint(pw, target, args.url, args.ignore_https_errors)
+                fp = capture_fingerprint(
+                    pw, target, args.url, args.ignore_https_errors, args.headless_chrome
+                )
                 fingerprints.append(fp)
             except Exception as exc:  # noqa: BLE001
                 print(f"ERROR capturing {label}: {exc}", file=sys.stderr, flush=True)

@@ -8,9 +8,13 @@ services:
     ports:
       - "5555:5555"   # ADB
       - "6080:6080"   # noVNC  →  http://localhost:6080
+      - "9222:9222"   # Chrome DevTools bridge for host Playwright
     volumes:
       # Persist emulator userdata and the container-side adb key across restarts.
       - android-home:/root/.android
+      # Mirror the host adb identity so host `adb connect localhost:5555`
+      # matches the key the emulator sees during boot.
+      - "${HOME}/.android:/tmp/host-android:ro"
     networks:
       - android-net
 
