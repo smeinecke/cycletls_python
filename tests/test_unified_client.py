@@ -116,7 +116,7 @@ class TestAsyncMethods:
         """Verify fingerprint parameter works in async (was missing before unification)."""
         from cycletls import CycleTLS
         async with CycleTLS() as client:
-            response = await client.aget("https://example.com", fingerprint="chrome_120")
+            response = await client.aget("https://example.com", fingerprint="chrome_120_win")
             assert response.status_code == 200
 
 
