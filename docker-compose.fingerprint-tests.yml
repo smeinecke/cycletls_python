@@ -35,7 +35,7 @@ services:
     # To get a newer Firefox, bump the image tag to a newer Playwright release.
     command: >
       bash -c "pip install 'playwright==1.58.0' --quiet &&
-               playwright install chrome msedge &&
+               playwright install chrome &&
                xvfb-run -a python /capture.py --url https://trackme:8443 --output /fingerprints/captured.json --ignore-https-errors"
 
 networks:

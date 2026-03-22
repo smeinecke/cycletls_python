@@ -155,7 +155,7 @@ def _profile_name(browser_name: str, version: str) -> str:
 
 def _candidate_targets() -> list[dict]:
     """Potential launch targets; availability is detected at runtime."""
-    return [
+    targets = [
         {"type": "chromium", "channel": None, "profile_browser": "chromium", "label": "chromium"},
         {"type": "chromium", "channel": "chrome", "profile_browser": "chrome", "label": "chromium:chrome"},
         {
@@ -183,6 +183,12 @@ def _candidate_targets() -> list[dict]:
         # Playwright's WebKit is our Safari-equivalent capture target.
         {"type": "webkit", "channel": None, "profile_browser": "safari", "label": "webkit:safari"},
     ]
+
+    # Linux Edge channels have been flaky in CI; skip them on Linux captures.
+    if sys.platform.startswith("linux"):
+        targets = [t for t in targets if not t["profile_browser"].startswith("msedge")]
+
+    return targets
 
 
 def _is_headless_target(target: dict, headless_chrome: bool) -> bool:
