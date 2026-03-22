@@ -14,6 +14,8 @@ import cycletls
 from cycletls import AsyncCycleTLS
 from cycletls.exceptions import HTTPError
 
+pytestmark = pytest.mark.live
+
 
 class TestAsyncHTTPErrors:
     """Test async HTTP error responses."""

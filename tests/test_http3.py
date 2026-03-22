@@ -13,11 +13,18 @@ import os
 import pytest
 from cycletls import CycleTLS
 
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture(scope="module")
 def cycle_client():
     """Create a single CycleTLS client for all tests in this module"""
     with CycleTLS() as client:
+        _orig = client.request
+        def _no_reuse(method, url, **kwargs):
+            kwargs.setdefault("enable_connection_reuse", False)
+            return _orig(method, url, **kwargs)
+        client.request = _no_reuse
         yield client
 
 

@@ -15,6 +15,8 @@ import asyncio
 import cycletls
 from cycletls import AsyncCycleTLS
 
+pytestmark = pytest.mark.live
+
 
 class TestAsyncPollingBehavior:
     """Test async polling configuration and behavior."""

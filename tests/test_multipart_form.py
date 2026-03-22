@@ -20,6 +20,8 @@ from test_utils import (
     assert_valid_json_response,
 )
 
+pytestmark = pytest.mark.live
+
 
 class TestMultipartFormData:
     """Test basic multipart form data submissions."""

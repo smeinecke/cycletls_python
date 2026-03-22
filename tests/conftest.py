@@ -6,6 +6,9 @@ import pytest
 import sys
 import os
 
+# TrackMe base URL — override with TRACKME_URL env var to point at a local instance
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+
 # Add parent directory to path to import cycletls
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -17,8 +20,17 @@ def cycletls_client():
     """
     Session-scoped CycleTLS client fixture.
     Creates a single client instance for all tests.
+
+    Connection reuse is disabled by default so that TrackMe-style servers
+    (which close connections after every response) don't leave a stale cached
+    connection in the global Go transport pool for the next test.
     """
     client = CycleTLS()
+    _orig = client.request
+    def _no_reuse(method, url, **kwargs):
+        kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+    client.request = _no_reuse
     yield client
     client.close()
 
@@ -28,8 +40,16 @@ def cycletls_client_function():
     """
     Function-scoped CycleTLS client fixture.
     Creates a new client instance for each test function.
+
+    Connection reuse is disabled by default — the Go transport pool is
+    process-global, so stale connections from a previous test can bleed in.
     """
     client = CycleTLS()
+    _orig = client.request
+    def _no_reuse(method, url, **kwargs):
+        kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+    client.request = _no_reuse
     yield client
     client.close()
 
@@ -37,13 +57,19 @@ def cycletls_client_function():
 @pytest.fixture
 def test_url():
     """Base test URL for most tests."""
-    return "https://tls.peet.ws/api/clean"
+    return f"{_TRACKME_URL}/api/clean"
 
 
 @pytest.fixture
 def ja3_test_url():
     """TLS fingerprint test URL (replacement for defunct ja3er.com)."""
-    return "https://tls.peet.ws/api/clean"
+    return f"{_TRACKME_URL}/api/clean"
+
+
+@pytest.fixture(scope="session")
+def trackme_url():
+    """TrackMe base URL. Set TRACKME_URL env var to point at a local instance."""
+    return _TRACKME_URL
 
 
 @pytest.fixture

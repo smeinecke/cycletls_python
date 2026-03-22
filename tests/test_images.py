@@ -19,6 +19,8 @@ import os
 import tempfile
 from test_utils import assert_valid_response
 
+pytestmark = pytest.mark.live
+
 
 class TestImageDownloads:
     """Test downloading various image formats."""

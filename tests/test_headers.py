@@ -5,6 +5,8 @@ Tests custom header ordering, case sensitivity, and special headers.
 
 import pytest
 
+pytestmark = pytest.mark.live
+
 
 class TestHeaders:
     """Test suite for HTTP header handling in CycleTLS"""

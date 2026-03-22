@@ -20,6 +20,8 @@ import ssl
 import socket
 from test_utils import assert_valid_response
 
+pytestmark = pytest.mark.live
+
 
 class TestBasicSNIOverride:
     """Test basic SNI override functionality."""

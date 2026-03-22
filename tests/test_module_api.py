@@ -5,9 +5,12 @@ Tests the module-level convenience functions (cycletls.get(), cycletls.post(), e
 and configuration management (set_default(), get_default(), reset_defaults()).
 """
 
+import os
 import pytest
 import cycletls
 from cycletls import HTTPError
+
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
 
 pytestmark = pytest.mark.live
 
@@ -18,6 +21,7 @@ class TestModuleLevelFunctions:
     def setup_method(self):
         """Reset defaults before each test"""
         cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
 
     def teardown_method(self):
         """Clean up after each test"""
@@ -152,6 +156,7 @@ class TestConfigurationManagement:
     def setup_method(self):
         """Reset defaults before each test"""
         cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
 
     def teardown_method(self):
         """Clean up after each test"""
@@ -273,6 +278,10 @@ class TestConfigurationManagement:
 class TestGlobalSession:
     """Test suite for global session management"""
 
+    def setup_method(self):
+        cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
+
     def teardown_method(self):
         """Clean up after each test"""
         cycletls.reset_defaults()
@@ -293,9 +302,10 @@ class TestGlobalSession:
 
     def test_global_session_reused_across_requests(self, httpbin_url):
         """Test that global session is reused for multiple requests"""
-        # Enable connection reuse to verify same session is used
-        cycletls.set_default(enable_connection_reuse=True)
-
+        # Verify the same Python session object handles multiple requests.
+        # Go-level TCP connection reuse is orthogonal to Python session reuse
+        # and must stay disabled to avoid stale-connection errors from the
+        # process-global Go transport pool.
         response1 = cycletls.get(f"{httpbin_url}/get")
         response2 = cycletls.get(f"{httpbin_url}/get")
         response3 = cycletls.get(f"{httpbin_url}/get")
@@ -311,6 +321,9 @@ class TestTLSFingerprintingWithModuleAPI:
     def setup_method(self):
         """Reset defaults before each test"""
         cycletls.reset_defaults()
+        # TrackMe closes connections after each request; disable reuse to avoid
+        # "use of closed network connection" from the global Go transport pool.
+        cycletls.set_default(enable_connection_reuse=False)
 
     def teardown_method(self):
         """Clean up after each test"""
@@ -321,7 +334,7 @@ class TestTLSFingerprintingWithModuleAPI:
         """Test using JA3 fingerprint as default"""
         cycletls.set_default(ja3=chrome_ja3)
 
-        response = cycletls.get("https://tls.peet.ws/api/clean")
+        response = cycletls.get(f"{_TRACKME_URL}/api/clean")
 
         assert response.status_code == 200
         data = response.json()
@@ -329,7 +342,7 @@ class TestTLSFingerprintingWithModuleAPI:
 
     def test_ja3_fingerprint_per_request(self, firefox_ja3):
         """Test using JA3 fingerprint per-request"""
-        response = cycletls.get("https://tls.peet.ws/api/clean", ja3=firefox_ja3)
+        response = cycletls.get(f"{_TRACKME_URL}/api/clean", ja3=firefox_ja3)
 
         assert response.status_code == 200
         data = response.json()
@@ -338,6 +351,10 @@ class TestTLSFingerprintingWithModuleAPI:
 
 class TestErrorHandling:
     """Test error handling with module-level API"""
+
+    def setup_method(self):
+        cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
 
     def teardown_method(self):
         """Clean up after each test"""
@@ -370,6 +387,10 @@ class TestErrorHandling:
 class TestCookies:
     """Test cookie handling with module-level API"""
 
+    def setup_method(self):
+        cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
+
     def teardown_method(self):
         """Clean up after each test"""
         cycletls.reset_defaults()
@@ -398,6 +419,10 @@ class TestCookies:
 
 class TestThreadSafety:
     """Test thread safety of module-level API"""
+
+    def setup_method(self):
+        cycletls.reset_defaults()
+        cycletls.set_default(enable_connection_reuse=False)
 
     def teardown_method(self):
         """Clean up after each test"""

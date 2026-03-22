@@ -11,6 +11,8 @@ This module tests:
 import pytest
 from cycletls import CycleTLS
 
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture
 def firefox_ja3():

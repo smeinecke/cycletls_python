@@ -18,6 +18,8 @@ import json
 import time
 from test_utils import assert_valid_response, assert_valid_json_response
 
+pytestmark = pytest.mark.live
+
 
 class TestSSEFFIExports:
     """Verify Go FFI exports for SSE exist in the shared library."""

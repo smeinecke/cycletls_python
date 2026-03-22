@@ -7,6 +7,8 @@ import pytest
 from datetime import datetime, timedelta
 from cycletls import Cookie
 
+pytestmark = pytest.mark.live
+
 
 class TestCookies:
     """Test suite for cookie handling in CycleTLS"""

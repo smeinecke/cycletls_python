@@ -5,6 +5,8 @@ Tests GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS requests.
 
 import pytest
 
+pytestmark = pytest.mark.live
+
 
 class TestHTTPMethods:
     """Test suite for HTTP request methods in CycleTLS"""

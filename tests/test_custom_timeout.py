@@ -15,6 +15,8 @@ import pytest
 import time
 from test_utils import assert_valid_response
 
+pytestmark = pytest.mark.live
+
 
 class TestPerRequestTimeout:
     """Test per-request timeout overrides."""

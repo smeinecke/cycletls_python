@@ -6,11 +6,18 @@ Based on CycleTLS/tests/encoding.test.ts
 import pytest
 from cycletls import CycleTLS
 
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture
 def client():
     """Create a CycleTLS client instance"""
     cycle = CycleTLS()
+    _orig = cycle.request
+    def _no_reuse(method, url, **kwargs):
+        kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+    cycle.request = _no_reuse
     yield cycle
     cycle.close()
 

@@ -16,6 +16,8 @@ from http.cookiejar import CookieJar
 from http.cookies import SimpleCookie
 from test_utils import assert_valid_response
 
+pytestmark = pytest.mark.live
+
 
 class TestBasicCookieHandling:
     """Test basic cookie setting and retrieval."""

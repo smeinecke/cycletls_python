@@ -1,0 +1,14 @@
+services:
+  trackme:
+    build:
+      context: ./docker/trackme
+    network_mode: host
+    volumes:
+      - ./docker/trackme/certs:/app/certs:ro
+      - ./docker/trackme/config.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost:8443/api/clean && echo ok || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 12
+      start_period: 60s

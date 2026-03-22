@@ -21,6 +21,8 @@ from test_utils import (
     assert_valid_json_response,
 )
 
+pytestmark = pytest.mark.live
+
 
 class TestConcurrentRequests:
     """Test multiple concurrent requests."""

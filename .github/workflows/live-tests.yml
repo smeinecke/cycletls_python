@@ -17,12 +17,16 @@ env:
 
 jobs:
   live-tests:
-    name: Live Tests (Python 3.12)
+    name: Live Tests (Python ${{ matrix.python }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.11', '3.12', '3.13']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup CycleTLS (Go build)
         uses: ./.github/actions/setup-cycletls
@@ -30,11 +34,38 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
           enable-cache: true
 
       - name: Install dependencies
         run: uv sync --locked --all-extras --dev
 
+      - name: Generate TLS certificates for TrackMe
+        run: |
+          mkdir -p docker/trackme/certs
+          openssl req -x509 -newkey rsa:2048 \
+            -keyout docker/trackme/certs/key.pem \
+            -out docker/trackme/certs/chain.pem \
+            -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          # Combine system CAs with test CA so Go trusts the self-signed cert
+          cat /etc/ssl/certs/ca-certificates.crt docker/trackme/certs/chain.pem \
+            > /tmp/combined-test-cas.crt
+
+      - name: Build and start TrackMe
+        run: |
+          docker compose -f docker-compose.test.yml up -d --build
+          echo "Waiting for TrackMe to become ready..."
+          if ! timeout 90 bash -c 'until docker inspect --format "{{.State.Health.Status}}" cycletls_python-trackme-1 2>/dev/null | grep -q healthy; do sleep 2; done'; then
+            echo "TrackMe did not become ready in time. Container logs:"
+            docker logs cycletls_python-trackme-1
+            exit 1
+          fi
+          echo "TrackMe is ready."
+
       - name: Run live tests
+        env:
+          TRACKME_URL: https://localhost:8443
+          SSL_CERT_FILE: /tmp/combined-test-cas.crt
         run: uv run pytest -v --color=yes --reruns=3 -m "live and not blocking" tests/

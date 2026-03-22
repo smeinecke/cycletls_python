@@ -14,6 +14,8 @@ import pytest
 import json
 from cycletls import CycleTLS
 
+pytestmark = pytest.mark.live
+
 
 class TestResponseJsonMethod:
     """Test the json() method for parsing JSON responses."""

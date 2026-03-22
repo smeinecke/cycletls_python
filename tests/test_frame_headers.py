@@ -12,8 +12,13 @@ Note: Most tests are marked as skipped if frame details are not exposed
 in the Python API. This functionality may be internal to the Go backend.
 """
 
+import os
 import pytest
 from cycletls import CycleTLS
+
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+
+pytestmark = pytest.mark.live
 
 
 class TestChromeFrameHeaders:
@@ -29,7 +34,7 @@ class TestChromeFrameHeaders:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=chrome_ja3,
                 user_agent=chrome_ua
             )
@@ -95,7 +100,7 @@ class TestChromeFrameHeaders:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=chrome_ja3
             )
 
@@ -135,7 +140,7 @@ class TestFirefoxFrameHeaders:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=firefox_ja3,
                 user_agent=firefox_ua
             )
@@ -196,12 +201,12 @@ class TestFirefoxFrameHeaders:
 
         try:
             chrome_response = chrome_client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=chrome_ja3
             )
 
             firefox_response = firefox_client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=firefox_ja3
             )
 
@@ -247,7 +252,7 @@ class TestFrameTypes:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 force_http1=False  # Ensure HTTP/2
             )
 
@@ -275,7 +280,7 @@ class TestFrameTypes:
         client = CycleTLS()
 
         try:
-            response = client.get("https://tls.peet.ws/api/all")
+            response = client.get(f"{_TRACKME_URL}/api/all")
 
             data = response.json()
 
@@ -301,7 +306,7 @@ class TestFrameTypes:
         client = CycleTLS()
 
         try:
-            response = client.get("https://tls.peet.ws/api/all")
+            response = client.get(f"{_TRACKME_URL}/api/all")
 
             data = response.json()
 
@@ -380,13 +385,15 @@ class TestHTTP2Fingerprinting:
             # HTTP/2 request (default)
             response_h2 = client.get(
                 f"{httpbin_url}/get",
-                force_http1=False
+                force_http1=False,
+                enable_connection_reuse=False,
             )
 
             # HTTP/1 request
             response_h1 = client.get(
                 f"{httpbin_url}/get",
-                force_http1=True
+                force_http1=True,
+                enable_connection_reuse=False,
             )
 
             # Both should succeed
@@ -402,7 +409,7 @@ class TestHTTP2Fingerprinting:
         client = CycleTLS()
 
         try:
-            response = client.get("https://tls.peet.ws/api/all")
+            response = client.get(f"{_TRACKME_URL}/api/all")
 
             data = response.json()
 
@@ -429,7 +436,7 @@ class TestBrowserSpecificFingerprints:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=chrome_ja3
             )
 
@@ -461,7 +468,7 @@ class TestBrowserSpecificFingerprints:
 
         try:
             response = client.get(
-                "https://tls.peet.ws/api/all",
+                f"{_TRACKME_URL}/api/all",
                 ja3=firefox_ja3
             )
 
@@ -508,7 +515,10 @@ class TestFrameHeaderValidation:
         try:
             # Some servers may not support HTTP/2
             # The client should handle this gracefully
-            response = client.get("https://httpbin.org/get")
+            response = client.get(
+                "https://httpbin.org/get",
+                enable_connection_reuse=False,
+            )
 
             assert response.status_code == 200
 

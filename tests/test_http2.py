@@ -1,11 +1,21 @@
+import os
 import pytest
 from cycletls import CycleTLS
+
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+
+pytestmark = pytest.mark.live
 
 
 @pytest.fixture
 def cycle():
-    """Create a CycleTLS instance for testing"""
+    """Create a CycleTLS instance for testing with connection reuse disabled."""
     with CycleTLS() as client:
+        _orig = client.request
+        def _no_reuse(method, url, **kwargs):
+            kwargs.setdefault("enable_connection_reuse", False)
+            return _orig(method, url, **kwargs)
+        client.request = _no_reuse
         yield client
 
 
@@ -30,7 +40,7 @@ class TestHTTP2:
         # Use tls.peet.ws as it's more reliable than ja3er.com
         # Test HTTP/2 (default)
         response_http2 = cycle.get(
-            "https://tls.peet.ws/api/all",
+            f"{_TRACKME_URL}/api/all",
             force_http1=False,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0",
             timeout=30
@@ -38,7 +48,7 @@ class TestHTTP2:
 
         # Test HTTP/1.1 (forced)
         response_http1 = cycle.get(
-            "https://tls.peet.ws/api/all",
+            f"{_TRACKME_URL}/api/all",
             force_http1=True,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0",
             timeout=30

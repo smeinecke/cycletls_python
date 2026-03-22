@@ -17,6 +17,8 @@ import pytest
 import hashlib
 from test_utils import assert_valid_response
 
+pytestmark = pytest.mark.live
+
 
 class TestBinaryUpload:
     """Test binary data uploads with body_bytes parameter."""

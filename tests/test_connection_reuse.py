@@ -2,6 +2,8 @@ import pytest
 from cycletls import CycleTLS
 import time
 
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture
 def cycle_with_reuse():

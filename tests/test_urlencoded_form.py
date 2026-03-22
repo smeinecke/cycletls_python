@@ -19,6 +19,8 @@ from test_utils import (
     assert_valid_json_response,
 )
 
+pytestmark = pytest.mark.live
+
 
 class TestBasicURLEncodedForm:
     """Test basic URL-encoded form submissions."""
