@@ -12,6 +12,8 @@ Tests various edge cases including:
 """
 
 import pytest
+
+pytestmark = pytest.mark.live
 from cycletls import CycleTLS
 
 

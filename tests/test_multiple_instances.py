@@ -9,8 +9,23 @@ Based on CycleTLS multipleImports.test.ts, this module tests:
 """
 
 import pytest
+
+pytestmark = pytest.mark.live
 import threading
 from cycletls import CycleTLS
+
+
+def _no_reuse_client():
+    """Return a CycleTLS instance that never reuses connections (avoids stale-pool errors)."""
+    client = CycleTLS()
+    _orig = client.request
+
+    def _patched(method, url, **kwargs):
+        kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+
+    client.request = _patched
+    return client
 
 
 class TestMultipleInstances:
@@ -18,14 +33,14 @@ class TestMultipleInstances:
 
     def test_create_multiple_instances(self):
         """Should be able to create multiple CycleTLS instances."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             assert client1 is not None
             assert client2 is not None
             assert client1 is not client2
 
     def test_instances_can_make_independent_requests(self, httpbin_url):
         """Multiple instances should be able to make independent requests."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             # Make requests with both instances
             response1 = client1.get(f"{httpbin_url}/get")
             response2 = client2.get(f"{httpbin_url}/get")
@@ -35,8 +50,8 @@ class TestMultipleInstances:
 
     def test_instances_work_after_one_is_closed(self, httpbin_url):
         """Closing one instance should not affect others."""
-        client1 = CycleTLS()
-        client2 = CycleTLS()
+        client1 = _no_reuse_client()
+        client2 = _no_reuse_client()
 
         try:
             # Make request with both
@@ -65,7 +80,7 @@ class TestIsolatedState:
         chrome_ja3 = "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"
         firefox_ja3 = "771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0"
 
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             # Use different JA3 for each instance
             response1 = client1.get(f"{httpbin_url}/get", ja3=chrome_ja3)
             response2 = client2.get(f"{httpbin_url}/get", ja3=firefox_ja3)
@@ -75,7 +90,7 @@ class TestIsolatedState:
 
     def test_instances_have_isolated_headers(self, httpbin_url):
         """Each instance should maintain its own headers."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             response1 = client1.get(
                 f"{httpbin_url}/headers",
                 headers={"X-Instance": "client1"}
@@ -98,7 +113,7 @@ class TestIsolatedState:
 
     def test_instances_have_isolated_cookies(self, httpbin_url):
         """Each instance should maintain its own cookie jar."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             # Set different cookies for each instance
             response1 = client1.get(f"{httpbin_url}/cookies/set?cookie1=value1")
             response2 = client2.get(f"{httpbin_url}/cookies/set?cookie2=value2")
@@ -115,7 +130,7 @@ class TestConcurrentOperations:
 
     def test_concurrent_requests_different_instances(self, httpbin_url):
         """Should handle concurrent requests from different instances."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             results = {}
 
             def make_request(client, name):
@@ -138,7 +153,7 @@ class TestConcurrentOperations:
 
     def test_concurrent_requests_same_instance(self, httpbin_url):
         """Should handle concurrent requests from the same instance."""
-        with CycleTLS() as client:
+        with _no_reuse_client() as client:
             results = []
 
             def make_request(url):
@@ -163,7 +178,7 @@ class TestConcurrentOperations:
 
     def test_parallel_large_requests(self, httpbin_url):
         """Should handle parallel large requests."""
-        with CycleTLS() as client1, CycleTLS() as client2:
+        with _no_reuse_client() as client1, _no_reuse_client() as client2:
             results = {}
 
             def make_large_request(client, name, size):
@@ -204,7 +219,7 @@ class TestResourceCleanup:
 
     def test_explicit_close(self, httpbin_url):
         """Test explicit closing of instances."""
-        client = CycleTLS()
+        client = _no_reuse_client()
 
         response = client.get(f"{httpbin_url}/get")
         assert response.status_code == 200
@@ -218,7 +233,7 @@ class TestResourceCleanup:
 
     def test_multiple_close_calls(self, httpbin_url):
         """Test that multiple close calls don't cause errors."""
-        client = CycleTLS()
+        client = _no_reuse_client()
 
         response = client.get(f"{httpbin_url}/get")
         assert response.status_code == 200
@@ -232,7 +247,7 @@ class TestResourceCleanup:
 
     def test_cleanup_after_error(self, httpbin_url):
         """Test cleanup after errors."""
-        with CycleTLS() as client:
+        with _no_reuse_client() as client:
             # Make a request that will fail - use a clearly invalid URL scheme
             # or a reserved IP that won't route
             try:
@@ -249,7 +264,7 @@ class TestResourceCleanup:
 
     def test_context_manager_cleanup(self, httpbin_url):
         """Test context manager properly cleans up resources."""
-        with CycleTLS() as client:
+        with _no_reuse_client() as client:
             response = client.get(f"{httpbin_url}/get")
             assert response.status_code == 200
 
@@ -267,7 +282,7 @@ class TestInstanceLimits:
 
         try:
             for i in range(5):
-                client = CycleTLS()
+                client = _no_reuse_client()
                 instances.append(client)
 
             assert len(instances) == 5
@@ -281,13 +296,13 @@ class TestInstanceLimits:
     def test_reuse_after_close(self, httpbin_url):
         """Test creating a new instance after closing previous one."""
         # Create and close first instance
-        client1 = CycleTLS()
+        client1 = _no_reuse_client()
         response1 = client1.get(f"{httpbin_url}/get")
         assert response1.status_code == 200
         client1.close()
 
         # Create new instance
-        client2 = CycleTLS()
+        client2 = _no_reuse_client()
         try:
             response2 = client2.get(f"{httpbin_url}/get")
             assert response2.status_code == 200
@@ -300,7 +315,7 @@ class TestThreadSafety:
 
     def test_single_instance_multiple_threads(self, httpbin_url):
         """Test using a single instance from multiple threads."""
-        with CycleTLS() as client:
+        with _no_reuse_client() as client:
             results = []
             errors = []
 
@@ -326,7 +341,7 @@ class TestThreadSafety:
 
     def test_multiple_instances_multiple_threads(self, httpbin_url):
         """Test multiple instances each used by different threads."""
-        clients = [CycleTLS() for _ in range(3)]
+        clients = [_no_reuse_client() for _ in range(3)]
         results = []
 
         def make_request(client, request_id):

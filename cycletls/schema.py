@@ -6,6 +6,7 @@ import base64
 import json
 import math
 import re
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -260,7 +261,7 @@ class SSEEvent:
     retry: Optional[int] = None
 
 
-@dataclass(slots=True)
+@dataclass(**{"slots": True} if sys.version_info >= (3, 10) else {})
 class Response:
     """Enhanced response model with binary data and cookies."""
 
