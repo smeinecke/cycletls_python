@@ -81,7 +81,10 @@ func parseError(err error) (errormessage errorMessage) {
 	}
 
 	status := lastString(strings.Split(httpError, "StatusCode:"))
-	StatusCode, _ := strconv.Atoi(status)
+	StatusCode, _ := strconv.Atoi(strings.TrimSpace(status))
+	if StatusCode < 0 || StatusCode > 65535 {
+		StatusCode = 0
+	}
 	if StatusCode != 0 {
 		msg, debugger := createErrorString(err)
 		return errorMessage{StatusCode: StatusCode, debugger: debugger, ErrorMsg: msg}

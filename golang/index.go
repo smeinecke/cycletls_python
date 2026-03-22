@@ -1603,8 +1603,8 @@ func WSEndpoint(w nhttp.ResponseWriter, r *nhttp.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(headers)
-		log.Println(body)
+		debugLogger.Println(headers)
+		debugLogger.Println(body)
 
 	} else {
 		chanRead := make(chan fullRequest)
