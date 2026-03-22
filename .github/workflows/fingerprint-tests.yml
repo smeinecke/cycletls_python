@@ -42,7 +42,7 @@ jobs:
       - name: Install Playwright
         run: pip install "playwright==1.58.0"
 
-      - name: Install Playwright browsers (for Android ADB support)
+      - name: Install Playwright browsers (for CDP connection to Android Chrome)
         run: playwright install chromium --with-deps
 
       - name: Generate TLS certificates for TrackMe
@@ -74,8 +74,14 @@ jobs:
         with:
           api-level: 34
           arch: x86_64
+          target: google_apis_playstore
           profile: pixel_7
+          emulator-boot-timeout: 300
           script: |
+            echo "==> Emulator booted. Waiting 30 s for Play Services to settle..."
+            sleep 30
+            echo "==> ADB devices:"
+            adb devices
             mkdir -p tests/integration/artifacts
             python scripts/capture_browser_fingerprints.py --android-only --url https://10.0.2.2:8443 --output tests/integration/artifacts/captured-android.json --ignore-https-errors
 
@@ -261,7 +267,7 @@ jobs:
             tests/integration/test_browser_fingerprint_replication.py
 
       - name: Commit updated fingerprint registry
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         run: |
           if git diff --quiet -- cycletls/data/fingerprints.json; then
             echo "No fingerprint registry changes to commit."
@@ -271,7 +277,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add cycletls/data/fingerprints.json
           git commit -m "chore: update fingerprint registry from CI capture"
-          git push
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
 
       - name: Upload captured fingerprints as artifact
         if: always()

@@ -40,4 +40,5 @@ services:
 
 networks:
   fingerprint-net:
+    name: fingerprint-net
     driver: bridge

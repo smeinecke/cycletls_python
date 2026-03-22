@@ -28,6 +28,105 @@ trackme-certs :
 		echo "Certs generated."; \
 	fi
 
+# Run Android Chrome fingerprint capture locally using Docker (budtmo/docker-android).
+# Requires: Docker with KVM access (/dev/kvm), adb on PATH.
+#
+# The Android emulator persists its userdata in a named Docker volume so the
+# Play Store image keeps its ADB trust state between runs. On first use, accept
+# the ADB authorization dialog in the emulator and check "Always allow".
+# A noVNC web UI is available at http://localhost:6080 to watch/interact with the
+# emulator (useful for debugging Chrome's First Run Experience).
+#
+# Usage:
+#   make android-capture-docker           # start emulator + capture
+#   make android-capture-docker-stop      # tear down
+
+# First run builds the image (downloads ~3 GB of SDK + system image — takes ~15 min).
+# Subsequent runs reuse the cached image and start in ~3-5 min.
+# Open http://localhost:6080 during the run to watch the emulator screen via noVNC.
+.PHONY : android-capture-docker
+android-capture-docker : trackme-certs
+	@echo "==> Tearing down any previous run ..."
+	docker compose -f docker-compose.android-capture.yml down 2>/dev/null || true
+	docker compose -f docker-compose.fingerprint-tests.yml down -v 2>/dev/null || true
+	adb disconnect localhost:5555 2>/dev/null || true
+	@echo "==> Starting TrackMe ..."
+	docker compose -f docker-compose.fingerprint-tests.yml up -d --remove-orphans --build trackme
+	@for i in $$(seq 1 40); do \
+		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
+		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
+		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe is ready."; break; fi; \
+		if [ $$i -eq 40 ]; then echo "TrackMe did not become ready."; exit 1; fi; \
+		sleep 3; \
+	done
+
+	@echo "==> Building + starting Android emulator (first run downloads ~3 GB) ..."
+	@echo "    noVNC → http://localhost:6080"
+	docker compose -f docker-compose.android-capture.yml up -d --build --remove-orphans
+	@echo "Waiting for emulator to boot (3-5 min) ..."
+	@for i in $$(seq 1 120); do \
+		if adb connect localhost:5555 2>/dev/null | grep -q "connected"; then \
+			BOOT=$$(adb -s localhost:5555 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r\n'); \
+			if [ "$$BOOT" = "1" ]; then echo "Emulator booted."; break; fi; \
+		fi; \
+		if [ $$i -eq 120 ]; then echo "Emulator did not boot in time."; exit 1; fi; \
+		sleep 5; \
+	done
+
+	@echo "==> Running Android capture ..."
+	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
+	uv run python scripts/capture_browser_fingerprints.py \
+		--android-only \
+		--url https://10.0.2.2:8443 \
+		--output $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json \
+		--ignore-https-errors
+	@echo "--- Captured Android fingerprints ---"
+	@cat $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json
+
+.PHONY : android-capture-docker-stop
+android-capture-docker-stop :
+	docker compose -f docker-compose.android-capture.yml down || true
+	docker compose -f docker-compose.fingerprint-tests.yml down -v || true
+	adb disconnect localhost:5555 2>/dev/null || true
+
+.PHONY : android-capture-docker-reset
+android-capture-docker-reset :
+	docker compose -f docker-compose.android-capture.yml down -v || true
+	adb disconnect localhost:5555 2>/dev/null || true
+
+# Run Android Chrome fingerprint capture against a locally connected ADB device.
+# Works with a real Android device (USB) or a local Android Studio AVD.
+# Requires: adb on PATH, at least one device shown in `adb devices`.
+#
+# Usage:
+#   make android-capture-local
+#   make android-capture-local ADB_SERIAL=emulator-5554   # target a specific device
+
+.PHONY : android-capture-local
+android-capture-local : trackme-certs
+	@echo "==> Connected ADB devices:"
+	@adb devices
+	@echo ""
+	@echo "==> Starting TrackMe (port-mapped, accessible at 10.0.2.2:8443 from emulator)..."
+	docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
+	@for i in $$(seq 1 40); do \
+		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
+		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
+		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe is ready."; break; fi; \
+		if [ $$i -eq 40 ]; then echo "TrackMe did not become ready."; exit 1; fi; \
+		sleep 3; \
+	done
+	@echo "==> Running Android capture..."
+	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
+	uv run python scripts/capture_browser_fingerprints.py \
+		--android-only \
+		--url https://10.0.2.2:8443 \
+		--output $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json \
+		--ignore-https-errors
+	@echo "--- Captured Android fingerprints ---"
+	@cat $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json
+	@docker compose -f docker-compose.fingerprint-tests.yml down -v || true
+
 # Run fingerprint replication tests locally (desktop browsers only, no Android).
 # Steps mirror the CI fingerprint-tests job:
 #   1. Start TrackMe on a bridge network (reachable by the Playwright Docker container)
