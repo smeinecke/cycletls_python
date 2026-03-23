@@ -48,6 +48,7 @@ from playwright.sync_api import sync_playwright
 
 _CHROME_PACKAGE = "com.android.chrome"
 _CHROME_ACTIVITY = "com.google.android.apps.chrome.Main"
+_BROWSER_LAUNCH_TIMEOUT_MS = 30_000
 
 
 def _adb_base_command() -> list[str]:
@@ -153,7 +154,7 @@ def _profile_name(browser_name: str, version: str) -> str:
     return f"{browser_name}_{safe_version}{_platform_suffix()}".lower()
 
 
-def _candidate_targets() -> list[dict]:
+def _candidate_targets(headless_chrome: bool) -> list[dict]:
     """Potential launch targets; availability is detected at runtime."""
     targets = [
         {"type": "chromium", "channel": None, "profile_browser": "chromium", "label": "chromium"},
@@ -187,6 +188,10 @@ def _candidate_targets() -> list[dict]:
     # Linux Edge channels have been flaky in CI; skip them on Linux captures.
     if sys.platform.startswith("linux"):
         targets = [t for t in targets if not t["profile_browser"].startswith("msedge")]
+        # In headed Linux CI, the bundled Playwright Chromium target has shown
+        # sporadic launch hangs. Use the stable Chrome channel instead.
+        if not headless_chrome:
+            targets = [t for t in targets if t["label"] != "chromium"]
 
     return targets
 
@@ -202,7 +207,7 @@ def _discover_available_targets(playwright_instance, headless_chrome: bool) -> t
     available: list[dict] = []
     unavailable: dict[str, str] = {}
 
-    for target in _candidate_targets():
+    for target in _candidate_targets(headless_chrome):
         browser_type = getattr(playwright_instance, target["type"], None)
         if browser_type is None:
             unavailable[target["label"]] = "browser type not available"
@@ -213,6 +218,7 @@ def _discover_available_targets(playwright_instance, headless_chrome: bool) -> t
             launch_kwargs["channel"] = target["channel"]
         if target.get("executable_path"):
             launch_kwargs["executable_path"] = target["executable_path"]
+        launch_kwargs["timeout"] = _BROWSER_LAUNCH_TIMEOUT_MS
 
         try:
             browser = browser_type.launch(**launch_kwargs)
@@ -239,6 +245,7 @@ def capture_fingerprint(
         launch_kwargs["channel"] = target["channel"]
     if target.get("executable_path"):
         launch_kwargs["executable_path"] = target["executable_path"]
+    launch_kwargs["timeout"] = _BROWSER_LAUNCH_TIMEOUT_MS
 
     browser = browser_type.launch(**launch_kwargs)
     context = browser.new_context(ignore_https_errors=ignore_https_errors)
