@@ -153,11 +153,10 @@ jobs:
             -subj "/CN=trackme" \
             -addext "subjectAltName=DNS:trackme,DNS:localhost,IP:127.0.0.1"
 
-      - name: Capture real browser fingerprints via Playwright (Linux/local TrackMe)
+      - name: Start TrackMe for Linux capture
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          mkdir -p tests/integration/artifacts
           docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
           echo "Waiting for TrackMe to become healthy..."
           if ! timeout 120 bash -c \
@@ -168,8 +167,17 @@ jobs:
             docker compose -f docker-compose.fingerprint-tests.yml logs trackme
             exit 1
           fi
-          docker compose -f docker-compose.fingerprint-tests.yml run --rm playwright-capture
-          mv tests/integration/artifacts/captured.json tests/integration/artifacts/captured-${{ runner.os }}.json
+
+      - name: Capture real browser fingerprints via Playwright (Linux/local TrackMe)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          mkdir -p tests/integration/artifacts
+          python scripts/capture_browser_fingerprints.py \
+            --url https://localhost:8443 \
+            --output tests/integration/artifacts/captured-${{ runner.os }}.json \
+            --ignore-https-errors \
+            --headless-chrome
 
       - name: Capture real browser fingerprints via Playwright (macOS/Windows)
         if: runner.os != 'Linux'
