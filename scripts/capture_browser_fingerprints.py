@@ -215,10 +215,9 @@ def _discover_available_targets(playwright_instance, headless_chrome: bool) -> t
             launch_kwargs["channel"] = target["channel"]
         if target.get("executable_path"):
             launch_kwargs["executable_path"] = target["executable_path"]
-        launch_kwargs["timeout"] = _BROWSER_LAUNCH_TIMEOUT_MS
 
         try:
-            browser = browser_type.launch(**launch_kwargs)
+            browser = browser_type.launch(**launch_kwargs, timeout=_BROWSER_LAUNCH_TIMEOUT_MS)
             browser.close()
             available.append(target)
             print(f"[discover] available: {target['label']}", flush=True)
@@ -242,9 +241,8 @@ def capture_fingerprint(
         launch_kwargs["channel"] = target["channel"]
     if target.get("executable_path"):
         launch_kwargs["executable_path"] = target["executable_path"]
-    launch_kwargs["timeout"] = _BROWSER_LAUNCH_TIMEOUT_MS
 
-    browser = browser_type.launch(**launch_kwargs)
+    browser = browser_type.launch(**launch_kwargs, timeout=_BROWSER_LAUNCH_TIMEOUT_MS)
     context = browser.new_context(ignore_https_errors=ignore_https_errors)
     page = context.new_page()
 
