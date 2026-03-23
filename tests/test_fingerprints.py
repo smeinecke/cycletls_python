@@ -157,7 +157,7 @@ class TestFingerprintRegistry:
         chrome = FingerprintRegistry.get("chrome_120_win")
         assert chrome.name == "chrome_120_win"
         assert chrome.ja3.startswith("771")
-        assert "Chrome" in chrome.user_agent
+        assert chrome.user_agent is not None and "Chrome" in chrome.user_agent
 
     def test_get_nonexistent_profile(self):
         """Test getting a non-existent profile raises KeyError."""
@@ -355,7 +355,7 @@ class TestBrowserFamilyAndPlatform:
 
     def test_latest_raises_when_no_match(self):
         with pytest.raises(KeyError, match="No profiles found"):
-            FingerprintRegistry.latest(BrowserFamily.SAFARI, platform=Platform.WINDOWS)
+            FingerprintRegistry.latest(BrowserFamily.SAFARI, platform=Platform.ANDROID)
 
     # --- random ---
 
@@ -373,7 +373,7 @@ class TestBrowserFamilyAndPlatform:
 
     def test_random_raises_when_no_match(self):
         with pytest.raises(KeyError, match="No profiles found"):
-            FingerprintRegistry.random(BrowserFamily.SAFARI, platform=Platform.WINDOWS)
+            FingerprintRegistry.random(BrowserFamily.SAFARI, platform=Platform.ANDROID)
 
 
 class TestPluginLoading:
