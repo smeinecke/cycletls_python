@@ -185,13 +185,10 @@ def _candidate_targets(headless_chrome: bool) -> list[dict]:
         {"type": "webkit", "channel": None, "profile_browser": "safari", "label": "webkit:safari"},
     ]
 
-    # Linux Edge channels have been flaky in CI; skip them on Linux captures.
-    if sys.platform.startswith("linux"):
-        targets = [t for t in targets if not t["profile_browser"].startswith("msedge")]
-        # In headed Linux CI, the bundled Playwright Chromium target has shown
-        # sporadic launch hangs. Use the stable Chrome channel instead.
-        if not headless_chrome:
-            targets = [t for t in targets if t["label"] != "chromium"]
+    # In headed Linux CI, the bundled Playwright Chromium target has shown
+    # sporadic launch hangs. Use the stable Chrome channel instead.
+    if sys.platform.startswith("linux") and not headless_chrome:
+        targets = [t for t in targets if t["label"] != "chromium"]
 
     return targets
 

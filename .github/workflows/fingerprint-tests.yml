@@ -132,7 +132,7 @@ jobs:
         shell: bash
         run: |
           playwright install --with-deps chromium firefox webkit
-          playwright install chrome
+          playwright install chrome msedge
 
       - name: Install Playwright browsers and channels (macOS/Windows)
         if: runner.os != 'Linux'
