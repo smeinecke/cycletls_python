@@ -9,6 +9,8 @@ Tests core async operations including:
 """
 
 import pytest
+
+pytestmark = pytest.mark.live
 import cycletls
 from cycletls import AsyncCycleTLS
 

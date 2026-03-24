@@ -13,6 +13,8 @@ import time
 import cycletls
 from cycletls import AsyncCycleTLS
 
+pytestmark = pytest.mark.live
+
 
 class TestAsyncConcurrent:
     """Test concurrent async request execution."""

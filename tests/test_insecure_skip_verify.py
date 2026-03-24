@@ -19,6 +19,15 @@ def _skip_if_network_error(exc: BaseException) -> None:
     if any(phrase in msg for phrase in _NETWORK_ERROR_PHRASES):
         pytest.skip(f"badssl.com network error (not a TLS error): {exc}")
 
+_NETWORK_ERROR_PHRASES = ("eof", "server closed", "connection reset", "connection refused", "i/o timeout")
+
+
+def _skip_if_network_error(exc: BaseException) -> None:
+    """Skip the test if *exc* is a transient network error rather than a TLS/cert error."""
+    msg = str(exc).lower()
+    if any(phrase in msg for phrase in _NETWORK_ERROR_PHRASES):
+        pytest.skip(f"badssl.com network error (not a TLS error): {exc}")
+
 
 @pytest.fixture
 def client():

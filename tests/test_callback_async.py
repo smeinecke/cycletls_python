@@ -6,6 +6,8 @@ efficient callback mechanism, reducing FFI calls from 10-200 per request to just
 """
 
 import pytest
+
+pytestmark = pytest.mark.live
 import asyncio
 import sys
 import os

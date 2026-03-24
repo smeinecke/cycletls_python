@@ -11,6 +11,8 @@ import asyncio
 
 import pytest
 
+pytestmark = pytest.mark.live
+
 from cycletls import CycleTLS, AsyncCycleTLS
 
 

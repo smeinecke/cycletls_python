@@ -234,7 +234,7 @@ class RequestBatcher:
                     pending.future.set_exception(exc)
             return
 
-        for pending, result in zip(batch, results, strict=True):
+        for pending, result in zip(batch, results):
             if not pending.future.done():
                 pending.future.set_result(result)
 
