@@ -125,7 +125,7 @@ class TestPrepareRequest:
         client = CycleTLS()
         # chrome_120 is a built-in fingerprint
         payload = client._prepare_request(
-            "GET", "https://example.com", fingerprint="chrome_120"
+            "GET", "https://example.com", fingerprint="chrome_120_win"
         )
         options = payload["options"]
         # chrome_120 sets a specific ja3 and user_agent
@@ -384,7 +384,7 @@ class TestARequest:
         with patch("cycletls.api.ffi_send_request_async", new_callable=AsyncMock) as mock_ffi:
             mock_ffi.return_value = fake_data
             response = await client.arequest(
-                "GET", "https://example.com", fingerprint="chrome_120"
+                "GET", "https://example.com", fingerprint="chrome_120_win"
             )
             assert isinstance(response, Response)
 
@@ -491,9 +491,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.aget("https://example.com", fingerprint="chrome_120")
+            await client.aget("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
     @pytest.mark.asyncio
     async def test_apost_has_fingerprint(self):
@@ -503,9 +503,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.apost("https://example.com", fingerprint="firefox_121")
+            await client.apost("https://example.com", fingerprint="firefox_121_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "firefox_121"
+            assert call_kwargs.get("fingerprint") == "firefox_121_win"
 
     @pytest.mark.asyncio
     async def test_aput_has_fingerprint(self):
@@ -515,9 +515,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.aput("https://example.com", fingerprint="chrome_120")
+            await client.aput("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
     @pytest.mark.asyncio
     async def test_apatch_has_fingerprint(self):
@@ -527,9 +527,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.apatch("https://example.com", fingerprint="chrome_120")
+            await client.apatch("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
     @pytest.mark.asyncio
     async def test_adelete_has_fingerprint(self):
@@ -539,9 +539,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.adelete("https://example.com", fingerprint="chrome_120")
+            await client.adelete("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
     @pytest.mark.asyncio
     async def test_ahead_has_fingerprint(self):
@@ -551,9 +551,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.ahead("https://example.com", fingerprint="chrome_120")
+            await client.ahead("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
     @pytest.mark.asyncio
     async def test_aoptions_has_fingerprint(self):
@@ -563,9 +563,9 @@ class TestAsyncConvenienceMethodsHaveFingerprint:
             mock_areq.return_value = Response(
                 request_id="1", status_code=200, body="ok"
             )
-            await client.aoptions("https://example.com", fingerprint="chrome_120")
+            await client.aoptions("https://example.com", fingerprint="chrome_120_win")
             call_kwargs = mock_areq.call_args[1]
-            assert call_kwargs.get("fingerprint") == "chrome_120"
+            assert call_kwargs.get("fingerprint") == "chrome_120_win"
 
 
 class TestABatch:

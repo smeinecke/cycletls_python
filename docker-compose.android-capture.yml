@@ -1,0 +1,38 @@
+services:
+  android:
+    build:
+      context: ./docker/android-emulator
+    # KVM for hardware-accelerated emulation (same as CI)
+    devices:
+      - /dev/kvm:/dev/kvm
+    ports:
+      - "5555:5555"   # ADB
+      - "6080:6080"   # noVNC  →  http://localhost:6080
+      - "9222:9222"   # Chrome DevTools bridge for host Playwright
+    volumes:
+      # Persist emulator userdata and the container-side adb key across restarts.
+      - android-home:/root/.android
+      # Mirror the host adb identity so host `adb connect localhost:5555`
+      # matches the key the emulator sees during boot.
+      - "${HOME}/.android:/tmp/host-android:ro"
+    networks:
+      - android-net
+
+  # Thin socat proxy so Chrome inside the emulator can reach TrackMe.
+  # Inside the emulator 10.0.2.2 = QEMU host = android container.
+  # socat listens on *:8443 there and forwards to trackme:8443.
+  trackme-proxy:
+    image: alpine/socat
+    command: TCP4-LISTEN:8443,fork,reuseaddr TCP4:trackme:8443
+    networks:
+      - android-net
+      - fingerprint-net
+
+networks:
+  android-net:
+    driver: bridge
+  fingerprint-net:
+    external: true    # created by docker-compose.fingerprint-tests.yml
+
+volumes:
+  android-home:
