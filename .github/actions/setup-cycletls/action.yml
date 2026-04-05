@@ -5,13 +5,13 @@ inputs:
   go-version:
     description: Go version to use
     required: false
-    default: '1.26'
+    default: "1.26"
 
 runs:
   using: composite
   steps:
     - name: Setup Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v6
       with:
         go-version: ${{ inputs.go-version }}
         cache-dependency-path: |
@@ -19,7 +19,7 @@ runs:
           golang/go.sum
 
     - name: Cache Go build
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.cache/go-build
