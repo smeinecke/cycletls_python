@@ -44,7 +44,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Playwright
-        run: pip install "playwright==1.58.0"
+        run: pip install playwright
 
       - name: Install Playwright browsers (for CDP connection to Android Chrome)
         run: playwright install chromium --with-deps
@@ -128,7 +128,7 @@ jobs:
 
       - name: Install Playwright
         shell: bash
-        run: pip install "playwright==1.58.0"
+        run: pip install playwright
 
       - name: Install Playwright browsers and channels (Linux)
         if: runner.os == 'Linux'
