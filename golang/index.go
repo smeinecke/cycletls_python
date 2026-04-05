@@ -739,8 +739,9 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 			b.WriteByte(0)
 			b.WriteByte(5)
 			b.WriteString("error")
-			b.WriteByte(byte(parsedError.StatusCode >> 8))
-			b.WriteByte(byte(parsedError.StatusCode))
+			statusCode743 := uint16(parsedError.StatusCode)
+			b.WriteByte(byte(statusCode743 >> 8))
+			b.WriteByte(byte(statusCode743))
 
 			var message = parsedError.ErrorMsg + "-> \n" + string(err.Error())
 			var messageLength = len(message)
@@ -849,8 +850,9 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 					b.WriteByte(0)
 					b.WriteByte(5)
 					b.WriteString("error")
-					b.WriteByte(byte(parsedError.StatusCode >> 8))
-					b.WriteByte(byte(parsedError.StatusCode))
+					statusCode853 := uint16(parsedError.StatusCode)
+					b.WriteByte(byte(statusCode853 >> 8))
+					b.WriteByte(byte(statusCode853))
 
 					message := parsedError.ErrorMsg
 					messageLength := len(message)
