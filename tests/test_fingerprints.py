@@ -99,21 +99,22 @@ class TestTLSFingerprint:
                 f,
             )
             f.flush()
+            temp_path = f.name
 
-            fp = TLSFingerprint.from_json(f.name)
-            assert fp.name == "json_browser"
-            assert fp.user_agent == "JSON/1.0"
+        fp = TLSFingerprint.from_json(temp_path)
+        assert fp.name == "json_browser"
+        assert fp.user_agent == "JSON/1.0"
 
-            # Test to_json
-            output_path = Path(f.name).with_suffix(".out.json")
-            fp.to_json(output_path)
-            fp2 = TLSFingerprint.from_json(output_path)
-            assert fp2.name == fp.name
-            assert fp2.ja3 == fp.ja3
+        # Test to_json
+        output_path = Path(temp_path).with_suffix(".out.json")
+        fp.to_json(output_path)
+        fp2 = TLSFingerprint.from_json(output_path)
+        assert fp2.name == fp.name
+        assert fp2.ja3 == fp.ja3
 
-            # Cleanup
-            output_path.unlink()
-            Path(f.name).unlink()
+        # Cleanup (file is now closed, safe for Windows)
+        output_path.unlink()
+        Path(temp_path).unlink()
 
     def test_apply_to_kwargs(self):
         """Test applying fingerprint to request kwargs."""
@@ -423,14 +424,15 @@ class TestPluginLoading:
                 f,
             )
             f.flush()
+            temp_path = f.name
 
-            fp = load_fingerprint_from_file(f.name)
-            assert fp.name == "single_file_browser"
-            assert "single_file_browser" in FingerprintRegistry.list()
+        fp = load_fingerprint_from_file(temp_path)
+        assert fp.name == "single_file_browser"
+        assert "single_file_browser" in FingerprintRegistry.list()
 
-            # Cleanup
-            FingerprintRegistry.unregister("single_file_browser")
-            Path(f.name).unlink()
+        # Cleanup (file is now closed, safe for Windows)
+        FingerprintRegistry.unregister("single_file_browser")
+        Path(temp_path).unlink()
 
     def test_create_fingerprint_template(self):
         """Test creating a fingerprint template file."""
