@@ -10,8 +10,8 @@ concurrency:
 
 on:
   schedule:
-    # Run weekly on Sundays at 3:00 AM UTC
-    - cron: '0 3 * * 0'
+    # Run daily at 3:00 AM UTC
+    - cron: '0 3 * * *'
   pull_request:
     branches:
       - main
@@ -439,13 +439,42 @@ jobs:
               print("No new fingerprints to add.")
           EOF
 
-      - name: Create fingerprint update PR
+      - name: Check for existing fingerprint PR
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect_new_fingerprints.outputs.has_new == 'true'
+        id: check_existing_pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          new_names="${{ steps.detect_new_fingerprints.outputs.new_names }}"
+          # Search for open PRs with the same fingerprint names in title or body
+          existing_pr=$(gh pr list --repo ${{ github.repository }} --state open --json number,title,body --jq "
+            .[] | select(
+              (.title | contains(\"fingerprint registry\")) and
+              (.body | contains(\"${new_names}\"))
+            ) | .number
+          ")
+          if [ -n "$existing_pr" ]; then
+            echo "Existing PR found: #$existing_pr with same fingerprints"
+            echo "has_existing_pr=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No existing PR found with same fingerprints"
+            echo "has_existing_pr=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate branch name
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect_new_fingerprints.outputs.has_new == 'true' && steps.check_existing_pr.outputs.has_existing_pr != 'true'
+        id: gen_branch_name
+        run: |
+          date_suffix=$(date +%Y%m%d)
+          echo "branch_name=ci/fingerprint-registry-update-${date_suffix}" >> "$GITHUB_OUTPUT"
+
+      - name: Create fingerprint update PR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect_new_fingerprints.outputs.has_new == 'true' && steps.check_existing_pr.outputs.has_existing_pr != 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           add-paths: |
             cycletls/data/fingerprints.json
-          branch: ci/fingerprint-registry-update
+          branch: ${{ steps.gen_branch_name.outputs.branch_name }}
           commit-message: "chore: update fingerprint registry from CI capture"
           title: "chore: update fingerprint registry from CI capture"
           body: |
