@@ -6,11 +6,29 @@ Based on CycleTLS/tests/insecureSkipVerify.test.ts
 import pytest
 from cycletls import CycleTLS
 
+# badssl.com is an external service that occasionally drops connections (EOF).
+# Retry up to 5 times with a short delay before treating a failure as real.
+pytestmark = pytest.mark.flaky(reruns=5, reruns_delay=2)
+
+_NETWORK_ERROR_PHRASES = ("eof", "server closed", "connection reset", "connection refused", "i/o timeout")
+
+
+def _skip_if_network_error(exc: BaseException) -> None:
+    """Skip the test if *exc* is a transient network error rather than a TLS/cert error."""
+    msg = str(exc).lower()
+    if any(phrase in msg for phrase in _NETWORK_ERROR_PHRASES):
+        pytest.skip(f"badssl.com network error (not a TLS error): {exc}")
+
 
 @pytest.fixture
 def client():
-    """Create a CycleTLS client instance"""
+    """Create a CycleTLS client instance with connection reuse disabled."""
     cycle = CycleTLS()
+    _orig = cycle.request
+    def _no_reuse(method, url, **kwargs):
+        kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+    cycle.request = _no_reuse
     yield cycle
     cycle.close()
 
@@ -83,12 +101,16 @@ def test_self_signed_certificate_accepted_with_skip_verify(client, firefox_ja3, 
     """Test that self-signed certificate is accepted when insecure_skip_verify is True"""
     url = "https://self-signed.badssl.com"
 
-    result = client.get(
-        url,
-        ja3=firefox_ja3,
-        user_agent=firefox_user_agent,
-        insecure_skip_verify=True
-    )
+    try:
+        result = client.get(
+            url,
+            ja3=firefox_ja3,
+            user_agent=firefox_user_agent,
+            insecure_skip_verify=True
+        )
+    except Exception as exc:
+        _skip_if_network_error(exc)
+        raise
 
     # Should successfully connect despite self-signed certificate
     assert result.status_code == 200
@@ -215,6 +237,8 @@ def test_certificate_errors_parametrized(client, firefox_ja3, firefox_user_agent
         )
 
     error_msg = str(exc_info.value).lower()
+    # If badssl.com dropped the connection before the TLS handshake, skip rather than fail.
+    _skip_if_network_error(exc_info.value)
     # At least one of the expected keywords should be in the error message
     assert any(
         any(keyword in error_msg for keyword in keywords)
