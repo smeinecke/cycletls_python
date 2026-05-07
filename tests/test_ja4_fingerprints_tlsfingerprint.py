@@ -1,22 +1,25 @@
 """
-JA4 Fingerprint Validation Tests against tlsfingerprint.com
+JA4 Fingerprint Validation Tests against tls.peet.ws
 
 Tests JA4 and JA4_r fingerprinting functionality by verifying the observed
-fingerprints at tlsfingerprint.com when different JA4_r configurations are used.
+fingerprints at tls.peet.ws when different JA4_r configurations are used.
 
 Run with: pytest tests/test_ja4_fingerprints_tlsfingerprint.py -v -m live
 Skip with: pytest -m "not live"
 
 Based on: test_ja4_fingerprints.py
 """
+import os
+
 import pytest
+
 from cycletls import CycleTLS
 
 # Mark all tests in this module as live tests
 pytestmark = pytest.mark.live
 
-# Base URL for tlsfingerprint.com
-BASE_URL = "https://tlsfingerprint.com"
+# Base URL — override with TLSFP_URL to point at a local tlsfingerprint.com Docker instance
+BASE_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 # JA4_r fingerprints from test_ja4_fingerprints.py
 JA4R_FINGERPRINTS = [
@@ -45,7 +48,7 @@ JA4R_FINGERPRINTS = [
 
 def extract_ja4_from_response(data: dict) -> dict:
     """
-    Extract JA4 data from tlsfingerprint.com response.
+    Extract JA4 data from tls.peet.ws response.
 
     Response format:
     {
@@ -70,10 +73,22 @@ def extract_ja4_from_response(data: dict) -> dict:
     return {}
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def cycle_client():
-    """Create a single CycleTLS client for all tests in this module"""
+    """Create a CycleTLS client with connection reuse disabled.
+
+    tlsfingerprint.com closes connections after each request. With the default
+    enable_connection_reuse=True the Go transport caches the TLS connection
+    globally; the next test picks up the closed connection and gets
+    "use of closed network connection". Setting enable_connection_reuse=False
+    creates a fresh roundTripper per request, avoiding stale connections.
+    """
     with CycleTLS() as client:
+        _orig_request = client.request
+        def _no_reuse(method, url, **kwargs):
+            kwargs.setdefault("enable_connection_reuse", False)
+            return _orig_request(method, url, **kwargs)
+        client.request = _no_reuse
         yield client
 
 
@@ -81,7 +96,7 @@ class TestJA4FingerprintApplication:
     """Test that JA4 fingerprints are correctly applied"""
 
     def test_response_contains_ja4_data(self, cycle_client):
-        """Test that tlsfingerprint.com returns JA4 data"""
+        """Test that tls.peet.ws returns JA4 data"""
         response = cycle_client.get(f"{BASE_URL}/api/all")
 
         assert response.status_code == 200

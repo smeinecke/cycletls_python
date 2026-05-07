@@ -1,27 +1,30 @@
 """
-HTTP/2 Fingerprint Validation Tests against tlsfingerprint.com
+HTTP/2 Fingerprint Validation Tests against tls.peet.ws
 
 Tests HTTP/2 Akamai fingerprint generation and validation by verifying the
-observed fingerprints at tlsfingerprint.com.
+observed fingerprints at tls.peet.ws.
 
 Run with: pytest tests/test_http2_fingerprint_tlsfingerprint.py -v -m live
 Skip with: pytest -m "not live"
 
 Based on: test_http2_fingerprint.py, test_frame_headers.py
 """
+import os
+
 import pytest
+
 from cycletls import CycleTLS
 
 # Mark all tests in this module as live tests
 pytestmark = pytest.mark.live
 
-# Base URL for tlsfingerprint.com
-BASE_URL = "https://tlsfingerprint.com"
+# Base URL — override with TLSFP_URL to point at a local tlsfingerprint.com Docker instance
+BASE_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 
 def extract_http2_from_response(data: dict) -> dict:
     """
-    Extract HTTP/2 fingerprint data from tlsfingerprint.com response.
+    Extract HTTP/2 fingerprint data from tls.peet.ws response.
 
     Response format:
     {
@@ -37,10 +40,22 @@ def extract_http2_from_response(data: dict) -> dict:
     return data.get("http2", {})
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def cycle_client():
-    """Create a single CycleTLS client for all tests in this module"""
+    """Create a CycleTLS client with connection reuse disabled.
+
+    tlsfingerprint.com closes connections after each request. With the default
+    enable_connection_reuse=True the Go transport caches the TLS connection
+    globally; the next test picks up the closed connection and gets
+    "use of closed network connection". Setting enable_connection_reuse=False
+    creates a fresh roundTripper per request, avoiding stale connections.
+    """
     with CycleTLS() as client:
+        _orig_request = client.request
+        def _no_reuse(method, url, **kwargs):
+            kwargs.setdefault("enable_connection_reuse", False)
+            return _orig_request(method, url, **kwargs)
+        client.request = _no_reuse
         yield client
 
 
@@ -48,7 +63,7 @@ class TestHTTP2FingerprintData:
     """Test that HTTP/2 fingerprint data is returned"""
 
     def test_response_contains_http2_data(self, cycle_client):
-        """Test that tlsfingerprint.com returns HTTP/2 data"""
+        """Test that tls.peet.ws returns HTTP/2 data"""
         response = cycle_client.get(f"{BASE_URL}/api/all")
 
         assert response.status_code == 200

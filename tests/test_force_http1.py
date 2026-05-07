@@ -3,14 +3,35 @@ Tests for force_http1 functionality.
 Based on CycleTLS/tests/forceHTTP1.test.ts
 """
 
+import os
+
 import pytest
+
 from cycletls import CycleTLS
+
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+
+pytestmark = pytest.mark.live
 
 
 @pytest.fixture
 def client():
-    """Create a CycleTLS client instance"""
+    """Create a CycleTLS client instance.
+
+    Connection reuse is disabled ONLY for requests against the local
+    tlsfingerprint.com server (which closes the TLS connection after each
+    response). Requests against httpbin.org rely on HTTP/1.1 keep-alive
+    and break when reuse is force-disabled (httpbin closes idle conns
+    aggressively, causing "server closed idle connection" / EOF errors
+    on the next request).
+    """
     cycle = CycleTLS()
+    _orig = cycle.request
+    def _no_reuse_for_tlsfp(method, url, **kwargs):
+        if _TLSFP_URL in url:
+            kwargs.setdefault("enable_connection_reuse", False)
+        return _orig(method, url, **kwargs)
+    cycle.request = _no_reuse_for_tlsfp
     yield cycle
     cycle.close()
 
@@ -29,7 +50,7 @@ def chrome_user_agent():
 
 def test_http2_by_default(client, chrome_ja3, chrome_user_agent):
     """Test that HTTP/2 is used by default when server supports it"""
-    url = "https://tls.peet.ws/api/all"
+    url = f"{_TLSFP_URL}/api/all"
 
     result = client.get(
         url,
@@ -48,7 +69,7 @@ def test_http2_by_default(client, chrome_ja3, chrome_user_agent):
 
 def test_force_http1_on_http2_server(client, chrome_ja3, chrome_user_agent):
     """Test that HTTP/1.1 is forced when force_http1 is True"""
-    url = "https://tls.peet.ws/api/all"
+    url = f"{_TLSFP_URL}/api/all"
 
     result = client.get(
         url,
