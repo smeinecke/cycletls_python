@@ -5,6 +5,7 @@ pytest configuration and shared fixtures for CycleTLS tests.
 import os
 import re
 import sys
+from urllib.parse import urlparse
 
 import pytest
 
@@ -15,6 +16,19 @@ _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 # TrackMe base URL — override with TRACKME_URL env var to point at a local instance
 _TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+
+
+def _is_external_endpoint(url: str) -> bool:
+    """Return True if *url* points to an endpoint that aggressively closes idle connections."""
+    hostname = urlparse(url).hostname
+    if hostname is None:
+        return False
+    # Local tlsfingerprint.com Docker and the production tls.peet.ws both close
+    # connections after every response.
+    if _TLSFP_URL in url:
+        return True
+    # httpbin.org closes idle connections aggressively.
+    return hostname == "httpbin.org" or hostname.endswith(".httpbin.org")
 
 # Add parent directory to path to import cycletls
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -37,7 +51,7 @@ def cycletls_client():
     client = CycleTLS()
     _orig = client.request
     def _no_reuse_for_external(method, url, **kwargs):
-        if _TLSFP_URL in url or "httpbin.org" in url:
+        if _is_external_endpoint(url):
             kwargs.setdefault("enable_connection_reuse", False)
         return _orig(method, url, **kwargs)
     client.request = _no_reuse_for_external
