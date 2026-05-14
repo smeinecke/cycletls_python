@@ -68,8 +68,5 @@ site/
 # Continuous Claude cache (local only)
 .claude/cache/
 
-# Generated test certificates for local TrackMe instance
-docker/trackme/certs/
-
-# Generated browser fingerprint captures
-tests/integration/artifacts/*.json
+# Local checkout of Danny-Dasilva/tlsfingerprint.com used by live-tests workflow
+.tlsfingerprint-server/

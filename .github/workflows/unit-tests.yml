@@ -28,6 +28,19 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
+        # macOS runners are scarce on free tier; only run macOS for the latest
+        # Python version. Linux covers the full Python matrix.
+        exclude:
+          - os: macos-latest
+            python: '3.9'
+          - os: macos-latest
+            python: '3.10'
+          - os: macos-latest
+            python: '3.11'
+          - os: macos-latest
+            python: '3.12'
+          - os: macos-latest
+            python: '3.14'
 
     steps:
       - uses: actions/checkout@v6
