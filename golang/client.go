@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	fhttp "github.com/Danny-Dasilva/fhttp"
 	"hash/crc32"
 	"hash/fnv"
 	"net"
 	"sync"
 	"time"
+
+	fhttp "github.com/Danny-Dasilva/fhttp"
 
 	"github.com/gorilla/websocket"
 	uquic "github.com/refraction-networking/uquic"
@@ -94,6 +95,24 @@ type Browser struct {
 	InsecureSkipVerify bool
 	ForceHTTP1         bool
 	ForceHTTP3         bool
+
+	// LocalAddress, when non-empty, is the local IP the kernel binds the
+	// outbound TCP socket to (via net.Dialer.LocalAddr). When a proxy is in
+	// the path, the bind applies to the client->proxy hop only — the proxy
+	// opens its own socket to the destination, so the destination server
+	// never observes this IP. Treat this as routing/interface control, NOT
+	// as an anonymizer against the proxy itself: the proxy host always sees
+	// LocalAddress (and any on-path observer between client and proxy does
+	// too).
+	LocalAddress string
+
+	// DisableKeepAlives, when true, disables HTTP keep-alives at the
+	// inner http.Transport layer for every request that uses this Browser.
+	// Set this when the caller passes enable_connection_reuse=false from
+	// Python so that connection reuse really is disabled — bypassing the
+	// global client cache alone is not sufficient because the underlying
+	// transport otherwise still pools idle connections per address.
+	DisableKeepAlives bool
 
 	// TLS 1.3 specific options
 	TLS13AutoRetry bool
@@ -245,10 +264,19 @@ func generateClientKey(browser Browser, timeout int, disableRedirect bool, proxy
 	return key
 }
 
-// getOrCreateClient retrieves a client from the pool or creates a new one
+// getOrCreateClient retrieves a client from the pool or creates a new one.
+//
+// When enableConnectionReuse is false the caller wants no connection reuse
+// at all, so we both bypass the global client pool *and* propagate
+// DisableKeepAlives onto the Browser. Without the second step the inner
+// http.Transport would still pool idle conns per address — see the badssl
+// triage report at .claude/cache/agents/source-tracer/output.md for the
+// failure mode this prevents.
 func getOrCreateClient(browser Browser, timeout int, disableRedirect bool, userAgent string, enableConnectionReuse bool, localAddress string, proxyURL ...string) (fhttp.Client, error) {
-	// If connection reuse is disabled, always create a new client
+	// If connection reuse is disabled, always create a new client and tell
+	// the inner http.Transport to disable keep-alives.
 	if !enableConnectionReuse {
+		browser.DisableKeepAlives = true
 		return createNewClient(browser, timeout, disableRedirect, userAgent, localAddress, proxyURL...)
 	}
 
@@ -302,6 +330,9 @@ func getOrCreateClient(browser Browser, timeout int, disableRedirect bool, userA
 
 // createNewClient creates a new HTTP client (internal function)
 func createNewClient(browser Browser, timeout int, disableRedirect bool, userAgent string, localAddress string, proxyURL ...string) (fhttp.Client, error) {
+	// Stamp localAddress onto the Browser so downstream consumers (the
+	// roundTripper, in particular the HTTP/3 UDP listener) can honor it.
+	browser.LocalAddress = localAddress
 	var dialer proxy.ContextDialer
 	if len(proxyURL) > 0 && len(proxyURL[0]) > 0 {
 		var err error

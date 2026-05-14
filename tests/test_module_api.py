@@ -6,11 +6,15 @@ and configuration management (set_default(), get_default(), reset_defaults()).
 """
 
 import os
+
+
 import pytest
+
 import cycletls
 from cycletls import HTTPError
 
-_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+
 
 pytestmark = pytest.mark.live
 
@@ -321,7 +325,7 @@ class TestTLSFingerprintingWithModuleAPI:
     def setup_method(self):
         """Reset defaults before each test"""
         cycletls.reset_defaults()
-        # TrackMe closes connections after each request; disable reuse to avoid
+        # tlsfingerprint.com closes connections after each request; disable reuse to avoid
         # "use of closed network connection" from the global Go transport pool.
         cycletls.set_default(enable_connection_reuse=False)
 
@@ -334,7 +338,8 @@ class TestTLSFingerprintingWithModuleAPI:
         """Test using JA3 fingerprint as default"""
         cycletls.set_default(ja3=chrome_ja3)
 
-        response = cycletls.get(f"{_TRACKME_URL}/api/clean")
+        response = cycletls.get(f"{_TLSFP_URL}/api/clean")
+
 
         assert response.status_code == 200
         data = response.json()
@@ -342,7 +347,8 @@ class TestTLSFingerprintingWithModuleAPI:
 
     def test_ja3_fingerprint_per_request(self, firefox_ja3):
         """Test using JA3 fingerprint per-request"""
-        response = cycletls.get(f"{_TRACKME_URL}/api/clean", ja3=firefox_ja3)
+        response = cycletls.get(f"{_TLSFP_URL}/api/clean", ja3=firefox_ja3)
+
 
         assert response.status_code == 200
         data = response.json()
