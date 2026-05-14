@@ -86,6 +86,7 @@ class TestAsyncConcurrent:
             assert all(r.status_code == 200 for r in responses)
 
     @pytest.mark.live
+    @pytest.mark.flaky(reruns=5, reruns_delay=5)
     @pytest.mark.asyncio
     async def test_large_concurrent_batch(self, httpbin_url):
         """Test large batch of concurrent requests."""
