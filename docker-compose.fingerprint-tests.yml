@@ -41,8 +41,8 @@ services:
     # To get a newer Firefox, bump the image tag to a newer Playwright release.
     command: >
       bash -c "pip install playwright --quiet &&
-               playwright install chrome &&
-               xvfb-run -a python /capture.py --url https://tlsfingerprint --output /fingerprints/captured.json --ignore-https-errors"
+               playwright install chromium firefox webkit &&
+               python /capture.py --url https://tlsfingerprint --output /fingerprints/captured.json --ignore-https-errors --headless-chrome"
 
 networks:
   fingerprint-net:
