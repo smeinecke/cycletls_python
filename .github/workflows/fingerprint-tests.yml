@@ -99,7 +99,6 @@ jobs:
             echo "==> Python:"
             which python3
             python3 --version
-            python3 -c "import playwright; print('playwright:', playwright.__version__)"
             echo "==> Check Chrome package:"
             adb shell pm list packages com.android.chrome || true
             echo "==> Reverse tlsfingerprint.com port into the emulator..."
