@@ -5,12 +5,12 @@ Based on CycleTLS/tests/forceHTTP1.test.ts
 
 import os
 
-
 import pytest
 
 from cycletls import CycleTLS
 
 _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 
 pytestmark = pytest.mark.live
@@ -90,26 +90,16 @@ def test_force_http1_on_http2_server(client, chrome_ja3, chrome_user_agent):
     assert data["http_version"] == "HTTP/1.1"
 
 
-def test_http1_with_httpbin(client, chrome_ja3, chrome_user_agent):
-    """Test force_http1 with httpbin.org"""
-    url = "https://httpbin.org/get"
+def test_http1_with_httpbin(client):
+    """Test force_http1 with httpbin"""
+    url = f"{_HTTPBIN_URL}/get"
 
-    # First verify default behavior (should use HTTP/2 if available)
-    result_default = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=False
-    )
+    # First verify default behavior
+    result_default = client.get(url, force_http1=False)
     assert result_default.status_code == 200
 
     # Then force HTTP/1.1
-    result_http1 = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result_http1 = client.get(url, force_http1=True)
     assert result_http1.status_code == 200
 
     # Both requests should succeed
@@ -117,15 +107,13 @@ def test_http1_with_httpbin(client, chrome_ja3, chrome_user_agent):
     assert result_http1.json() is not None
 
 
-def test_http1_with_post_request(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_post_request(client):
     """Test that force_http1 works with POST requests"""
-    url = "https://httpbin.org/post"
+    url = f"{_HTTPBIN_URL}/post"
 
     result = client.post(
         url,
         json_data={"test": "data"},
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
         force_http1=True
     )
 
@@ -135,9 +123,9 @@ def test_http1_with_post_request(client, chrome_ja3, chrome_user_agent):
     assert data["json"]["test"] == "data"
 
 
-def test_http1_with_headers(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_headers(client):
     """Test that custom headers work correctly with force_http1"""
-    url = "https://httpbin.org/headers"
+    url = f"{_HTTPBIN_URL}/headers"
 
     custom_headers = {
         "X-Custom-Header": "test-value",
@@ -147,84 +135,70 @@ def test_http1_with_headers(client, chrome_ja3, chrome_user_agent):
     result = client.get(
         url,
         headers=custom_headers,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
         force_http1=True
     )
 
     assert result.status_code == 200
     data = result.json()
     assert "headers" in data
-    assert data["headers"]["X-Custom-Header"] == "test-value"
-    assert data["headers"]["X-Another-Header"] == "another-value"
+    # go-httpbin returns header values as lists, original httpbin as strings
+    def _header_value(data, key):
+        val = data["headers"][key]
+        return val[0] if isinstance(val, list) else val
+
+    assert _header_value(data, "X-Custom-Header") == "test-value"
+    assert _header_value(data, "X-Another-Header") == "another-value"
 
 
-def test_http1_with_query_parameters(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_query_parameters(client):
     """Test that query parameters work correctly with force_http1"""
-    url = "https://httpbin.org/get?param1=value1&param2=value2"
+    url = f"{_HTTPBIN_URL}/get?param1=value1&param2=value2"
 
-    result = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result = client.get(url, force_http1=True)
 
     assert result.status_code == 200
     data = result.json()
     assert "args" in data
-    assert data["args"]["param1"] == "value1"
-    assert data["args"]["param2"] == "value2"
+    # go-httpbin returns arg values as lists, original httpbin as strings
+    def _arg_value(data, key):
+        val = data["args"][key]
+        return val[0] if isinstance(val, list) else val
+
+    assert _arg_value(data, "param1") == "value1"
+    assert _arg_value(data, "param2") == "value2"
 
 
-def test_http1_with_cookies(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_cookies(client):
     """Test that cookies work correctly with force_http1"""
-    url = "https://httpbin.org/cookies"
+    url = f"{_HTTPBIN_URL}/cookies"
 
     # Set cookies using the cookies/set endpoint first
-    set_url = "https://httpbin.org/cookies/set?test_cookie=test_value"
-    client.get(
-        set_url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    set_url = f"{_HTTPBIN_URL}/cookies/set?test_cookie=test_value"
+    client.get(set_url, force_http1=True)
 
     # Now check cookies
-    result = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result = client.get(url, force_http1=True)
 
     assert result.status_code == 200
 
 
-def test_http1_with_redirects(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_redirects(client):
     """Test that redirects work correctly with force_http1"""
-    url = "https://httpbin.org/redirect/2"
+    url = f"{_HTTPBIN_URL}/redirect/2"
 
-    result = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result = client.get(url, force_http1=True)
 
     # Should follow redirects and succeed
     assert result.status_code == 200
     assert "url" in result.json()
 
 
-def test_http1_no_redirect_follow(client, chrome_ja3, chrome_user_agent):
+def test_http1_no_redirect_follow(client):
     """Test that redirect following can be disabled with force_http1"""
-    url = "https://httpbin.org/redirect/1"
+    url = f"{_HTTPBIN_URL}/redirect/1"
 
     result = client.get(
         url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
         force_http1=True,
         disable_redirect=True
     )
@@ -233,16 +207,11 @@ def test_http1_no_redirect_follow(client, chrome_ja3, chrome_user_agent):
     assert result.status_code in [301, 302, 303, 307, 308]
 
 
-def test_http1_with_compression(client, chrome_ja3, chrome_user_agent):
+def test_http1_with_compression(client):
     """Test that compression works correctly with force_http1"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
-    result = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result = client.get(url, force_http1=True)
 
     assert result.status_code == 200
     data = result.json()
@@ -250,30 +219,20 @@ def test_http1_with_compression(client, chrome_ja3, chrome_user_agent):
     assert data["gzipped"] is True
 
 
-def test_http1_performance_comparison(client, chrome_ja3, chrome_user_agent):
+def test_http1_performance_comparison(client):
     """Compare response times between HTTP/1.1 and HTTP/2"""
     import time
 
-    url = "https://httpbin.org/get"
+    url = f"{_HTTPBIN_URL}/get"
 
-    # Test HTTP/2
+    # Test default (HTTP/2 if available, else HTTP/1.1)
     start_http2 = time.time()
-    result_http2 = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=False
-    )
+    result_http2 = client.get(url, force_http1=False)
     time_http2 = time.time() - start_http2
 
     # Test HTTP/1.1
     start_http1 = time.time()
-    result_http1 = client.get(
-        url,
-        ja3=chrome_ja3,
-        user_agent=chrome_user_agent,
-        force_http1=True
-    )
+    result_http1 = client.get(url, force_http1=True)
     time_http1 = time.time() - start_http1
 
     # Both should succeed
@@ -286,23 +245,23 @@ def test_http1_performance_comparison(client, chrome_ja3, chrome_user_agent):
 
 
 @pytest.mark.parametrize("method,url", [
-    ("GET", "https://httpbin.org/get"),
-    ("POST", "https://httpbin.org/post"),
-    ("PUT", "https://httpbin.org/put"),
-    ("DELETE", "https://httpbin.org/delete"),
-    ("PATCH", "https://httpbin.org/patch"),
+    ("GET", f"{_HTTPBIN_URL}/get"),
+    ("POST", f"{_HTTPBIN_URL}/post"),
+    ("PUT", f"{_HTTPBIN_URL}/put"),
+    ("DELETE", f"{_HTTPBIN_URL}/delete"),
+    ("PATCH", f"{_HTTPBIN_URL}/patch"),
 ])
-def test_http1_with_various_methods(client, chrome_ja3, chrome_user_agent, method, url):
+def test_http1_with_various_methods(client, method, url):
     """Test that force_http1 works with various HTTP methods"""
     if method == "GET":
-        result = client.get(url, ja3=chrome_ja3, user_agent=chrome_user_agent, force_http1=True)
+        result = client.get(url, force_http1=True)
     elif method == "POST":
-        result = client.post(url, json_data={"test": "data"}, ja3=chrome_ja3, user_agent=chrome_user_agent, force_http1=True)
+        result = client.post(url, json_data={"test": "data"}, force_http1=True)
     elif method == "PUT":
-        result = client.put(url, json_data={"test": "data"}, ja3=chrome_ja3, user_agent=chrome_user_agent, force_http1=True)
+        result = client.put(url, json_data={"test": "data"}, force_http1=True)
     elif method == "DELETE":
-        result = client.delete(url, ja3=chrome_ja3, user_agent=chrome_user_agent, force_http1=True)
+        result = client.delete(url, force_http1=True)
     elif method == "PATCH":
-        result = client.patch(url, json_data={"test": "data"}, ja3=chrome_ja3, user_agent=chrome_user_agent, force_http1=True)
+        result = client.patch(url, json_data={"test": "data"}, force_http1=True)
 
     assert result.status_code == 200

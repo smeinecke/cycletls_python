@@ -16,6 +16,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from cycletls._ffi import send_request_async, send_request_async_callback
 
 
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 async def benchmark_polling(url: str, n: int) -> tuple[float, list]:
     """Benchmark polling-based async."""
     payloads = [
@@ -70,7 +72,7 @@ async def benchmark_callback(url: str, n: int) -> tuple[float, list]:
 
 async def main():
     """Run benchmarks."""
-    url = "https://httpbin.org/get"
+    url = f"{_HTTPBIN_URL}/get"
     n_requests = 10  # Number of concurrent requests
 
     print("=" * 60)

@@ -1,6 +1,9 @@
+import os
+
 import pytest
 from cycletls import CycleTLS
 
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = [pytest.mark.live, pytest.mark.flaky(reruns=5, reruns_delay=2)]
 
 
@@ -20,14 +23,14 @@ def client():
 def test_basic_timeout(client):
     """Test basic timeout functionality with default timeout"""
     # This should succeed with default timeout (6 seconds)
-    result = client.get("https://httpbin.org/delay/1")
+    result = client.get(f"{_HTTPBIN_URL}/delay/1")
     assert result.status_code == 200
 
 
 def test_custom_timeout_success(client):
     """Test that request completes within custom timeout"""
     # 5 second timeout should be enough for 2 second delay
-    result = client.get("https://httpbin.org/delay/2", timeout=5)
+    result = client.get(f"{_HTTPBIN_URL}/delay/2", timeout=5)
     assert result.status_code == 200
 
 
@@ -35,7 +38,7 @@ def test_custom_timeout_failure(client):
     """Test that request fails when timeout is too short"""
     # 1 second timeout should fail for 3 second delay
     with pytest.raises(Exception) as exc_info:
-        client.get("https://httpbin.org/delay/3", timeout=1)
+        client.get(f"{_HTTPBIN_URL}/delay/3", timeout=1)
 
     # The error should be related to timeout
     error_msg = str(exc_info.value).lower()
@@ -46,7 +49,7 @@ def test_short_timeout(client):
     """Test with very short timeout value"""
     # 500ms timeout should fail for 2 second delay
     with pytest.raises(Exception) as exc_info:
-        client.get("https://httpbin.org/delay/2", timeout=0.5)
+        client.get(f"{_HTTPBIN_URL}/delay/2", timeout=0.5)
 
     error_msg = str(exc_info.value).lower()
     assert any(word in error_msg for word in ['timeout', 'deadline', 'context'])
@@ -55,14 +58,14 @@ def test_short_timeout(client):
 def test_long_timeout(client):
     """Test with longer custom timeout value"""
     # 10 second timeout should be plenty for 1 second delay
-    result = client.get("https://httpbin.org/delay/1", timeout=10)
+    result = client.get(f"{_HTTPBIN_URL}/delay/1", timeout=10)
     assert result.status_code == 200
 
 
 def test_timeout_zero_delay(client):
     """Test timeout with instant response (no delay)"""
     # Even with a short timeout, instant response should work
-    result = client.get("https://httpbin.org/delay/0", timeout=1)
+    result = client.get(f"{_HTTPBIN_URL}/delay/0", timeout=1)
     assert result.status_code == 200
 
 
@@ -70,7 +73,7 @@ def test_timeout_with_post(client):
     """Test timeout works with POST requests"""
     # Test POST request with timeout
     result = client.post(
-        "https://httpbin.org/delay/1",
+        f"{_HTTPBIN_URL}/delay/1",
         json_data={"test": "data"},
         timeout=5
     )
@@ -81,7 +84,7 @@ def test_timeout_error_handling(client):
     """Test that timeout errors are properly raised and contain useful info"""
     try:
         # This should timeout
-        client.get("https://httpbin.org/delay/5", timeout=1)
+        client.get(f"{_HTTPBIN_URL}/delay/5", timeout=1)
         pytest.fail("Expected timeout error was not raised")
     except Exception as e:
         # Verify we get a meaningful error message
@@ -108,7 +111,7 @@ def test_default_timeout_value():
 ])
 def test_timeout_parametrized(client, delay, timeout, should_succeed):
     """Parametrized test for various timeout scenarios"""
-    url = f"https://httpbin.org/delay/{delay}"
+    url = f"{_HTTPBIN_URL}/delay/{delay}"
 
     if should_succeed:
         result = client.get(url, timeout=timeout)

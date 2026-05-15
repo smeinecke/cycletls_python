@@ -2,6 +2,9 @@ import pytest
 from cycletls import CycleTLS
 import time
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -32,21 +35,21 @@ class TestConnectionReuse:
         start_time = time.time()
 
         response1 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             user_agent=user_agent,
             enable_connection_reuse=True
         )
 
         response2 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             user_agent=user_agent,
             enable_connection_reuse=True
         )
 
         response3 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             user_agent=user_agent,
             enable_connection_reuse=True
@@ -78,13 +81,13 @@ class TestConnectionReuse:
 
         # Make multiple requests with connection reuse disabled
         response1 = cycle_without_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=False
         )
 
         response2 = cycle_without_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=False
         )
@@ -99,19 +102,19 @@ class TestConnectionReuse:
 
         # Different endpoints on httpbin.org
         response1 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=True
         )
 
         response2 = cycle_with_reuse.get(
-            "https://httpbin.org/headers",
+            f"{_HTTPBIN_URL}/headers",
             ja3=ja3,
             enable_connection_reuse=True
         )
 
         response3 = cycle_with_reuse.get(
-            "https://httpbin.org/user-agent",
+            f"{_HTTPBIN_URL}/user-agent",
             ja3=ja3,
             enable_connection_reuse=True
         )
@@ -136,10 +139,10 @@ class TestConnectionReuse:
 
         # Simulate concurrent-like behavior by making rapid sequential requests
         urls = [
-            "https://httpbin.org/get",
-            "https://httpbin.org/headers",
-            "https://httpbin.org/user-agent",
-            "https://httpbin.org/uuid",
+            f"{_HTTPBIN_URL}/get",
+            f"{_HTTPBIN_URL}/headers",
+            f"{_HTTPBIN_URL}/user-agent",
+            f"{_HTTPBIN_URL}/uuid",
         ]
 
         responses = []
@@ -165,14 +168,14 @@ class TestConnectionReuse:
 
         # Make multiple POST requests
         response1 = cycle_with_reuse.post(
-            "https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/post",
             json_data=payload1,
             ja3=ja3,
             enable_connection_reuse=True
         )
 
         response2 = cycle_with_reuse.post(
-            "https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/post",
             json_data=payload2,
             ja3=ja3,
             enable_connection_reuse=True
@@ -194,14 +197,14 @@ class TestConnectionReuse:
 
         # GET request
         response_get = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=True
         )
 
         # POST request
         response_post = cycle_with_reuse.post(
-            "https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/post",
             json_data={"test": "data"},
             ja3=ja3,
             enable_connection_reuse=True
@@ -209,7 +212,7 @@ class TestConnectionReuse:
 
         # PUT request
         response_put = cycle_with_reuse.put(
-            "https://httpbin.org/put",
+            f"{_HTTPBIN_URL}/put",
             json_data={"test": "put"},
             ja3=ja3,
             enable_connection_reuse=True
@@ -217,7 +220,7 @@ class TestConnectionReuse:
 
         # DELETE request
         response_delete = cycle_with_reuse.delete(
-            "https://httpbin.org/delete",
+            f"{_HTTPBIN_URL}/delete",
             ja3=ja3,
             enable_connection_reuse=True
         )
@@ -234,7 +237,7 @@ class TestConnectionReuse:
 
         # Set a cookie
         response1 = cycle_with_reuse.get(
-            "https://httpbin.org/cookies/set?session=abc123",
+            f"{_HTTPBIN_URL}/cookies/set?session=abc123",
             ja3=ja3,
             enable_connection_reuse=True,
             disable_redirect=False
@@ -242,7 +245,7 @@ class TestConnectionReuse:
 
         # Make another request to verify connection reuse
         response2 = cycle_with_reuse.get(
-            "https://httpbin.org/cookies",
+            f"{_HTTPBIN_URL}/cookies",
             ja3=ja3,
             enable_connection_reuse=True
         )
@@ -257,21 +260,21 @@ class TestConnectionReuse:
         # Use httpbin for more reliable testing (tls.peet.ws can EOF under load)
         # Request with reuse enabled
         response1 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=True
         )
 
         # Request with reuse disabled
         response2 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=False
         )
 
         # Request with reuse enabled again
         response3 = cycle_with_reuse.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3,
             enable_connection_reuse=True
         )

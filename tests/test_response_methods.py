@@ -14,6 +14,9 @@ import pytest
 import json
 from cycletls import CycleTLS
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -65,7 +68,7 @@ class TestResponseJsonMethod:
     def test_json_with_arrays(self, cycletls_client):
         """Test JSON parsing with array responses."""
         # Use a service that returns a JSON array
-        response = cycletls_client.get("https://httpbin.org/get")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/get")
 
         assert response.status_code == 200
         json_data = response.json()

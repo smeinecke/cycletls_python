@@ -20,6 +20,9 @@ import ssl
 import socket
 from test_utils import assert_valid_response
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -32,7 +35,7 @@ class TestBasicSNIOverride:
         # Using a real endpoint that accepts SNI
         try:
             response = cycletls_client_function.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=chrome_ja3,
                 server_name="httpbin.org",  # Same as actual host
                 insecure_skip_verify=False
@@ -96,7 +99,7 @@ class TestSNIWithTLS:
         """Test SNI with TLS verification enabled."""
         # Standard request with TLS verification
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3,
             insecure_skip_verify=False
         )
@@ -107,7 +110,7 @@ class TestSNIWithTLS:
         """Test SNI with TLS verification disabled (insecure)."""
         # Request with TLS verification disabled
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3,
             insecure_skip_verify=True
         )
@@ -128,7 +131,7 @@ class TestSNIEdgeCases:
         try:
             # Try to send empty SNI
             response = cycletls_client_function.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=chrome_ja3,
                 server_name="",  # Empty SNI
                 insecure_skip_verify=True
@@ -148,7 +151,7 @@ class TestSNIEdgeCases:
         # SNI should not accept special characters
         try:
             response = cycletls_client_function.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=chrome_ja3,
                 server_name="invalid@host!.com",  # Invalid hostname
                 insecure_skip_verify=True
@@ -166,7 +169,7 @@ class TestSNIEdgeCases:
         # IDN domains should be converted to punycode for SNI
         try:
             response = cycletls_client_function.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=chrome_ja3,
                 server_name="httpbin.org",  # Using ASCII for this test
                 insecure_skip_verify=False
@@ -200,7 +203,7 @@ class TestSNIRealWorldScenarios:
         """Test SNI with CDN endpoint (common real-world scenario)."""
         # Many CDNs use SNI to route to the correct origin
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",  # httpbin uses Fastly CDN
+            f"{_HTTPBIN_URL}/get",  # httpbin uses Fastly CDN
             ja3=chrome_ja3
         )
 
@@ -210,7 +213,7 @@ class TestSNIRealWorldScenarios:
         """Test SNI with load-balanced endpoint."""
         # Load balancers often use SNI for routing
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3
         )
 
@@ -220,7 +223,7 @@ class TestSNIRealWorldScenarios:
         """Test multiple requests with different SNI values."""
         # First request
         response1 = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3
         )
 
@@ -228,7 +231,7 @@ class TestSNIRealWorldScenarios:
 
         # Second request to different domain
         response2 = cycletls_client_function.get(
-            "https://httpbin.org/anything",
+            f"{_HTTPBIN_URL}/anything",
             ja3=chrome_ja3
         )
 
@@ -248,7 +251,7 @@ class TestSNIDocumentation:
         the client is trying to connect to during TLS handshake.
         """
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3,
             # server_name would specify custom SNI if needed
         )
@@ -286,7 +289,7 @@ class TestSNIParameterValidation:
         # Should accept string
         try:
             response = cycletls_client_function.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=chrome_ja3,
                 server_name="httpbin.org"
             )
@@ -309,7 +312,7 @@ class TestSNIParameterValidation:
         """Test that None value for SNI is handled correctly."""
         # None should use default behavior (SNI from URL hostname)
         response = cycletls_client_function.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=chrome_ja3,
             server_name=None
         )

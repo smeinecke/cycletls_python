@@ -19,6 +19,8 @@ import pytest
 
 from cycletls import CycleTLS
 
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 
@@ -531,7 +533,7 @@ class TestFrameHeaderValidation:
             # Some servers may not support HTTP/2
             # The client should handle this gracefully
             response = client.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 enable_connection_reuse=False,
             )
 

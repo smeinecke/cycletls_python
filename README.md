@@ -2114,3 +2114,4 @@ More information about the [LICENSE can be found here](http://choosealicense.com
 - Based on [CycleTLS](https://github.com/Danny-Dasilva/CycleTLS) by Danny Dasilva
 - Powered by [uTLS](https://github.com/refraction-networking/utls) for TLS fingerprinting
 - Built with [Pydantic](https://pydantic-docs.helpmanual.io/) for data validation
+- Tests use [go-httpbin](https://github.com/mccutchen/go-httpbin) for local HTTP testing

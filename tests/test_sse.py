@@ -13,10 +13,14 @@ Tests SSE functionality including:
 Note: Tests are marked as skip if SSE functionality is not fully implemented yet.
 """
 
+import os
+
 import pytest
 import json
 import time
 from test_utils import assert_valid_response, assert_valid_json_response
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 pytestmark = pytest.mark.live
 
@@ -48,7 +52,7 @@ class TestSSEConnection:
         """Test basic SSE connection using protocol='sse'."""
         # Using httpbin's stream endpoint or similar SSE server
         response = cycletls_client.get(
-            "https://httpbin.org/stream/5",
+            f"{_HTTPBIN_URL}/stream/5",
             protocol="sse"
         )
 
@@ -70,7 +74,7 @@ class TestSSEConnection:
     def test_sse_connection_with_accept_header(self, cycletls_client):
         """Test SSE connection with Accept: text/event-stream header."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/5",
+            f"{_HTTPBIN_URL}/stream/5",
             protocol="sse",
             headers={
                 "Accept": "text/event-stream"
@@ -103,7 +107,7 @@ class TestSSEEvents:
     def test_receive_events(self, cycletls_client):
         """Test receiving events from SSE stream."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/3",
+            f"{_HTTPBIN_URL}/stream/3",
             protocol="sse"
         )
 
@@ -126,7 +130,7 @@ class TestSSEEvents:
     def test_parse_sse_format(self, cycletls_client):
         """Test parsing SSE format from response."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/5",
+            f"{_HTTPBIN_URL}/stream/5",
             protocol="sse"
         )
 
@@ -164,7 +168,7 @@ class TestSSEEvents:
     def test_receive_multiple_events(self, cycletls_client):
         """Test receiving multiple events from SSE stream."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/10",
+            f"{_HTTPBIN_URL}/stream/10",
             protocol="sse",
             timeout=10
         )
@@ -185,7 +189,7 @@ class TestSSEEventTypes:
     def test_message_event(self, cycletls_client):
         """Test receiving 'message' event type (default)."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/3",
+            f"{_HTTPBIN_URL}/stream/3",
             protocol="sse"
         )
 
@@ -244,7 +248,7 @@ class TestSSEEventID:
         """Test reconnecting with Last-Event-ID header."""
         # When reconnecting, client should send Last-Event-ID header
         response = cycletls_client.get(
-            "https://httpbin.org/stream/5",
+            f"{_HTTPBIN_URL}/stream/5",
             protocol="sse",
             headers={
                 "Last-Event-ID": "42"
@@ -287,7 +291,7 @@ class TestSSEClose:
     def test_close_connection(self, cycletls_client):
         """Test closing SSE connection."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/5",
+            f"{_HTTPBIN_URL}/stream/5",
             protocol="sse"
         )
 
@@ -300,7 +304,7 @@ class TestSSEClose:
     def test_connection_timeout(self, cycletls_client):
         """Test SSE connection with timeout."""
         response = cycletls_client.get(
-            "https://httpbin.org/stream/100",
+            f"{_HTTPBIN_URL}/stream/100",
             protocol="sse",
             timeout=2  # Short timeout
         )
@@ -317,7 +321,7 @@ class TestSSEErrors:
         """Test connection to invalid SSE endpoint."""
         with pytest.raises(Exception):
             response = cycletls_client.get(
-                "https://httpbin.org/status/404",
+                f"{_HTTPBIN_URL}/status/404",
                 protocol="sse",
                 timeout=2
             )
@@ -327,7 +331,7 @@ class TestSSEErrors:
         """Test handling of non-SSE content type."""
         # Connect to regular JSON endpoint with SSE protocol
         response = cycletls_client.get(
-            "https://httpbin.org/json",
+            f"{_HTTPBIN_URL}/json",
             protocol="sse"
         )
 
@@ -357,7 +361,7 @@ class TestSSEAdvanced:
         }
 
         response = cycletls_client.get(
-            "https://httpbin.org/stream/3",
+            f"{_HTTPBIN_URL}/stream/3",
             protocol="sse",
             headers=custom_headers
         )
@@ -369,7 +373,7 @@ class TestSSEAdvanced:
         """Test SSE connection through proxy."""
         try:
             response = cycletls_client.get(
-                "https://httpbin.org/stream/3",
+                f"{_HTTPBIN_URL}/stream/3",
                 protocol="sse",
                 proxy="http://localhost:8888",
                 timeout=2
@@ -385,7 +389,7 @@ class TestSSEAdvanced:
         """Test SSE with streaming response handling."""
         # This would use a streaming response handler
         # response = cycletls_client.get(
-        #     "https://httpbin.org/stream/10",
+        #     f"{_HTTPBIN_URL}/stream/10",
         #     protocol="sse",
         #     response_type="stream"
         # )
@@ -469,7 +473,7 @@ class TestSSEVerification:
         try:
             # Regular GET request to streaming endpoint (without SSE protocol)
             response = cycletls_client.get(
-                "https://httpbin.org/stream/3",
+                f"{_HTTPBIN_URL}/stream/3",
                 timeout=10
             )
 

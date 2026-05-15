@@ -14,6 +14,9 @@ import cycletls
 from cycletls import AsyncCycleTLS
 from cycletls.exceptions import HTTPError
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -97,7 +100,7 @@ class TestAsyncTimeout:
         # Request with 1 second timeout to endpoint that delays 10 seconds
         with pytest.raises((asyncio.TimeoutError, Exception)):
             await cycletls.aget(
-                "https://httpbin.org/delay/10",
+                f"{_HTTPBIN_URL}/delay/10",
                 timeout=1  # 1 second timeout
             )
 
@@ -107,7 +110,7 @@ class TestAsyncTimeout:
         async with AsyncCycleTLS() as client:
             with pytest.raises((asyncio.TimeoutError, Exception)):
                 await client.get(
-                    "https://httpbin.org/delay/10",
+                    f"{_HTTPBIN_URL}/delay/10",
                     timeout=1
                 )
 
@@ -154,7 +157,7 @@ class TestAsyncExceptionPropagation:
         try:
             async with AsyncCycleTLS() as client:
                 # Make a successful request
-                response = await client.get("https://httpbin.org/get")
+                response = await client.get(f"{_HTTPBIN_URL}/get")
                 assert response.status_code == 200
 
                 # Raise an exception

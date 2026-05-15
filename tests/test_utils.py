@@ -43,6 +43,15 @@ def assert_valid_json_response(response, expected_status=200):
         pytest.fail(f"Response body is not valid JSON: {e}")
 
 
+def httpbin_value(data: dict, key: str) -> Any:
+    """
+    Normalize a value from httpbin JSON that may be a list (go-httpbin)
+    or a single string (original httpbin).
+    """
+    val = data[key]
+    return val[0] if isinstance(val, list) else val
+
+
 def assert_ja3_match(response, expected_ja3=None):
     """
     Assert that the JA3 fingerprint in the response matches expected.

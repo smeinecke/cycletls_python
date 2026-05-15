@@ -17,6 +17,10 @@ _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 # TrackMe base URL — override with TRACKME_URL env var to point at a local instance
 _TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
 
+# HTTPBin base URL — override with HTTPBIN_URL env var to point at a local instance.
+# Default is the public endpoint; CI sets HTTPBIN_URL to a local Docker container.
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
+
 
 def _is_external_endpoint(url: str) -> bool:
     """Return True if *url* points to an endpoint that aggressively closes idle connections."""
@@ -27,7 +31,10 @@ def _is_external_endpoint(url: str) -> bool:
     # connections after every response.
     if _TLSFP_URL in url:
         return True
-    # httpbin.org closes idle connections aggressively.
+    # Local httpbin Docker (e.g. localhost/127.0.0.1) is not external.
+    if _HTTPBIN_URL in url:
+        return False
+    # Public httpbin.org closes idle connections aggressively.
     return hostname == "httpbin.org" or hostname.endswith(".httpbin.org")
 
 # Add parent directory to path to import cycletls
@@ -105,7 +112,7 @@ def trackme_url():
 @pytest.fixture
 def httpbin_url():
     """HTTPBin URL for testing various HTTP features."""
-    return "https://httpbin.org"
+    return _HTTPBIN_URL
 
 
 @pytest.fixture

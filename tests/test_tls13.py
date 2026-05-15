@@ -20,6 +20,8 @@ import os
 import pytest
 from test_utils import assert_valid_response
 
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 
@@ -78,7 +80,7 @@ class TestTLS13Basic:
         test_sites = [
             "https://www.cloudflare.com",
             "https://www.google.com",
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
         ]
 
         for site in test_sites:
@@ -127,7 +129,7 @@ class TestTLS13AutoRetry:
         ja3_with_extra_curves = "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"
 
         response = cycletls_client.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3_with_extra_curves,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             tls13_auto_retry=True,
@@ -165,7 +167,7 @@ class TestTLS13CurveHandling:
         ja3_curve_24 = "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"
 
         response = cycletls_client.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=ja3_curve_24,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             timeout=30
@@ -185,7 +187,7 @@ class TestTLS12Fallback:
         tls12_ja3 = "771,49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25,0"
 
         response = cycletls_client.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3=tls12_ja3,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",
             timeout=30
@@ -202,7 +204,7 @@ class TestTLS12Fallback:
         # Test with multiple endpoints that may use different TLS versions
         # Using reliable endpoints only (howsmyssl.com is flaky)
         endpoints = [
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             f"{_TLSFP_URL}/api/clean",
 
         ]
@@ -247,7 +249,7 @@ class TestTLS13ErrorHandling:
         # This might fail or fall back to defaults depending on implementation
         try:
             response = cycletls_client.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=invalid_ja3,
                 timeout=10
             )
@@ -294,7 +296,7 @@ class TestTLS13WithJa3er:
 
         for ja3, browser_name in fingerprints:
             response = cycletls_client.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 ja3=ja3,
                 user_agent=f"Mozilla/5.0 (Test {browser_name})",
                 timeout=30
@@ -312,7 +314,7 @@ class TestTLS13WithHttpbin:
         payload = {"test": "tls13", "data": "value"}
 
         response = cycletls_client.post(
-            "https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/post",
             json_data=payload,
             ja3=chrome_ja3,
             timeout=30
@@ -332,7 +334,7 @@ class TestTLS13WithHttpbin:
         }
 
         response = cycletls_client.get(
-            "https://httpbin.org/headers",
+            f"{_HTTPBIN_URL}/headers",
             ja3=firefox_ja3,
             headers=custom_headers,
             timeout=30
@@ -357,7 +359,7 @@ class TestTLS13WithHttpbin:
         ]
 
         response = cycletls_client.get(
-            "https://httpbin.org/cookies",
+            f"{_HTTPBIN_URL}/cookies",
             ja3=chrome_ja3,
             cookies=cookies,
             timeout=30

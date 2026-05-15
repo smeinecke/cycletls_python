@@ -13,6 +13,7 @@ import os
 import pytest
 from cycletls import CycleTLS
 
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -288,7 +289,7 @@ class TestForceHTTP3FlagValidation:
         # httpbin.org may not support HTTP/3
         try:
             response = cycle_client.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 force_http3=True,
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
             )

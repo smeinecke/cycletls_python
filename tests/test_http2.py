@@ -5,6 +5,8 @@ import pytest
 
 from cycletls import CycleTLS
 
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 
@@ -29,7 +31,7 @@ class TestHTTP2:
     def test_basic_http2_request(self, cycle):
         """Test that HTTP/2 is used by default"""
         response = cycle.get(
-            "https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/get",
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0",
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
@@ -75,7 +77,7 @@ class TestHTTP2:
     def test_force_http1_protocol(self, cycle):
         """Test forcing HTTP/1.1 protocol"""
         response = cycle.get(
-            "https://httpbin.org/headers",
+            f"{_HTTPBIN_URL}/headers",
             force_http1=True,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0",
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -95,7 +97,7 @@ class TestHTTP2:
         }
 
         response = cycle.get(
-            "https://httpbin.org/headers",
+            f"{_HTTPBIN_URL}/headers",
             headers=custom_headers,
             force_http1=False,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0"
@@ -118,7 +120,7 @@ class TestHTTP2:
         }
 
         response = cycle.post(
-            "https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/post",
             json_data=payload,
             force_http1=False,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0"
@@ -133,7 +135,7 @@ class TestHTTP2:
     def test_http2_with_timeout(self, cycle):
         """Test HTTP/2 request with custom timeout"""
         response = cycle.get(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             timeout=5,
             force_http1=False,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0"
@@ -147,7 +149,7 @@ class TestHTTP2:
         """Test HTTP/2 with redirect handling"""
         # Test with redirects enabled (default)
         response = cycle.get(
-            "https://httpbin.org/redirect/2",
+            f"{_HTTPBIN_URL}/redirect/2",
             disable_redirect=False,
             force_http1=False,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0"

@@ -1,7 +1,12 @@
+import os
+
 import pytest
 import socket
 import time
+
 from cycletls import CycleTLS
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 
 def wait_for_proxy(host, port, timeout=5):
@@ -70,7 +75,7 @@ def test_http_proxy(client):
     proxy_url = "http://127.0.0.1:8080"
 
     result = client.get(
-        "https://httpbin.org/ip",
+        f"{_HTTPBIN_URL}/ip",
         proxy=proxy_url,
         ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
         user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
@@ -94,7 +99,7 @@ def test_https_proxy(client):
 
     try:
         result = client.get(
-            "https://httpbin.org/ip",
+            f"{_HTTPBIN_URL}/ip",
             proxy=proxy_url,
             ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
             user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
@@ -122,7 +127,7 @@ def test_socks4_proxy(client):
     assert wait_for_proxy("127.0.0.1", 9050, timeout=30), "SOCKS4 proxy not ready"
 
     result = client.get(
-        "https://httpbin.org/ip",
+        f"{_HTTPBIN_URL}/ip",
         proxy=proxy_url,
         ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
         user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
@@ -144,7 +149,7 @@ def test_socks5_proxy(client):
     assert wait_for_proxy("127.0.0.1", 9050, timeout=30), "SOCKS5 proxy not ready"
 
     result = client.get(
-        "https://httpbin.org/ip",
+        f"{_HTTPBIN_URL}/ip",
         proxy=proxy_url,
         ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
         user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
@@ -156,7 +161,7 @@ def test_socks5_proxy(client):
 
 @pytest.mark.skipif(
     not is_proxy_available("socks5://127.0.0.1:9050"),
-    reason="SOCKS5 proxy not available at 127.0.0.1:9050"
+    reason="SOCKS5h proxy not available at 127.0.0.1:9050"
 )
 def test_socks5h_proxy(client):
     """Test SOCKS5h proxy connection (hostname resolution via proxy)"""
@@ -166,7 +171,7 @@ def test_socks5h_proxy(client):
     assert wait_for_proxy("127.0.0.1", 9050, timeout=30), "SOCKS5h proxy not ready"
 
     result = client.get(
-        "https://httpbin.org/ip",
+        f"{_HTTPBIN_URL}/ip",
         proxy=proxy_url,
         ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
         user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
@@ -180,7 +185,7 @@ def test_invalid_proxy_url(client):
     """Test error handling for invalid proxy URL"""
     with pytest.raises(Exception):
         client.get(
-            "https://httpbin.org/ip",
+            f"{_HTTPBIN_URL}/ip",
             proxy="invalid://malformed:url:here"
         )
 
@@ -190,7 +195,7 @@ def test_unreachable_proxy(client):
     # Use a proxy that should not be reachable
     with pytest.raises(Exception):
         client.get(
-            "https://httpbin.org/ip",
+            f"{_HTTPBIN_URL}/ip",
             proxy="http://127.0.0.1:1",  # Port 1 should not be open
             timeout=2
         )
@@ -206,7 +211,7 @@ def test_proxy_authentication_format(client):
         pytest.skip("Authenticated proxy not available")
 
     result = client.get(
-        "https://httpbin.org/ip",
+        f"{_HTTPBIN_URL}/ip",
         proxy=proxy_url
     )
 
@@ -217,7 +222,7 @@ def test_proxy_authentication_format(client):
 
 def test_no_proxy(client):
     """Test that requests work without proxy (baseline test)"""
-    result = client.get("https://httpbin.org/ip")
+    result = client.get(f"{_HTTPBIN_URL}/ip")
     assert result.status_code == 200
     assert "origin" in result.body.lower() or "ip" in result.body.lower()
 
@@ -228,7 +233,7 @@ def test_proxy_with_post_request(client):
         pytest.skip("SOCKS5 proxy not available")
 
     result = client.post(
-        "https://httpbin.org/post",
+        f"{_HTTPBIN_URL}/post",
         proxy="socks5://127.0.0.1:9050",
         json_data={"test": "data"}
     )
@@ -249,7 +254,7 @@ def test_proxy_types_parametrized(client, proxy_type):
 
     try:
         result = client.get(
-            "https://httpbin.org/ip",
+            f"{_HTTPBIN_URL}/ip",
             proxy=proxy_type
         )
         # Accept success or redirect (some proxies cause redirects)

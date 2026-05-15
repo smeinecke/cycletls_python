@@ -16,6 +16,9 @@ from http.cookiejar import CookieJar
 from http.cookies import SimpleCookie
 from test_utils import assert_valid_response
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -251,7 +254,7 @@ class TestDomainBasedCookieFiltering:
         """Test that cookies from one domain are not sent to another."""
         # Set cookie on httpbin.org
         httpbin_response = cycletls_client_function.get(
-            "https://httpbin.org/cookies/set?domain_test=httpbin",
+            f"{_HTTPBIN_URL}/cookies/set?domain_test=httpbin",
             disable_redirect=True
         )
 
@@ -269,7 +272,7 @@ class TestDomainBasedCookieFiltering:
 
             # Request to httpbin should work with the cookie
             valid_response = cycletls_client_function.get(
-                "https://httpbin.org/cookies",
+                f"{_HTTPBIN_URL}/cookies",
                 headers={'Cookie': httpbin_cookie}
             )
 

@@ -7,6 +7,9 @@ import pytest
 
 from cycletls import CycleTLS
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 # badssl.com is an external service that occasionally drops connections (EOF).
 # Retry up to 5 times with a short delay before treating a failure as real.
 pytestmark = [pytest.mark.live, pytest.mark.flaky(reruns=5, reruns_delay=2)]
@@ -189,7 +192,7 @@ def test_untrusted_root_certificate_accepted_with_skip_verify(client, firefox_ja
 
 def test_valid_certificate_works_with_skip_verify_disabled(client, firefox_ja3, firefox_user_agent):
     """Test that valid certificate works normally when insecure_skip_verify is False"""
-    url = "https://httpbin.org/get"
+    url = f"{_HTTPBIN_URL}/get"
 
     result = client.get(
         url,

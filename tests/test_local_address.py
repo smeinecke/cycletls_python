@@ -7,11 +7,16 @@ invalid-IP validation; the live test makes a real request with the
 loopback address (127.0.0.1) binding to verify end-to-end wiring.
 """
 
+import os
 import socket
+
 import pytest
+
 from cycletls import CycleTLS
 from cycletls.schema import Request
 from cycletls.exceptions import ConnectionError as CycleTLSConnectionError
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 
 # ---------------------------------------------------------------------------
@@ -44,7 +49,7 @@ class TestLocalAddressValidation:
         with CycleTLS() as client:
             with pytest.raises(Exception) as exc_info:
                 client.get(
-                    "https://httpbin.org/get",
+                    f"{_HTTPBIN_URL}/get",
                     local_address="not-an-ip-address",
                     enable_connection_reuse=False,
                     timeout=10,
@@ -72,7 +77,7 @@ class TestLocalAddressLive:
         with CycleTLS() as client:
             try:
                 response = client.get(
-                    "https://httpbin.org/get",
+                    f"{_HTTPBIN_URL}/get",
                     local_address="127.0.0.1",
                     enable_connection_reuse=False,
                     timeout=15,
@@ -98,7 +103,7 @@ class TestLocalAddressLive:
 
         with CycleTLS() as client:
             response = client.get(
-                "https://httpbin.org/get",
+                f"{_HTTPBIN_URL}/get",
                 local_address=local_ip,
                 enable_connection_reuse=False,
                 timeout=15,

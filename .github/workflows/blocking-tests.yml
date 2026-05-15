@@ -28,6 +28,12 @@ jobs:
       matrix:
         python: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
+    services:
+      httpbin:
+        image: mccutchen/go-httpbin
+        ports:
+          - 8080:8080
+
     steps:
       - uses: actions/checkout@v6
 
@@ -80,6 +86,7 @@ jobs:
         env:
           TLSFP_URL: https://localhost
           SSL_CERT_FILE: /tmp/combined-test-cas.crt
+          HTTPBIN_URL: http://localhost:8080
         run: uv run pytest -v --color=yes -m "blocking" tests/
 
       - name: Tear down tlsfingerprint.com server

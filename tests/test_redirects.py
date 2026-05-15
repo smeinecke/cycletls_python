@@ -11,6 +11,9 @@ This module tests:
 import pytest
 from cycletls import CycleTLS
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -32,7 +35,7 @@ class TestRedirectFollowing:
     def test_follow_redirect_default(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that redirects are followed by default."""
         response = cycletls_client_function.get(
-            "https://httpbin.org/redirect/1",
+            f"{_HTTPBIN_URL}/redirect/1",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent
         )
@@ -43,7 +46,7 @@ class TestRedirectFollowing:
     def test_follow_multiple_redirects(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test following multiple redirects (3 hops)."""
         response = cycletls_client_function.get(
-            "https://httpbin.org/redirect/3",
+            f"{_HTTPBIN_URL}/redirect/3",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent
         )
@@ -57,9 +60,9 @@ class TestRedirectFollowing:
         Note: httpbin's /absolute-redirect/N returns http:// URLs which cause issues
         with HTTP/2. Using redirect-to with an absolute HTTPS URL instead.
         """
-        target_url = "https://httpbin.org/get"
+        target_url = f"{_HTTPBIN_URL}/get"
         response = cycletls_client_function.get(
-            f"https://httpbin.org/redirect-to?url={target_url}",
+            f"{_HTTPBIN_URL}/redirect-to?url={target_url}",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent
         )
@@ -69,9 +72,9 @@ class TestRedirectFollowing:
 
     def test_redirect_to_specific_url(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test redirect to a specific URL."""
-        target_url = "https://httpbin.org/get"
+        target_url = f"{_HTTPBIN_URL}/get"
         response = cycletls_client_function.get(
-            f"https://httpbin.org/redirect-to?url={target_url}",
+            f"{_HTTPBIN_URL}/redirect-to?url={target_url}",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent
         )
@@ -86,7 +89,7 @@ class TestRedirectDisabled:
     def test_disable_redirect_returns_redirect_status(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that disabling redirects returns the redirect status code."""
         response = cycletls_client_function.get(
-            "https://httpbin.org/redirect/1",
+            f"{_HTTPBIN_URL}/redirect/1",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             disable_redirect=True
@@ -98,7 +101,7 @@ class TestRedirectDisabled:
     def test_disable_redirect_multiple_hops(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that with redirects disabled, only the first redirect is returned."""
         response = cycletls_client_function.get(
-            "https://httpbin.org/redirect/3",
+            f"{_HTTPBIN_URL}/redirect/3",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             disable_redirect=True
@@ -110,7 +113,7 @@ class TestRedirectDisabled:
     def test_disable_redirect_absolute(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test disabling redirects with absolute redirect."""
         response = cycletls_client_function.get(
-            "https://httpbin.org/absolute-redirect/1",
+            f"{_HTTPBIN_URL}/absolute-redirect/1",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             disable_redirect=True
@@ -121,9 +124,9 @@ class TestRedirectDisabled:
 
     def test_disable_redirect_to_specific_url(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test disabling redirects when redirecting to specific URL."""
-        target_url = "https://httpbin.org/get"
+        target_url = f"{_HTTPBIN_URL}/get"
         response = cycletls_client_function.get(
-            f"https://httpbin.org/redirect-to?url={target_url}",
+            f"{_HTTPBIN_URL}/redirect-to?url={target_url}",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             disable_redirect=True
@@ -139,7 +142,7 @@ class TestFinalURL:
 
     def test_final_url_with_redirect_disabled(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that final_url matches original URL when redirects are disabled."""
-        url = "https://httpbin.org/redirect/1"
+        url = f"{_HTTPBIN_URL}/redirect/1"
         response = cycletls_client_function.get(
             url,
             ja3=firefox_ja3,
@@ -152,7 +155,7 @@ class TestFinalURL:
 
     def test_final_url_with_redirect_enabled(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that final_url is updated after following redirects."""
-        url = "https://httpbin.org/redirect/1"
+        url = f"{_HTTPBIN_URL}/redirect/1"
         response = cycletls_client_function.get(
             url,
             ja3=firefox_ja3,
@@ -166,7 +169,7 @@ class TestFinalURL:
 
     def test_final_url_multiple_redirects(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test final_url after multiple redirect hops."""
-        url = "https://httpbin.org/redirect/3"
+        url = f"{_HTTPBIN_URL}/redirect/3"
         response = cycletls_client_function.get(
             url,
             ja3=firefox_ja3,
@@ -180,7 +183,7 @@ class TestFinalURL:
 
     def test_final_url_no_redirect(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test that final_url matches original URL when no redirect occurs."""
-        url = "https://httpbin.org/get"
+        url = f"{_HTTPBIN_URL}/get"
         response = cycletls_client_function.get(
             url,
             ja3=firefox_ja3,
@@ -229,7 +232,7 @@ class TestRedirectWithDifferentMethods:
         So we redirect to /get endpoint which accepts GET requests.
         """
         response = cycletls_client_function.post(
-            "https://httpbin.org/redirect-to?url=https://httpbin.org/get",
+            f"{_HTTPBIN_URL}/redirect-to?url={_HTTPBIN_URL}/get",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             json_data={"test": "data"}
@@ -241,7 +244,7 @@ class TestRedirectWithDifferentMethods:
     def test_post_redirect_disabled(self, cycletls_client_function, firefox_ja3, firefox_user_agent):
         """Test POST request with redirects disabled."""
         response = cycletls_client_function.post(
-            "https://httpbin.org/redirect-to?url=https://httpbin.org/post",
+            f"{_HTTPBIN_URL}/redirect-to?url={_HTTPBIN_URL}/post",
             ja3=firefox_ja3,
             user_agent=firefox_user_agent,
             disable_redirect=True,

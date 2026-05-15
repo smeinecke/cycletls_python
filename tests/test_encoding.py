@@ -3,8 +3,13 @@ Tests for encoding/compression functionality.
 Based on CycleTLS/tests/encoding.test.ts
 """
 
+import os
+
 import pytest
+
 from cycletls import CycleTLS
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 pytestmark = pytest.mark.live
 
@@ -36,7 +41,7 @@ def chrome_user_agent():
 
 def test_gzip_decompression(client, chrome_ja3, chrome_user_agent):
     """Test that gzip-compressed responses are properly decompressed"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,
@@ -58,7 +63,7 @@ def test_gzip_decompression(client, chrome_ja3, chrome_user_agent):
 
 def test_deflate_decompression(client, chrome_ja3, chrome_user_agent):
     """Test that deflate-compressed responses are properly decompressed"""
-    url = "https://httpbin.org/deflate"
+    url = f"{_HTTPBIN_URL}/deflate"
 
     result = client.get(
         url,
@@ -80,6 +85,7 @@ def test_deflate_decompression(client, chrome_ja3, chrome_user_agent):
 
 def test_brotli_decompression(client, chrome_ja3, chrome_user_agent):
     """Test that brotli-compressed responses are properly decompressed"""
+    # Use public httpbin.org for /brotli until a local alternative is available
     url = "https://httpbin.org/brotli"
 
     result = client.get(
@@ -102,7 +108,7 @@ def test_brotli_decompression(client, chrome_ja3, chrome_user_agent):
 
 def test_gzip_response_headers(client, chrome_ja3, chrome_user_agent):
     """Test that gzip response contains correct headers"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,
@@ -118,12 +124,14 @@ def test_gzip_response_headers(client, chrome_ja3, chrome_user_agent):
     assert "headers" in data
     headers = data["headers"]
     assert "Accept-Encoding" in headers
-    assert "gzip" in headers["Accept-Encoding"].lower()
+    enc = headers["Accept-Encoding"]
+    enc_str = enc[0] if isinstance(enc, list) else enc
+    assert "gzip" in enc_str.lower()
 
 
 def test_deflate_response_headers(client, chrome_ja3, chrome_user_agent):
     """Test that deflate response contains correct headers"""
-    url = "https://httpbin.org/deflate"
+    url = f"{_HTTPBIN_URL}/deflate"
 
     result = client.get(
         url,
@@ -139,11 +147,14 @@ def test_deflate_response_headers(client, chrome_ja3, chrome_user_agent):
     assert "headers" in data
     headers = data["headers"]
     assert "Accept-Encoding" in headers
-    assert "deflate" in headers["Accept-Encoding"].lower()
+    enc = headers["Accept-Encoding"]
+    enc_str = enc[0] if isinstance(enc, list) else enc
+    assert "deflate" in enc_str.lower()
 
 
 def test_brotli_response_headers(client, chrome_ja3, chrome_user_agent):
     """Test that brotli response contains correct headers"""
+    # Use public httpbin.org for /brotli until a local alternative is available
     url = "https://httpbin.org/brotli"
 
     result = client.get(
@@ -166,9 +177,8 @@ def test_brotli_response_headers(client, chrome_ja3, chrome_user_agent):
 def test_multiple_encodings_support(client, chrome_ja3, chrome_user_agent):
     """Test that client can handle multiple encoding types"""
     urls = [
-        "https://httpbin.org/gzip",
-        "https://httpbin.org/deflate",
-        "https://httpbin.org/brotli"
+        f"{_HTTPBIN_URL}/gzip",
+        f"{_HTTPBIN_URL}/deflate",
     ]
 
     for url in urls:
@@ -187,7 +197,7 @@ def test_multiple_encodings_support(client, chrome_ja3, chrome_user_agent):
 
 def test_no_encoding_header(client, chrome_ja3, chrome_user_agent):
     """Test request without Accept-Encoding header"""
-    url = "https://httpbin.org/get"
+    url = f"{_HTTPBIN_URL}/get"
 
     result = client.get(
         url,
@@ -202,7 +212,7 @@ def test_no_encoding_header(client, chrome_ja3, chrome_user_agent):
 
 def test_gzip_with_post_request(client, chrome_ja3, chrome_user_agent):
     """Test that encoding works with POST requests"""
-    url = "https://httpbin.org/post"
+    url = f"{_HTTPBIN_URL}/post"
 
     result = client.post(
         url,
@@ -224,7 +234,7 @@ def test_gzip_with_post_request(client, chrome_ja3, chrome_user_agent):
 def test_encoding_with_large_response(client, chrome_ja3, chrome_user_agent):
     """Test encoding with large response body"""
     # Request a large amount of data
-    url = "https://httpbin.org/bytes/10000"
+    url = f"{_HTTPBIN_URL}/bytes/10000"
 
     result = client.get(
         url,
@@ -240,7 +250,7 @@ def test_encoding_with_large_response(client, chrome_ja3, chrome_user_agent):
 
 def test_gzip_text_response(client, chrome_ja3, chrome_user_agent):
     """Test that gzip-compressed text responses are readable"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,
@@ -258,7 +268,7 @@ def test_gzip_text_response(client, chrome_ja3, chrome_user_agent):
 
 def test_deflate_text_response(client, chrome_ja3, chrome_user_agent):
     """Test that deflate-compressed text responses are readable"""
-    url = "https://httpbin.org/deflate"
+    url = f"{_HTTPBIN_URL}/deflate"
 
     result = client.get(
         url,
@@ -276,6 +286,7 @@ def test_deflate_text_response(client, chrome_ja3, chrome_user_agent):
 
 def test_brotli_text_response(client, chrome_ja3, chrome_user_agent):
     """Test that brotli-compressed text responses are readable"""
+    # Use public httpbin.org for /brotli until a local alternative is available
     url = "https://httpbin.org/brotli"
 
     result = client.get(
@@ -295,7 +306,7 @@ def test_brotli_text_response(client, chrome_ja3, chrome_user_agent):
 def test_encoding_with_redirects(client, chrome_ja3, chrome_user_agent):
     """Test that encoding works correctly with redirects"""
     # This will redirect and the final response should still be decompressed
-    url = "https://httpbin.org/redirect-to?url=https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/redirect-to?url={_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,
@@ -311,7 +322,7 @@ def test_encoding_with_redirects(client, chrome_ja3, chrome_user_agent):
 
 def test_selective_encoding_gzip_only(client, chrome_ja3, chrome_user_agent):
     """Test requesting only gzip encoding"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,
@@ -324,11 +335,13 @@ def test_selective_encoding_gzip_only(client, chrome_ja3, chrome_user_agent):
     data = result.json()
     assert "gzipped" in data
     assert "headers" in data
-    assert data["headers"]["Accept-Encoding"] == "gzip"
+    enc = data["headers"]["Accept-Encoding"]
+    assert (enc == "gzip" or (isinstance(enc, list) and enc[0] == "gzip"))
 
 
 def test_selective_encoding_brotli_only(client, chrome_ja3, chrome_user_agent):
     """Test requesting only brotli encoding"""
+    # Use public httpbin.org for /brotli until a local alternative is available
     url = "https://httpbin.org/brotli"
 
     result = client.get(
@@ -346,9 +359,8 @@ def test_selective_encoding_brotli_only(client, chrome_ja3, chrome_user_agent):
 
 
 @pytest.mark.parametrize("url,encoding_key", [
-    ("https://httpbin.org/gzip", "gzipped"),
-    ("https://httpbin.org/deflate", "deflated"),
-    ("https://httpbin.org/brotli", "brotli"),
+    (f"{_HTTPBIN_URL}/gzip", "gzipped"),
+    (f"{_HTTPBIN_URL}/deflate", "deflated"),
 ])
 def test_encodings_parametrized(client, chrome_ja3, chrome_user_agent, url, encoding_key):
     """Parametrized test for various encoding types"""
@@ -373,7 +385,7 @@ def test_encodings_parametrized(client, chrome_ja3, chrome_user_agent, url, enco
 
 def test_encoding_content_length(client, chrome_ja3, chrome_user_agent):
     """Test that decompressed content has appropriate length"""
-    url = "https://httpbin.org/gzip"
+    url = f"{_HTTPBIN_URL}/gzip"
 
     result = client.get(
         url,

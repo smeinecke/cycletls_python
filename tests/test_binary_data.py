@@ -17,6 +17,9 @@ import pytest
 import hashlib
 from test_utils import assert_valid_response
 
+import os
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -144,7 +147,7 @@ class TestBinaryDownload:
 
     def test_download_jpeg_image(self, cycletls_client):
         """Test downloading JPEG image and verifying binary data integrity."""
-        response = cycletls_client.get("https://httpbin.org/image/jpeg")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -166,7 +169,7 @@ class TestBinaryDownload:
 
     def test_download_png_image(self, cycletls_client):
         """Test downloading PNG image and verifying PNG signature."""
-        response = cycletls_client.get("https://httpbin.org/image/png")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
 
         assert_valid_response(response, expected_status=200)
 
@@ -191,7 +194,7 @@ class TestBinaryDownload:
 
     def test_download_webp_image(self, cycletls_client):
         """Test downloading WebP image."""
-        response = cycletls_client.get("https://httpbin.org/image/webp")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/webp")
 
         assert_valid_response(response, expected_status=200)
 
@@ -204,7 +207,7 @@ class TestBinaryDownload:
 
     def test_download_svg_image(self, cycletls_client):
         """Test downloading SVG image (text-based)."""
-        response = cycletls_client.get("https://httpbin.org/image/svg")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/svg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -280,7 +283,7 @@ class TestBinaryDetection:
 
     def test_image_response_is_binary(self, cycletls_client):
         """Test that image responses are detected as binary."""
-        response = cycletls_client.get("https://httpbin.org/image/jpeg")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -327,7 +330,7 @@ class TestBinaryEdgeCases:
 
     def test_large_image_download(self, cycletls_client):
         """Test downloading larger binary file (JPEG)."""
-        response = cycletls_client.get("https://httpbin.org/image/jpeg")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -344,7 +347,7 @@ class TestBinaryEdgeCases:
 
     def test_binary_content_type_header(self, cycletls_client):
         """Test that binary responses have appropriate Content-Type header."""
-        response = cycletls_client.get("https://httpbin.org/image/png")
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
 
         assert_valid_response(response, expected_status=200)
 

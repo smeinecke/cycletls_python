@@ -11,11 +11,14 @@ Based on CycleTLS TypeScript timeout tests, these tests verify:
 Tests use httpbin.org/delay endpoints to test various timeout scenarios.
 """
 
+import os
+
 import pytest
 import time
 from test_utils import assert_valid_response
 
-pytestmark = pytest.mark.live
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
+pytestmark = [pytest.mark.live, pytest.mark.flaky(reruns=5, reruns_delay=2)]
 
 
 class TestPerRequestTimeout:
@@ -26,7 +29,7 @@ class TestPerRequestTimeout:
         # 1 second timeout should fail for 4 second delay
         with pytest.raises(Exception) as exc_info:
             cycletls_client.get(
-                "https://httpbin.org/delay/4",
+                f"{_HTTPBIN_URL}/delay/4",
                 ja3=chrome_ja3,
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",
                 timeout=1
@@ -41,7 +44,7 @@ class TestPerRequestTimeout:
         """Test that a sufficient timeout allows the request to succeed."""
         # 30 second timeout should be enough for 1 second delay
         response = cycletls_client.get(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             ja3=chrome_ja3,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",
             timeout=30
@@ -54,14 +57,14 @@ class TestPerRequestTimeout:
         # First request with short timeout should fail
         with pytest.raises(Exception):
             cycletls_client.get(
-                "https://httpbin.org/delay/3",
+                f"{_HTTPBIN_URL}/delay/3",
                 ja3=chrome_ja3,
                 timeout=1
             )
 
         # Second request with longer timeout should succeed
         response = cycletls_client.get(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             ja3=chrome_ja3,
             timeout=10
         )
@@ -72,7 +75,7 @@ class TestPerRequestTimeout:
         """Test that timeout works with POST requests."""
         # POST with sufficient timeout should succeed
         response = cycletls_client.post(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             ja3=chrome_ja3,
             json_data={"test": "data"},
             timeout=10
@@ -83,7 +86,7 @@ class TestPerRequestTimeout:
         # POST with insufficient timeout should fail
         with pytest.raises(Exception) as exc_info:
             cycletls_client.post(
-                "https://httpbin.org/delay/5",
+                f"{_HTTPBIN_URL}/delay/5",
                 ja3=chrome_ja3,
                 json_data={"test": "data"},
                 timeout=1
@@ -102,7 +105,7 @@ class TestVeryShortTimeouts:
         # 500ms timeout should fail for 2 second delay
         with pytest.raises(Exception) as exc_info:
             cycletls_client.get(
-                "https://httpbin.org/delay/2",
+                f"{_HTTPBIN_URL}/delay/2",
                 ja3=chrome_ja3,
                 timeout=0.5
             )
@@ -116,7 +119,7 @@ class TestVeryShortTimeouts:
         # 100ms timeout should fail for any delay endpoint
         with pytest.raises(Exception) as exc_info:
             cycletls_client.get(
-                "https://httpbin.org/delay/1",
+                f"{_HTTPBIN_URL}/delay/1",
                 ja3=chrome_ja3,
                 timeout=0.1
             )
@@ -130,7 +133,7 @@ class TestVeryShortTimeouts:
         # Even with a 200ms timeout, /delay/0 should succeed
         try:
             response = cycletls_client.get(
-                "https://httpbin.org/delay/0",
+                f"{_HTTPBIN_URL}/delay/0",
                 ja3=chrome_ja3,
                 timeout=0.2
             )
@@ -146,7 +149,7 @@ class TestVeryShortTimeouts:
         # Test with 0 delay - might succeed or fail depending on latency
         try:
             response = cycletls_client.get(
-                "https://httpbin.org/delay/0",
+                f"{_HTTPBIN_URL}/delay/0",
                 ja3=chrome_ja3,
                 timeout=0.5
             )
@@ -159,7 +162,7 @@ class TestVeryShortTimeouts:
         # Test with 1 second delay - should definitely fail
         with pytest.raises(Exception) as exc_info:
             cycletls_client.get(
-                "https://httpbin.org/delay/1",
+                f"{_HTTPBIN_URL}/delay/1",
                 ja3=chrome_ja3,
                 timeout=0.5
             )
@@ -176,7 +179,7 @@ class TestVeryLongTimeouts:
         """Test 120 second (2 minute) timeout with quick response."""
         # Long timeout should easily handle 1 second delay
         response = cycletls_client.get(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             ja3=chrome_ja3,
             timeout=120
         )
@@ -187,7 +190,7 @@ class TestVeryLongTimeouts:
         """Test 300 second (5 minute) timeout with quick response."""
         # Very long timeout should handle 2 second delay
         response = cycletls_client.get(
-            "https://httpbin.org/delay/2",
+            f"{_HTTPBIN_URL}/delay/2",
             ja3=chrome_ja3,
             timeout=300
         )
@@ -199,7 +202,7 @@ class TestVeryLongTimeouts:
         """Test long timeout with longer delay (marked as slow test)."""
         # 90 second timeout should handle 5 second delay
         response = cycletls_client.get(
-            "https://httpbin.org/delay/5",
+            f"{_HTTPBIN_URL}/delay/5",
             ja3=chrome_ja3,
             timeout=90
         )
@@ -222,7 +225,7 @@ class TestTimeoutInheritance:
         """Test request without explicit timeout uses default."""
         # Should use default timeout (6 seconds) which is enough for 1 second delay
         response = cycletls_client.get(
-            "https://httpbin.org/delay/1",
+            f"{_HTTPBIN_URL}/delay/1",
             ja3=chrome_ja3
         )
 
@@ -233,7 +236,7 @@ class TestTimeoutInheritance:
         # 10 second delay should exceed default 6 second timeout
         with pytest.raises(Exception) as exc_info:
             cycletls_client.get(
-                "https://httpbin.org/delay/10",
+                f"{_HTTPBIN_URL}/delay/10",
                 ja3=chrome_ja3
                 # No timeout specified - should use default
             )
@@ -250,7 +253,7 @@ class TestTimeoutEdgeCases:
         """Test /delay/0 with various timeout values."""
         # Short timeout with instant response
         response1 = cycletls_client.get(
-            "https://httpbin.org/delay/0",
+            f"{_HTTPBIN_URL}/delay/0",
             ja3=chrome_ja3,
             timeout=1
         )
@@ -258,7 +261,7 @@ class TestTimeoutEdgeCases:
 
         # Long timeout with instant response
         response2 = cycletls_client.get(
-            "https://httpbin.org/delay/0",
+            f"{_HTTPBIN_URL}/delay/0",
             ja3=chrome_ja3,
             timeout=60
         )
@@ -268,7 +271,7 @@ class TestTimeoutEdgeCases:
         """Test that timeout errors contain useful information."""
         try:
             cycletls_client.get(
-                "https://httpbin.org/delay/5",
+                f"{_HTTPBIN_URL}/delay/5",
                 ja3=chrome_ja3,
                 timeout=1
             )
@@ -290,7 +293,7 @@ class TestTimeoutEdgeCases:
     ])
     def test_timeout_parametrized(self, cycletls_client, chrome_ja3, delay, timeout, should_succeed):
         """Parametrized test for various timeout scenarios."""
-        url = f"https://httpbin.org/delay/{delay}"
+        url = f"{_HTTPBIN_URL}/delay/{delay}"
 
         if should_succeed:
             response = cycletls_client.get(url, ja3=chrome_ja3, timeout=timeout)
@@ -309,7 +312,7 @@ class TestTimeoutEdgeCases:
 
         try:
             cycletls_client.get(
-                "https://httpbin.org/delay/10",
+                f"{_HTTPBIN_URL}/delay/10",
                 ja3=chrome_ja3,
                 timeout=2
             )

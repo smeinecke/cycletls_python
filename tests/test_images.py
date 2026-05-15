@@ -9,15 +9,19 @@ Based on CycleTLS TypeScript images.test.ts, these tests verify:
 - SVG image download
 - Binary integrity validation
 
-Tests use httpbin.org/image endpoints to download various image formats
+Tests use httpbin /image endpoints to download various image formats
 and verify their integrity by checking file signatures and data consistency.
 """
 
-import pytest
 import hashlib
 import os
 import tempfile
+
+import pytest
+
 from test_utils import assert_valid_response
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 
 pytestmark = pytest.mark.live
 
@@ -25,13 +29,9 @@ pytestmark = pytest.mark.live
 class TestImageDownloads:
     """Test downloading various image formats."""
 
-    def test_download_jpeg_image(self, cycletls_client, chrome_ja3):
+    def test_download_jpeg_image(self, cycletls_client):
         """Test downloading JPEG image and verifying JPEG signature."""
-        response = cycletls_client.get(
-            "https://httpbin.org/image/jpeg",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -54,13 +54,9 @@ class TestImageDownloads:
         jpeg_hash = hashlib.md5(image_data).hexdigest()
         assert jpeg_hash, "Should be able to calculate hash of JPEG data"
 
-    def test_download_png_image(self, cycletls_client, chrome_ja3):
+    def test_download_png_image(self, cycletls_client):
         """Test downloading PNG image and verifying PNG signature."""
-        response = cycletls_client.get(
-            "https://httpbin.org/image/png",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
 
         assert_valid_response(response, expected_status=200)
 
@@ -82,13 +78,9 @@ class TestImageDownloads:
         png_hash = hashlib.md5(image_data).hexdigest()
         assert png_hash, "Should be able to calculate hash of PNG data"
 
-    def test_download_webp_image(self, cycletls_client, chrome_ja3):
+    def test_download_webp_image(self, cycletls_client):
         """Test downloading WebP image."""
-        response = cycletls_client.get(
-            "https://httpbin.org/image/webp",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/webp")
 
         assert_valid_response(response, expected_status=200)
 
@@ -110,13 +102,9 @@ class TestImageDownloads:
         webp_hash = hashlib.md5(image_data).hexdigest()
         assert webp_hash, "Should be able to calculate hash of WebP data"
 
-    def test_download_svg_image(self, cycletls_client, chrome_ja3):
+    def test_download_svg_image(self, cycletls_client):
         """Test downloading SVG image (text-based)."""
-        response = cycletls_client.get(
-            "https://httpbin.org/image/svg",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response = cycletls_client.get(f"{_HTTPBIN_URL}/image/svg")
 
         assert_valid_response(response, expected_status=200)
 
@@ -133,30 +121,20 @@ class TestImageDownloads:
         assert '<svg' in svg_content.lower() or 'svg' in svg_content.lower(), \
             "Response should contain SVG content"
 
-    def test_download_gif_image(self, cycletls_client, chrome_ja3):
+    def test_download_gif_image(self, cycletls_client):
         """Test downloading GIF image and verifying GIF signature."""
-        # Note: httpbin.org doesn't have /image/gif endpoint, so we skip this
-        # or use an alternative endpoint if available
-        pytest.skip("httpbin.org does not provide /image/gif endpoint")
+        # Note: httpbin does not have /image/gif endpoint, so we skip this
+        pytest.skip("httpbin does not provide /image/gif endpoint")
 
 
 class TestImageBinaryIntegrity:
     """Test binary integrity of downloaded images."""
 
-    def test_jpeg_binary_integrity(self, cycletls_client, chrome_ja3):
+    def test_jpeg_binary_integrity(self, cycletls_client):
         """Test that JPEG binary data is preserved without corruption."""
         # Download the same image twice
-        response1 = cycletls_client.get(
-            "https://httpbin.org/image/jpeg",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
-
-        response2 = cycletls_client.get(
-            "https://httpbin.org/image/jpeg",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response1 = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
+        response2 = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
 
         assert_valid_response(response1, expected_status=200)
         assert_valid_response(response2, expected_status=200)
@@ -175,20 +153,11 @@ class TestImageBinaryIntegrity:
 
         assert hash1 == hash2, "JPEG binary data should be consistent across downloads"
 
-    def test_png_binary_integrity(self, cycletls_client, chrome_ja3):
+    def test_png_binary_integrity(self, cycletls_client):
         """Test that PNG binary data is preserved without corruption."""
         # Download the same image twice
-        response1 = cycletls_client.get(
-            "https://httpbin.org/image/png",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
-
-        response2 = cycletls_client.get(
-            "https://httpbin.org/image/png",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response1 = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
+        response2 = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
 
         assert_valid_response(response1, expected_status=200)
         assert_valid_response(response2, expected_status=200)
@@ -207,20 +176,11 @@ class TestImageBinaryIntegrity:
 
         assert hash1 == hash2, "PNG binary data should be consistent across downloads"
 
-    def test_webp_binary_integrity(self, cycletls_client, chrome_ja3):
+    def test_webp_binary_integrity(self, cycletls_client):
         """Test that WebP binary data is preserved without corruption."""
         # Download the same image twice
-        response1 = cycletls_client.get(
-            "https://httpbin.org/image/webp",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
-
-        response2 = cycletls_client.get(
-            "https://httpbin.org/image/webp",
-            ja3=chrome_ja3,
-            user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-        )
+        response1 = cycletls_client.get(f"{_HTTPBIN_URL}/image/webp")
+        response2 = cycletls_client.get(f"{_HTTPBIN_URL}/image/webp")
 
         assert_valid_response(response1, expected_status=200)
         assert_valid_response(response2, expected_status=200)
@@ -243,15 +203,11 @@ class TestImageBinaryIntegrity:
 class TestImageFileWrite:
     """Test writing downloaded images to files."""
 
-    def test_write_all_image_types_to_file(self, cycletls_client, chrome_ja3):
+    def test_write_all_image_types_to_file(self, cycletls_client):
         """Test downloading all image types and writing them to files."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Download and write JPEG
-            jpeg_response = cycletls_client.get(
-                "https://httpbin.org/image/jpeg",
-                ja3=chrome_ja3,
-                user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-            )
+            jpeg_response = cycletls_client.get(f"{_HTTPBIN_URL}/image/jpeg")
             assert_valid_response(jpeg_response, expected_status=200)
 
             jpeg_data = jpeg_response.body_bytes if hasattr(jpeg_response, 'body_bytes') and jpeg_response.body_bytes else \
@@ -265,11 +221,7 @@ class TestImageFileWrite:
             assert os.path.getsize(jpeg_path) > 0, "JPEG file should not be empty"
 
             # Download and write PNG
-            png_response = cycletls_client.get(
-                "https://httpbin.org/image/png",
-                ja3=chrome_ja3,
-                user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-            )
+            png_response = cycletls_client.get(f"{_HTTPBIN_URL}/image/png")
             assert_valid_response(png_response, expected_status=200)
 
             png_data = png_response.body_bytes if hasattr(png_response, 'body_bytes') and png_response.body_bytes else \
@@ -283,11 +235,7 @@ class TestImageFileWrite:
             assert os.path.getsize(png_path) > 0, "PNG file should not be empty"
 
             # Download and write WebP
-            webp_response = cycletls_client.get(
-                "https://httpbin.org/image/webp",
-                ja3=chrome_ja3,
-                user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-            )
+            webp_response = cycletls_client.get(f"{_HTTPBIN_URL}/image/webp")
             assert_valid_response(webp_response, expected_status=200)
 
             webp_data = webp_response.body_bytes if hasattr(webp_response, 'body_bytes') and webp_response.body_bytes else \
@@ -301,11 +249,7 @@ class TestImageFileWrite:
             assert os.path.getsize(webp_path) > 0, "WebP file should not be empty"
 
             # Download and write SVG
-            svg_response = cycletls_client.get(
-                "https://httpbin.org/image/svg",
-                ja3=chrome_ja3,
-                user_agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
-            )
+            svg_response = cycletls_client.get(f"{_HTTPBIN_URL}/image/svg")
             assert_valid_response(svg_response, expected_status=200)
 
             svg_data = svg_response.body

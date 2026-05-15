@@ -10,11 +10,20 @@ Tests advanced async functionality including:
 - Connection parameters
 """
 
+import os
+
 import pytest
 import asyncio
 import cycletls
 from cycletls import AsyncCycleTLS
 
+
+def _v(container, key):
+    """Normalize go-httpbin list values to a single value."""
+    val = container[key]
+    return val[0] if isinstance(val, list) else val
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 pytestmark = pytest.mark.live
 
 
@@ -82,8 +91,8 @@ class TestAsyncCookies:
 
             assert response.status_code == 200
             data = response.json()
-            assert data["cookies"]["session_id"] == "abc123"
-            assert data["cookies"]["user_pref"] == "dark_mode"
+            assert _v(data["cookies"], "session_id") == "abc123"
+            assert _v(data["cookies"], "user_pref") == "dark_mode"
 
     @pytest.mark.asyncio
     async def test_async_receive_cookies(self, httpbin_url):
@@ -109,7 +118,7 @@ class TestAsyncCookies:
 
         assert response.status_code == 200
         data = response.json()
-        assert data["cookies"]["test"] == "value"
+        assert _v(data["cookies"], "test") == "value"
 
 
 class TestAsyncProxy:
@@ -175,6 +184,7 @@ class TestAsyncCustomHeaders:
             data = response.json()
             # Verify headers were sent
             assert "X-Custom-Header" in data["headers"]
+            assert _v(data["headers"], "X-Custom-Header") == "value1"
 
 
 class TestAsyncRedirects:
@@ -228,7 +238,8 @@ class TestAsyncCompression:
     @pytest.mark.asyncio
     async def test_async_brotli_encoding(self, httpbin_url):
         """Test async request with brotli encoding."""
-        response = await cycletls.aget(f"{httpbin_url}/brotli")
+        # Use public httpbin.org for /brotli until a local alternative is available
+        response = await cycletls.aget("https://httpbin.org/brotli")
         assert response.status_code == 200
         data = response.json()
         assert data["brotli"] is True

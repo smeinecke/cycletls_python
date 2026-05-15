@@ -21,6 +21,8 @@ import os
 import pytest
 from test_utils import assert_valid_response
 
+
+_HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
 _TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
 
 pytestmark = pytest.mark.live
@@ -165,7 +167,7 @@ class TestHTTP2Settings:
         custom_http2 = "1:32768;2:0;4:131072;5:16384|12517377|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=custom_http2,
             timeout=30
         )
@@ -180,7 +182,7 @@ class TestHTTP2Settings:
         custom_http2 = "1:65536;2:0;4:262144;5:16384|12517377|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=custom_http2,
             timeout=30
         )
@@ -194,7 +196,7 @@ class TestHTTP2Settings:
         custom_http2 = "1:65536;2:0;4:100;5:16384|12517377|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=custom_http2,
             timeout=30
         )
@@ -212,7 +214,7 @@ class TestHTTP2Priority:
         firefox_http2 = "1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=firefox_http2,
             user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',
             timeout=30
@@ -226,7 +228,7 @@ class TestHTTP2Priority:
         chrome_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=chrome_http2,
             user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
             timeout=30
@@ -240,7 +242,7 @@ class TestHTTP2Priority:
         safari_http2 = "1:65536;2:0;4:131072;5:16384|12517377|0|m,a,p,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=safari_http2,
             user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
             timeout=30
@@ -258,7 +260,7 @@ class TestHTTP2WindowUpdate:
         firefox_http2 = "1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=firefox_http2,
             timeout=30
         )
@@ -271,7 +273,7 @@ class TestHTTP2WindowUpdate:
         chrome_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=chrome_http2,
             timeout=30
         )
@@ -284,7 +286,7 @@ class TestHTTP2WindowUpdate:
         custom_http2 = "1:65536;2:0;4:131072;5:16384|10000000|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=custom_http2,
             timeout=30
         )
@@ -306,7 +308,7 @@ class TestHTTP2WithOtherFeatures:
         }
 
         response = cycletls_client.get(
-            'https://httpbin.org/headers',
+            f"{_HTTPBIN_URL}/headers",
             http2_fingerprint=chrome_http2,
             headers=custom_headers,
             timeout=30
@@ -332,7 +334,7 @@ class TestHTTP2WithOtherFeatures:
         ]
 
         response = cycletls_client.get(
-            'https://httpbin.org/cookies',
+            f"{_HTTPBIN_URL}/cookies",
             http2_fingerprint=firefox_http2,
             cookies=cookies,
             timeout=30
@@ -350,7 +352,7 @@ class TestHTTP2WithOtherFeatures:
         chrome_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=chrome_http2,
             ja3=chrome_ja3,
             user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
@@ -366,7 +368,7 @@ class TestHTTP2WithOtherFeatures:
         payload = {"test": "http2", "data": "value"}
 
         response = cycletls_client.post(
-            'https://httpbin.org/post',
+            f"{_HTTPBIN_URL}/post",
             json_data=payload,
             http2_fingerprint=firefox_http2,
             timeout=30
@@ -388,7 +390,7 @@ class TestHTTP2EdgeCases:
         minimal_http2 = "1:4096;2:0;4:65536|10000000|0|m,p,a,s"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=minimal_http2,
             timeout=30
         )
@@ -402,7 +404,7 @@ class TestHTTP2EdgeCases:
         large_http2 = "1:131072;2:0;4:16777216;6:524288|20000000|0|m,a,s,p"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=large_http2,
             timeout=30
         )
@@ -413,7 +415,7 @@ class TestHTTP2EdgeCases:
     def test_http2_without_fingerprint(self, cycletls_client):
         """Test that requests work without HTTP/2 fingerprint (uses defaults)."""
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             timeout=30
         )
 
@@ -423,7 +425,7 @@ class TestHTTP2EdgeCases:
         """Test handling of empty HTTP/2 fingerprint."""
         # Empty fingerprint should fall back to defaults
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint="",
             timeout=30
         )
@@ -443,7 +445,7 @@ class TestHTTP2MultipleBrowsers:
 
         # Test Firefox fingerprint
         firefox_response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=firefox_http2,
             user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',
             timeout=30
@@ -452,7 +454,7 @@ class TestHTTP2MultipleBrowsers:
 
         # Test Chrome fingerprint
         chrome_response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=chrome_http2,
             user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
             timeout=30
@@ -465,7 +467,7 @@ class TestHTTP2MultipleBrowsers:
         edge_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
         response = cycletls_client.get(
-            'https://httpbin.org/get',
+            f"{_HTTPBIN_URL}/get",
             http2_fingerprint=edge_http2,
             user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
             timeout=30
@@ -482,9 +484,9 @@ class TestHTTP2FingerprintValidation:
         chrome_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
         endpoints = [
-            'https://httpbin.org/get',
-            'https://httpbin.org/headers',
-            'https://httpbin.org/user-agent',
+            f"{_HTTPBIN_URL}/get",
+            f"{_HTTPBIN_URL}/headers",
+            f"{_HTTPBIN_URL}/user-agent",
         ]
 
         for endpoint in endpoints:
@@ -504,7 +506,7 @@ class TestHTTP2FingerprintValidation:
         # Make multiple requests to same host
         for i in range(3):
             response = cycletls_client.get(
-                'https://httpbin.org/get',
+                f"{_HTTPBIN_URL}/get",
                 http2_fingerprint=firefox_http2,
                 timeout=30
             )
