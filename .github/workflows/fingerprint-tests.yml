@@ -87,7 +87,7 @@ jobs:
         with:
           api-level: 34
           arch: x86_64
-          target: google_apis_playstore
+          target: google_apis
           profile: pixel_7
           emulator-boot-timeout: 300
           script: |
@@ -99,6 +99,9 @@ jobs:
             echo "==> Python:"
             which python3
             python3 --version
+            python3 -c "import playwright; print('playwright:', playwright.__version__)"
+            echo "==> Check Chrome package:"
+            adb shell pm list packages com.android.chrome || true
             echo "==> Reverse tlsfingerprint.com port into the emulator..."
             adb reverse tcp:443 tcp:443
             adb reverse --list
