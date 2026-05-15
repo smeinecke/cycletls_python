@@ -749,7 +749,7 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 			b.WriteByte(0)
 			b.WriteByte(5)
 			b.WriteString("error")
-			statusCode743 := uint16(parsedError.StatusCode)
+			statusCode743 := parsedError.StatusCode
 			b.WriteByte(byte(statusCode743 >> 8))
 			b.WriteByte(byte(statusCode743))
 
@@ -860,7 +860,7 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 					b.WriteByte(0)
 					b.WriteByte(5)
 					b.WriteString("error")
-					statusCode853 := uint16(parsedError.StatusCode)
+					statusCode853 := parsedError.StatusCode
 					b.WriteByte(byte(statusCode853 >> 8))
 					b.WriteByte(byte(statusCode853))
 
@@ -1783,7 +1783,7 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 	if err != nil {
 		parsedError := parseError(err)
 		return Response{
-			Status: parsedError.StatusCode,
+			Status: int(parsedError.StatusCode),
 			Body:   parsedError.ErrorMsg + " -> " + err.Error(),
 		}, nil
 	}

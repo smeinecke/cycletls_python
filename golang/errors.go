@@ -11,7 +11,7 @@ import (
 )
 
 type errorMessage struct {
-	StatusCode int
+	StatusCode uint16
 	debugger   string
 	ErrorMsg   string
 	Op         string
@@ -28,7 +28,7 @@ func createErrorString(err error) (msg, debugger string) {
 	return
 }
 
-func createErrorMessage(StatusCode int, err error, op string) errorMessage {
+func createErrorMessage(StatusCode uint16, err error, op string) errorMessage {
 	var msg string
 
 	// For timeout errors, provide a clean, user-friendly message
@@ -81,10 +81,8 @@ func parseError(err error) (errormessage errorMessage) {
 	}
 
 	status := lastString(strings.Split(httpError, "StatusCode:"))
-	StatusCode, _ := strconv.Atoi(strings.TrimSpace(status))
-	if StatusCode < 0 || StatusCode > 65535 {
-		StatusCode = 0
-	}
+	statusCode64, _ := strconv.ParseUint(strings.TrimSpace(status), 10, 16)
+	StatusCode := uint16(statusCode64)
 	if StatusCode != 0 {
 		msg, debugger := createErrorString(err)
 		return errorMessage{StatusCode: StatusCode, debugger: debugger, ErrorMsg: msg}
