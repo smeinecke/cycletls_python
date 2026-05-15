@@ -1,13 +1,18 @@
 services:
-  trackme:
+  tlsfingerprint:
     build:
-      context: ./docker/trackme
+      context: ./.tlsfingerprint-server
+      dockerfile: Dockerfile
     network_mode: host
     volumes:
-      - ./docker/trackme/certs:/app/certs:ro
-      - ./docker/trackme/config.json:/app/config.json:ro
+      - ./.tlsfingerprint-server/certs:/app/certs:ro
+      - ./.tlsfingerprint-server/config.json:/app/config.json:ro
+      - ./.tlsfingerprint-server/blockedIPs:/app/blockedIPs
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost:8443/api/clean && echo ok || exit 1"]
+      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost/api/clean && echo ok || exit 1"]
       interval: 5s
       timeout: 10s
       retries: 12

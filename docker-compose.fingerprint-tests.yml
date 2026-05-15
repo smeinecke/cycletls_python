@@ -1,17 +1,23 @@
 services:
-  trackme:
+  tlsfingerprint:
     build:
-      context: ./docker/trackme
+      context: ./.tlsfingerprint-server
+      dockerfile: Dockerfile
     volumes:
-      - ./docker/trackme/certs:/app/certs:ro
-      - ./docker/trackme/config.bridge.json:/app/config.json:ro
+      - ./.tlsfingerprint-server/certs:/app/certs:ro
+      - ./.tlsfingerprint-server/config.json:/app/config.json:ro
+      - ./.tlsfingerprint-server/blockedIPs:/app/blockedIPs
     networks:
       - fingerprint-net
     ports:
-      - "8443:8443"
-      - "8080:8080"
+      - "443:443"
+      - "443:443/udp"
+      - "80:80"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost:8443/api/clean && echo ok || exit 1"]
+      test: ["CMD-SHELL", "wget -qO /dev/null --no-check-certificate https://localhost/api/clean && echo ok || exit 1"]
       interval: 5s
       timeout: 10s
       retries: 12
@@ -20,7 +26,7 @@ services:
   playwright-capture:
     image: mcr.microsoft.com/playwright/python:v1.58.0-noble
     depends_on:
-      trackme:
+      tlsfingerprint:
         condition: service_healthy
     volumes:
       - ./scripts/capture_browser_fingerprints.py:/capture.py:ro
@@ -28,15 +34,15 @@ services:
     networks:
       - fingerprint-net
     environment:
-      - TRACKME_URL=https://trackme:8443
+      - TLSFP_URL=https://tlsfingerprint
     # NOTE: Firefox version is pinned to what the Playwright image bundles.
     # Playwright's Firefox driver uses the Juggler protocol which is only in
     # Playwright's patched builds — system Firefox cannot be substituted.
     # To get a newer Firefox, bump the image tag to a newer Playwright release.
     command: >
       bash -c "pip install playwright --quiet &&
-               playwright install chrome &&
-               xvfb-run -a python /capture.py --url https://trackme:8443 --output /fingerprints/captured.json --ignore-https-errors"
+               playwright install chromium firefox webkit &&
+               python /capture.py --url https://tlsfingerprint --output /fingerprints/captured.json --ignore-https-errors --headless-chrome"
 
 networks:
   fingerprint-net:

@@ -49,29 +49,31 @@ jobs:
       - name: Install Playwright browsers (for CDP connection to Android Chrome)
         run: playwright install chromium --with-deps
 
-      - name: Generate TLS certificates for TrackMe
+      - name: Generate TLS certificates for tlsfingerprint.com
         run: |
-          mkdir -p docker/trackme/certs
-          openssl req -x509 -newkey rsa:2048 \
-            -keyout docker/trackme/certs/key.pem \
-            -out docker/trackme/certs/chain.pem \
-            -days 1 -nodes \
-            -subj "/CN=trackme" \
-            -addext "subjectAltName=DNS:trackme,DNS:localhost,IP:127.0.0.1,IP:10.0.2.2"
+          mkdir -p .tlsfingerprint-server/certs
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout .tlsfingerprint-server/certs/key.pem \
+            -out .tlsfingerprint-server/certs/chain.pem \
+            -sha256 -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          jq '.log_to_db = false | .mongo_url = "" | .device = ""' \
+            .tlsfingerprint-server/config.example.json > .tlsfingerprint-server/config.json
 
-      - name: Start TrackMe (bridge network, port-mapped to host)
+      - name: Start tlsfingerprint.com (bridge network, port-mapped to host)
         run: |
-          docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
-          echo "Waiting for TrackMe to become healthy..."
+          docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
+          echo "Waiting for tlsfingerprint.com to become healthy..."
           if ! timeout 120 bash -c \
             'until docker inspect --format "{{.State.Health.Status}}" \
-               $(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme) \
+               $(docker compose -f docker-compose.fingerprint-tests.yml ps -q tlsfingerprint) \
                2>/dev/null | grep -q healthy; do sleep 3; done'; then
-            echo "TrackMe did not become ready. Logs:"
-            docker compose -f docker-compose.fingerprint-tests.yml logs trackme
+            echo "tlsfingerprint.com did not become ready. Logs:"
+            docker compose -f docker-compose.fingerprint-tests.yml logs tlsfingerprint
             exit 1
           fi
-          echo "TrackMe is ready on the runner host at https://127.0.0.1:8443."
+          echo "tlsfingerprint.com is ready on the runner host at https://127.0.0.1."
 
       - name: Start Android emulator and capture Chrome fingerprint
         uses: ReactiveCircus/android-emulator-runner@v2
@@ -90,11 +92,11 @@ jobs:
             echo "==> Python:"
             which python3
             python3 --version
-            echo "==> Reverse TrackMe port into the emulator..."
-            adb reverse tcp:8443 tcp:8443
+            echo "==> Reverse tlsfingerprint.com port into the emulator..."
+            adb reverse tcp:443 tcp:443
             adb reverse --list
             mkdir -p tests/integration/artifacts
-            ADB_REVERSE_TCP_PORTS=8443 python3 scripts/capture_browser_fingerprints.py --android-only --url https://127.0.0.1:8443 --output tests/integration/artifacts/captured-android.json --ignore-https-errors
+            ADB_REVERSE_TCP_PORTS=443 python3 scripts/capture_browser_fingerprints.py --android-only --url https://127.0.0.1 --output tests/integration/artifacts/captured-android.json --ignore-https-errors
 
       - name: Upload Android fingerprint artifact
         if: always()
@@ -144,40 +146,42 @@ jobs:
           playwright install chromium firefox webkit
           playwright install chrome msedge
 
-      - name: Generate TLS certificates for TrackMe (Linux capture)
+      - name: Generate TLS certificates for tlsfingerprint.com (Linux capture)
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          mkdir -p docker/trackme/certs
-          openssl req -x509 -newkey rsa:2048 \
-            -keyout docker/trackme/certs/key.pem \
-            -out docker/trackme/certs/chain.pem \
-            -days 1 -nodes \
-            -subj "/CN=trackme" \
-            -addext "subjectAltName=DNS:trackme,DNS:localhost,IP:127.0.0.1"
+          mkdir -p .tlsfingerprint-server/certs
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout .tlsfingerprint-server/certs/key.pem \
+            -out .tlsfingerprint-server/certs/chain.pem \
+            -sha256 -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          jq '.log_to_db = false | .mongo_url = "" | .device = ""' \
+            .tlsfingerprint-server/config.example.json > .tlsfingerprint-server/config.json
 
-      - name: Start TrackMe for Linux capture
+      - name: Start tlsfingerprint.com for Linux capture
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
-          echo "Waiting for TrackMe to become healthy..."
+          docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
+          echo "Waiting for tlsfingerprint.com to become healthy..."
           if ! timeout 120 bash -c \
             'until docker inspect --format "{{.State.Health.Status}}" \
-               $(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme) \
+               $(docker compose -f docker-compose.fingerprint-tests.yml ps -q tlsfingerprint) \
                2>/dev/null | grep -q healthy; do sleep 3; done'; then
-            echo "TrackMe did not become ready. Logs:"
-            docker compose -f docker-compose.fingerprint-tests.yml logs trackme
+            echo "tlsfingerprint.com did not become ready. Logs:"
+            docker compose -f docker-compose.fingerprint-tests.yml logs tlsfingerprint
             exit 1
           fi
 
-      - name: Capture real browser fingerprints via Playwright (Linux/local TrackMe)
+      - name: Capture real browser fingerprints via Playwright (Linux/local tlsfingerprint.com)
         if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p tests/integration/artifacts
           python scripts/capture_browser_fingerprints.py \
-            --url https://localhost:8443 \
+            --url https://localhost \
             --output tests/integration/artifacts/captured-${{ runner.os }}.json \
             --ignore-https-errors \
             --headless-chrome
@@ -250,17 +254,19 @@ jobs:
           print(f"Snapshotted {len(names)} known fingerprint names.")
           EOF
 
-      - name: Generate TLS certificates for TrackMe
+      - name: Generate TLS certificates for tlsfingerprint.com
         run: |
-          mkdir -p docker/trackme/certs
-          openssl req -x509 -newkey rsa:2048 \
-            -keyout docker/trackme/certs/key.pem \
-            -out docker/trackme/certs/chain.pem \
-            -days 1 -nodes \
-            -subj "/CN=trackme" \
-            -addext "subjectAltName=DNS:trackme,DNS:localhost,IP:127.0.0.1"
+          mkdir -p .tlsfingerprint-server/certs
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout .tlsfingerprint-server/certs/key.pem \
+            -out .tlsfingerprint-server/certs/chain.pem \
+            -sha256 -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          jq '.log_to_db = false | .mongo_url = "" | .device = ""' \
+            .tlsfingerprint-server/config.example.json > .tlsfingerprint-server/config.json
           # Combine system CAs with test CA so Go/CycleTLS trusts the self-signed cert
-          cat /etc/ssl/certs/ca-certificates.crt docker/trackme/certs/chain.pem \
+          cat /etc/ssl/certs/ca-certificates.crt .tlsfingerprint-server/certs/chain.pem \
             > /tmp/combined-test-cas.crt
 
       - name: Download desktop fingerprints
@@ -355,22 +361,22 @@ jobs:
           echo "--- Captured fingerprints ---"
           cat tests/integration/artifacts/captured.json
 
-      - name: Switch TrackMe to host-network mode for CycleTLS tests
+      - name: Switch tlsfingerprint.com to host-network mode for CycleTLS tests
         run: |
           docker compose -f docker-compose.test.yml up -d --build
-          echo "Waiting for TrackMe (host-mode) to become healthy..."
+          echo "Waiting for tlsfingerprint.com (host-mode) to become healthy..."
           if ! timeout 90 bash -c \
             'until docker inspect --format "{{.State.Health.Status}}" \
-               cycletls_python-trackme-1 2>/dev/null | grep -q healthy; do sleep 2; done'; then
-            echo "TrackMe did not become ready. Logs:"
-            docker logs cycletls_python-trackme-1
+               cycletls_python-tlsfingerprint-1 2>/dev/null | grep -q healthy; do sleep 2; done'; then
+            echo "tlsfingerprint.com did not become ready. Logs:"
+            docker logs cycletls_python-tlsfingerprint-1
             exit 1
           fi
-          echo "TrackMe (host-mode) is ready."
+          echo "tlsfingerprint.com (host-mode) is ready."
 
       - name: Run fingerprint replication tests
         env:
-          TRACKME_URL: https://localhost:8443
+          TLSFP_URL: https://localhost
           SSL_CERT_FILE: /tmp/combined-test-cas.crt
           FINGERPRINT_FILE: tests/integration/artifacts/captured.json
         run: |

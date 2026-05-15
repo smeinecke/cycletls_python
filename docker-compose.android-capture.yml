@@ -18,12 +18,12 @@ services:
     networks:
       - android-net
 
-  # Thin socat proxy so Chrome inside the emulator can reach TrackMe.
+  # Thin socat proxy so Chrome inside the emulator can reach tlsfingerprint.com.
   # Inside the emulator 10.0.2.2 = QEMU host = android container.
-  # socat listens on *:8443 there and forwards to trackme:8443.
-  trackme-proxy:
+  # socat listens on *:443 there and forwards to tlsfingerprint:443.
+  tlsfingerprint-proxy:
     image: alpine/socat
-    command: TCP4-LISTEN:8443,fork,reuseaddr TCP4:trackme:8443
+    command: TCP4-LISTEN:443,fork,reuseaddr TCP4:tlsfingerprint:443
     networks:
       - android-net
       - fingerprint-net

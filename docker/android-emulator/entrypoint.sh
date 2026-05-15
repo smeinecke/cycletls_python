@@ -18,7 +18,7 @@ x11vnc -display :1 -nopw -forever -shared -quiet &
 websockify --web /usr/share/novnc 6080 localhost:5900 &
 
 # Local bridge target for adb-reversed HTTPS traffic from the emulator.
-socat TCP-LISTEN:8443,bind=127.0.0.1,fork,reuseaddr TCP4:trackme-proxy:8443 &
+socat TCP-LISTEN:443,bind=127.0.0.1,fork,reuseaddr TCP4:tlsfingerprint-proxy:443 &
 
 mkdir -p /root/.android
 

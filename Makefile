@@ -14,21 +14,44 @@ run-checks :
 	uv run pyright cycletls
 	uv run pytest -v --color=yes tests/
 
-# Generate self-signed TLS certs for TrackMe (skips if chain.pem already exists)
-.PHONY : trackme-certs
-trackme-certs :
-	@if [ -f docker/trackme/certs/chain.pem ]; then \
-		echo "Certs already exist (docker/trackme/certs/chain.pem). Delete to regenerate."; \
+# Local tlsfingerprint.com server setup
+TLSFP_SERVER_DIR ?= .tlsfingerprint-server
+TLSFP_CERT_BUNDLE ?= /tmp/cycletls-test-cas.crt
+
+# Clone/update Danny-Dasilva/tlsfingerprint.com locally (mirrors CI checkout step)
+.PHONY : tlsfingerprint-server
+tlsfingerprint-server :
+	@if [ ! -d "$(TLSFP_SERVER_DIR)" ]; then \
+		echo "==> Cloning Danny-Dasilva/tlsfingerprint.com ..."; \
+		git clone https://github.com/Danny-Dasilva/tlsfingerprint.com.git "$(TLSFP_SERVER_DIR)"; \
 	else \
-		mkdir -p docker/trackme/certs; \
-		openssl req -x509 -newkey rsa:2048 \
-			-keyout docker/trackme/certs/key.pem \
-			-out docker/trackme/certs/chain.pem \
-			-days 365 -nodes \
-			-subj "/CN=trackme" \
-			-addext "subjectAltName=DNS:trackme,DNS:localhost,IP:127.0.0.1,IP:10.0.2.2"; \
-		echo "Certs generated."; \
+		echo "==> Updating Danny-Dasilva/tlsfingerprint.com ..."; \
+		cd "$(TLSFP_SERVER_DIR)" && git pull; \
 	fi
+
+# Generate self-signed TLS certs for tlsfingerprint.com (skips if chain.pem already exists)
+.PHONY : tlsfingerprint-certs
+tlsfingerprint-certs : tlsfingerprint-server
+	@mkdir -p "$(TLSFP_SERVER_DIR)/certs"
+	@if [ ! -f "$(TLSFP_SERVER_DIR)/certs/chain.pem" ]; then \
+		echo "==> Generating TLS certificates ..."; \
+		openssl req -x509 -newkey rsa:4096 \
+			-keyout "$(TLSFP_SERVER_DIR)/certs/key.pem" \
+			-out "$(TLSFP_SERVER_DIR)/certs/chain.pem" \
+			-sha256 -days 365 -nodes \
+			-subj "/CN=localhost" \
+			-addext "subjectAltName=IP:127.0.0.1,DNS:localhost"; \
+	else \
+		echo "Certs already exist ($(TLSFP_SERVER_DIR)/certs/chain.pem). Delete to regenerate."; \
+	fi
+	@echo "==> Generating config.json ..."
+	@jq '.log_to_db = false | .mongo_url = "" | .device = ""' \
+		"$(TLSFP_SERVER_DIR)/config.example.json" > "$(TLSFP_SERVER_DIR)/config.json"
+
+# Legacy alias (kept for muscle memory; new code should use tlsfingerprint-certs)
+.PHONY : trackme-certs
+trackme-certs : tlsfingerprint-certs
+	@echo "Notice: trackme-certs is deprecated, use tlsfingerprint-certs instead."
 
 # Run Android Chrome fingerprint capture locally using Docker (budtmo/docker-android).
 # Requires: Docker with KVM access (/dev/kvm), adb on PATH.
@@ -47,19 +70,19 @@ trackme-certs :
 # Subsequent runs reuse the cached image and start in ~3-5 min.
 # Open http://localhost:6080 during the run to watch the emulator screen via noVNC.
 .PHONY : android-capture-docker
-android-capture-docker : trackme-certs
+android-capture-docker : tlsfingerprint-certs
 	@echo "==> Tearing down any previous run ..."
 	docker compose -f docker-compose.android-capture.yml down 2>/dev/null || true
 	docker compose -f docker-compose.fingerprint-tests.yml down -v 2>/dev/null || true
 	-$(DOCKER_ANDROID_ADB) disconnect emulator-5554 2>/dev/null || true
 	adb disconnect localhost:5555 2>/dev/null || true
-	@echo "==> Starting TrackMe ..."
-	docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
+	@echo "==> Starting tlsfingerprint.com ..."
+	docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
 	@for i in $$(seq 1 40); do \
-		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
+		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q tlsfingerprint 2>/dev/null); \
 		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
-		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe is ready."; break; fi; \
-		if [ $$i -eq 40 ]; then echo "TrackMe did not become ready."; exit 1; fi; \
+		if [ "$$STATUS" = "healthy" ]; then echo "tlsfingerprint.com is ready."; break; fi; \
+		if [ $$i -eq 40 ]; then echo "tlsfingerprint.com did not become ready."; exit 1; fi; \
 		sleep 3; \
 	done
 
@@ -76,10 +99,10 @@ android-capture-docker : trackme-certs
 
 	@echo "==> Running Android capture ..."
 	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
-	ADB_BIN="$(DOCKER_ANDROID_ADB)" ADB_REVERSE_TCP_PORTS="8443" ANDROID_CDP_EXPOSE_CMD="$(DOCKER_ANDROID_EXPOSE_CDP)" uv run python scripts/capture_browser_fingerprints.py \
+	ADB_BIN="$(DOCKER_ANDROID_ADB)" ADB_REVERSE_TCP_PORTS="443" ANDROID_CDP_EXPOSE_CMD="$(DOCKER_ANDROID_EXPOSE_CDP)" uv run python scripts/capture_browser_fingerprints.py \
 		--android-only \
 		--adb-serial emulator-5554 \
-		--url https://127.0.0.1:8443 \
+		--url https://127.0.0.1 \
 		--output $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json \
 		--ignore-https-errors
 	@echo "--- Captured Android fingerprints ---"
@@ -107,24 +130,24 @@ android-capture-docker-reset :
 #   make android-capture-local ADB_SERIAL=emulator-5554   # target a specific device
 
 .PHONY : android-capture-local
-android-capture-local : trackme-certs
+android-capture-local : tlsfingerprint-certs
 	@echo "==> Connected ADB devices:"
 	@adb devices
 	@echo ""
-	@echo "==> Starting TrackMe (port-mapped, accessible at 10.0.2.2:8443 from emulator)..."
-	docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
+	@echo "==> Starting tlsfingerprint.com (port-mapped, accessible at 10.0.2.2:443 from emulator)..."
+	docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
 	@for i in $$(seq 1 40); do \
-		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
+		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q tlsfingerprint 2>/dev/null); \
 		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
-		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe is ready."; break; fi; \
-		if [ $$i -eq 40 ]; then echo "TrackMe did not become ready."; exit 1; fi; \
+		if [ "$$STATUS" = "healthy" ]; then echo "tlsfingerprint.com is ready."; break; fi; \
+		if [ $$i -eq 40 ]; then echo "tlsfingerprint.com did not become ready."; exit 1; fi; \
 		sleep 3; \
 	done
 	@echo "==> Running Android capture..."
 	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
 	uv run python scripts/capture_browser_fingerprints.py \
 		--android-only \
-		--url https://10.0.2.2:8443 \
+		--url https://10.0.2.2 \
 		--output $(FINGERPRINT_ARTIFACTS_DIR)/captured-android.json \
 		--ignore-https-errors
 	@echo "--- Captured Android fingerprints ---"
@@ -133,32 +156,31 @@ android-capture-local : trackme-certs
 
 # Run fingerprint replication tests locally (desktop browsers only, no Android).
 # Steps mirror the CI fingerprint-tests job:
-#   1. Start TrackMe on a bridge network (reachable by the Playwright Docker container)
+#   1. Start tlsfingerprint.com on a bridge network (reachable by the Playwright Docker container)
+#      Port 443 is mapped to the host so CycleTLS tests on localhost also work.
 #   2. Capture real browser fingerprints via Playwright
-#   3. Switch TrackMe to host-network mode (reachable by CycleTLS on localhost)
-#   4. Run the fingerprint integration tests
-#   5. Clean up
+#   3. Run the fingerprint integration tests against https://localhost
+#   4. Clean up
 #
 # Requires: Docker, uv, Go shared lib (run `make build-go-lib` first if missing)
 FINGERPRINT_ARTIFACTS_DIR ?= tests/integration/artifacts
-SSL_CERT_BUNDLE ?= /tmp/cycletls-test-cas.crt
 
 .PHONY : fingerprint-tests
-fingerprint-tests : trackme-certs
+fingerprint-tests : tlsfingerprint-certs
 	@echo "==> Building combined CA bundle..."
-	cat /etc/ssl/certs/ca-certificates.crt docker/trackme/certs/chain.pem > $(SSL_CERT_BUNDLE)
-	mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
+	@cat /etc/ssl/certs/ca-certificates.crt "$(TLSFP_SERVER_DIR)/certs/chain.pem" > $(TLSFP_CERT_BUNDLE)
+	@mkdir -p $(FINGERPRINT_ARTIFACTS_DIR)
 
-	@echo "==> Starting TrackMe (bridge network)..."
-	docker compose -f docker-compose.fingerprint-tests.yml up -d --build trackme
-	@echo "Waiting for TrackMe to become healthy (up to 120s)..."
+	@echo "==> Starting tlsfingerprint.com (bridge network with port 443 mapped)..."
+	@docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
+	@echo "Waiting for tlsfingerprint.com to become healthy (up to 120s)..."
 	@for i in $$(seq 1 40); do \
-		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q trackme 2>/dev/null); \
+		ID=$$(docker compose -f docker-compose.fingerprint-tests.yml ps -q tlsfingerprint 2>/dev/null); \
 		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' $$ID 2>/dev/null || true); \
-		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe is ready."; break; fi; \
+		if [ "$$STATUS" = "healthy" ]; then echo "tlsfingerprint.com is ready."; break; fi; \
 		if [ $$i -eq 40 ]; then \
-			echo "TrackMe did not become ready. Logs:"; \
-			docker compose -f docker-compose.fingerprint-tests.yml logs trackme; \
+			echo "tlsfingerprint.com did not become ready. Logs:"; \
+			docker compose -f docker-compose.fingerprint-tests.yml logs tlsfingerprint; \
 			docker compose -f docker-compose.fingerprint-tests.yml down -v; \
 			exit 1; \
 		fi; \
@@ -166,37 +188,19 @@ fingerprint-tests : trackme-certs
 	done
 
 	@echo "==> Capturing browser fingerprints via Playwright..."
-	docker compose -f docker-compose.fingerprint-tests.yml run --rm playwright-capture
+	@docker compose -f docker-compose.fingerprint-tests.yml run --rm playwright-capture
 	@echo "Playwright capture done."
 	@echo "--- Captured fingerprints ---"
 	@cat $(FINGERPRINT_ARTIFACTS_DIR)/captured.json
 
-	@echo "==> Switching TrackMe to host-network mode..."
-	docker compose -f docker-compose.fingerprint-tests.yml rm -f -s trackme
-	docker compose -f docker-compose.test.yml up -d --build
-	@echo "Waiting for TrackMe (host-mode) to become healthy (up to 90s)..."
-	@for i in $$(seq 1 30); do \
-		STATUS=$$(docker inspect --format '{{.State.Health.Status}}' cycletls_python-trackme-1 2>/dev/null || true); \
-		if [ "$$STATUS" = "healthy" ]; then echo "TrackMe (host-mode) is ready."; break; fi; \
-		if [ $$i -eq 30 ]; then \
-			echo "TrackMe (host-mode) did not become ready. Logs:"; \
-			docker logs cycletls_python-trackme-1; \
-			docker compose -f docker-compose.fingerprint-tests.yml down -v; \
-			docker compose -f docker-compose.test.yml down; \
-			exit 1; \
-		fi; \
-		sleep 3; \
-	done
-
 	@echo "==> Running fingerprint replication tests..."
-	TRACKME_URL=https://localhost:8443 \
-	SSL_CERT_FILE=$(SSL_CERT_BUNDLE) \
+	@TLSFP_URL=https://localhost \
+	SSL_CERT_FILE=$(TLSFP_CERT_BUNDLE) \
 	FINGERPRINT_FILE=$(FINGERPRINT_ARTIFACTS_DIR)/captured.json \
 	uv run pytest -v --color=yes -m "fingerprint" \
 		tests/integration/test_browser_fingerprint_replication.py; \
 	EXIT_CODE=$$?; \
 	docker compose -f docker-compose.fingerprint-tests.yml down -v || true; \
-	docker compose -f docker-compose.test.yml down || true; \
 	exit $$EXIT_CODE
 
 # Local package publishing

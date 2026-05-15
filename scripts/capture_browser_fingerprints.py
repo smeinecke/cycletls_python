@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Capture real browser TLS fingerprints from TrackMe using Playwright.
+Capture real browser TLS fingerprints from tlsfingerprint.com using Playwright.
 
 Discovers all launchable browser targets available in the current runtime
-(OS/container), captures TrackMe /api/all for each, and writes normalized
-fingerprint data to a JSON file that can be loaded by
+(OS/container), captures tlsfingerprint.com /api/all for each, and writes
+normalized fingerprint data to a JSON file that can be loaded by
 ``cycletls.fingerprints.load_trackme_fingerprints``.
 
 Output schema:
@@ -26,7 +26,7 @@ Output schema:
 
 Usage:
     python capture_browser_fingerprints.py \
-        --url https://trackme:8443 \
+        --url https://tlsfingerprint \
         --output /tmp/fingerprints/captured.json \
         [--ignore-https-errors]
 """
@@ -663,18 +663,18 @@ def _main_android(args, output_path: Path) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Capture browser fingerprints via Playwright")
-    parser.add_argument("--url", default="https://localhost:8443", help="TrackMe base URL")
+    parser.add_argument("--url", default="https://localhost", help="tlsfingerprint.com base URL")
     parser.add_argument("--output", required=True, help="Output JSON file path")
     parser.add_argument(
         "--android-only",
         action="store_true",
         help="Capture from connected Android devices via ADB only (skips desktop browsers). "
-        "Use --url https://10.0.2.2:8443 when targeting an Android emulator.",
+        "Use --url https://10.0.2.2 when targeting an Android emulator.",
     )
     parser.add_argument(
         "--discover-only",
         action="store_true",
-        help="Only detect available browser targets; do not call TrackMe",
+        help="Only detect available browser targets; do not call tlsfingerprint.com",
     )
     parser.add_argument(
         "--require-browsers",

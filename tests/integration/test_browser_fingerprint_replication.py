@@ -1,4 +1,4 @@
-"""Integration tests that validate TrackMe-captured browser profiles."""
+"""Integration tests that validate tlsfingerprint.com-captured browser profiles."""
 
 import json
 import os
@@ -9,7 +9,7 @@ import pytest
 from cycletls import CycleTLS, FingerprintRegistry, load_trackme_fingerprints
 from cycletls.fingerprints import DEFAULT_FINGERPRINTS_FILE
 
-_TRACKME_URL = os.environ.get("TRACKME_URL", "https://localhost:8443")
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://localhost")
 _FINGERPRINT_FILE = os.environ.get("FINGERPRINT_FILE", "/fingerprints/captured.json")
 _REGISTRY_FILE = Path(
     os.environ.get("FINGERPRINTS_JSON_FILE", str(DEFAULT_FINGERPRINTS_FILE))
@@ -18,7 +18,7 @@ _REGISTRY_FILE = Path(
 pytestmark = pytest.mark.fingerprint
 
 
-def _extract_header_order_from_trackme(response: dict) -> list[str]:
+def _extract_header_order_from_tlsfp(response: dict) -> list[str]:
     http2 = response.get("http2", {})
     sent_frames = http2.get("sent_frames", [])
     if not isinstance(sent_frames, list):
@@ -98,7 +98,7 @@ def observed_by_name(cycle_client, captured_fingerprints) -> dict[str, dict]:
             enable_connection_reuse=False,
             insecure_skip_verify=True,
         )
-        assert response.status_code == 200, f"TrackMe returned {response.status_code} for {name}"
+        assert response.status_code == 200, f"tlsfingerprint.com returned {response.status_code} for {name}"
         observed[name] = response.json()
     return observed
 
@@ -120,7 +120,7 @@ def test_captured_profiles_persisted_to_registry_json(captured_fingerprints):
         )
 
 
-def test_trackme_output_matches_captured_ua_and_ja4r(captured_fingerprints, observed_by_name):
+def test_tlsfp_output_matches_captured_ua_and_ja4r(captured_fingerprints, observed_by_name):
     for fp in captured_fingerprints:
         name = fp.get("name")
         data = observed_by_name[name]
@@ -154,7 +154,7 @@ def test_trackme_output_matches_captured_ua_and_ja4r(captured_fingerprints, obse
         "browser-captured JA3 strings exactly."
     ),
 )
-def test_trackme_output_matches_captured_ja3(captured_fingerprints, observed_by_name):
+def test_tlsfp_output_matches_captured_ja3(captured_fingerprints, observed_by_name):
     for fp in captured_fingerprints:
         name = fp.get("name")
         expected_ja3 = fp.get("ja3")
@@ -175,7 +175,7 @@ def test_trackme_output_matches_captured_ja3(captured_fingerprints, observed_by_
         "behavior, so http2/header_order do not exactly match Playwright captures."
     ),
 )
-def test_trackme_output_matches_captured_http2_and_header_order(captured_fingerprints, observed_by_name):
+def test_tlsfp_output_matches_captured_http2_and_header_order(captured_fingerprints, observed_by_name):
     for fp in captured_fingerprints:
         name = fp.get("name")
         data = observed_by_name[name]
@@ -191,7 +191,7 @@ def test_trackme_output_matches_captured_http2_and_header_order(captured_fingerp
 
         expected_header_order = fp.get("header_order") or []
         if expected_header_order:
-            observed_header_order = _extract_header_order_from_trackme(data)
+            observed_header_order = _extract_header_order_from_tlsfp(data)
             assert observed_header_order == expected_header_order, (
                 f"{name}: header order mismatch\n"
                 f"  expected: {expected_header_order}\n"
