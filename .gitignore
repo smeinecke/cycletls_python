@@ -70,3 +70,5 @@ site/
 
 # Local checkout of Danny-Dasilva/tlsfingerprint.com used by live-tests workflow
 .tlsfingerprint-server/
+
+/local-publish.sh
