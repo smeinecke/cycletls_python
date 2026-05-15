@@ -79,9 +79,13 @@ def _configure_adb_reverse(serial: str) -> None:
     ports = os.environ.get("ADB_REVERSE_TCP_PORTS", "").strip()
     if not ports:
         return
-    for port in [item.strip() for item in ports.split(",") if item.strip()]:
+    for item in [item.strip() for item in ports.split(",") if item.strip()]:
+        if ":" in item:
+            local_port, remote_port = item.split(":", 1)
+        else:
+            local_port = remote_port = item
         subprocess.run(
-            _adb_command("-s", serial, "reverse", f"tcp:{port}", f"tcp:{port}"),
+            _adb_command("-s", serial, "reverse", f"tcp:{local_port}", f"tcp:{remote_port}"),
             check=True,
             timeout=10,
             capture_output=True,
