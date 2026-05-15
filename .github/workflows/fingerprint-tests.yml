@@ -49,6 +49,13 @@ jobs:
       - name: Install Playwright browsers (for CDP connection to Android Chrome)
         run: playwright install chromium --with-deps
 
+      - name: Checkout Danny-Dasilva/tlsfingerprint.com
+        uses: actions/checkout@v6
+        with:
+          repository: Danny-Dasilva/tlsfingerprint.com
+          ref: master
+          path: .tlsfingerprint-server
+
       - name: Generate TLS certificates for tlsfingerprint.com
         run: |
           mkdir -p .tlsfingerprint-server/certs
@@ -145,6 +152,14 @@ jobs:
         run: |
           playwright install chromium firefox webkit
           playwright install chrome msedge
+
+      - name: Checkout Danny-Dasilva/tlsfingerprint.com (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/checkout@v6
+        with:
+          repository: Danny-Dasilva/tlsfingerprint.com
+          ref: master
+          path: .tlsfingerprint-server
 
       - name: Generate TLS certificates for tlsfingerprint.com (Linux capture)
         if: runner.os == 'Linux'
@@ -253,6 +268,13 @@ jobs:
           snapshot_path.write_text(json.dumps({"names": names}, indent=2))
           print(f"Snapshotted {len(names)} known fingerprint names.")
           EOF
+
+      - name: Checkout Danny-Dasilva/tlsfingerprint.com
+        uses: actions/checkout@v6
+        with:
+          repository: Danny-Dasilva/tlsfingerprint.com
+          ref: master
+          path: .tlsfingerprint-server
 
       - name: Generate TLS certificates for tlsfingerprint.com
         run: |
