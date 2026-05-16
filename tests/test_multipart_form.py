@@ -20,6 +20,12 @@ from test_utils import (
     assert_valid_json_response,
 )
 
+def _v(container, key):
+    """Normalize go-httpbin list values to a single value."""
+    val = container[key]
+    return val[0] if isinstance(val, list) else val
+
+
 pytestmark = pytest.mark.live
 
 
@@ -44,9 +50,9 @@ class TestMultipartFormData:
         # Verify the form data was received
         data = assert_valid_json_response(response)
         assert 'form' in data, "Response should contain 'form' field"
-        assert data['form']['key1'] == 'value1', \
+        assert _v(data['form'], 'key1') == 'value1', \
             f"Expected key1='value1', got {data['form'].get('key1')}"
-        assert data['form']['key2'] == 'value2', \
+        assert _v(data['form'], 'key2') == 'value2', \
             f"Expected key2='value2', got {data['form'].get('key2')}"
 
     def test_multipart_with_special_characters(self, cycletls_client, httpbin_url):
@@ -67,9 +73,9 @@ class TestMultipartFormData:
 
         data = assert_valid_json_response(response)
         assert 'form' in data, "Response should contain 'form' field"
-        assert data['form']['email'] == form_data['email'], \
+        assert _v(data['form'], 'email') == form_data['email'], \
             "Email with special chars should be preserved"
-        assert data['form']['unicode'] == form_data['unicode'], \
+        assert _v(data['form'], 'unicode') == form_data['unicode'], \
             "Unicode characters should be preserved"
 
 
@@ -144,9 +150,9 @@ class TestFileUpload:
             assert 'form' in data, "Response should contain 'form' field"
 
             # Check form fields
-            assert data['form']['title'] == 'Test Document', \
+            assert _v(data['form'], 'title') == 'Test Document', \
                 "Form field 'title' should be preserved"
-            assert data['form']['category'] == 'testing', \
+            assert _v(data['form'], 'category') == 'testing', \
                 "Form field 'category' should be preserved"
 
             # Check file
@@ -283,7 +289,7 @@ class TestLargeFileUpload:
             assert 'largefile' in data['files'], "Large file should be present"
 
             # Verify content integrity (at least check size)
-            received_content = data['files']['largefile']
+            received_content = _v(data['files'], 'largefile')
             assert len(received_content) > 50000, \
                 f"Received content should be large, got {len(received_content)} chars"
 
@@ -444,8 +450,8 @@ class TestMultipartEdgeCases:
             assert 'attachment' in data['files'], "Second file should be present"
 
             # Check form fields
-            assert data['form']['author'] == 'Test User', "Author field should be preserved"
-            assert data['form']['version'] == '1.0', "Version field should be preserved"
+            assert _v(data['form'], 'author') == 'Test User', "Author field should be preserved"
+            assert _v(data['form'], 'version') == '1.0', "Version field should be preserved"
 
         finally:
             # Clean up

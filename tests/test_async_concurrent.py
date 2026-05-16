@@ -7,11 +7,20 @@ Tests concurrent operations including:
 - Performance verification for parallel execution
 """
 
-import pytest
 import asyncio
 import time
+
+import pytest
+
 import cycletls
 from cycletls import AsyncCycleTLS
+
+
+def _v(container, key):
+    """Normalize go-httpbin list values to a single value."""
+    val = container[key]
+    return val[0] if isinstance(val, list) else val
+
 
 pytestmark = pytest.mark.live
 
@@ -24,9 +33,7 @@ class TestAsyncConcurrent:
         """Test multiple concurrent GET requests."""
         urls = [f"{httpbin_url}/get?id={i}" for i in range(10)]
 
-        responses = await asyncio.gather(*[
-            cycletls.aget(url) for url in urls
-        ])
+        responses = await asyncio.gather(*[cycletls.aget(url) for url in urls])
 
         assert len(responses) == 10
         assert all(r.status_code == 200 for r in responses)
@@ -34,17 +41,16 @@ class TestAsyncConcurrent:
         # Verify each response has correct ID
         for i, response in enumerate(responses):
             data = response.json()
-            assert data["args"]["id"] == str(i)
+            assert _v(data["args"], "id") == str(i)
 
     @pytest.mark.asyncio
     async def test_concurrent_post_requests(self, httpbin_url):
         """Test multiple concurrent POST requests."""
         payloads = [{"id": i, "data": f"test_{i}"} for i in range(5)]
 
-        responses = await asyncio.gather(*[
-            cycletls.apost(f"{httpbin_url}/post", json_data=payload)
-            for payload in payloads
-        ])
+        responses = await asyncio.gather(
+            *[cycletls.apost(f"{httpbin_url}/post", json_data=payload) for payload in payloads]
+        )
 
         assert len(responses) == 5
         assert all(r.status_code == 200 for r in responses)
@@ -75,10 +81,7 @@ class TestAsyncConcurrent:
     async def test_concurrent_with_client_reuse(self, httpbin_url):
         """Test concurrent requests using same client instance."""
         async with AsyncCycleTLS() as client:
-            tasks = [
-                client.get(f"{httpbin_url}/get?id={i}")
-                for i in range(10)
-            ]
+            tasks = [client.get(f"{httpbin_url}/get?id={i}") for i in range(10)]
 
             responses = await asyncio.gather(*tasks)
 
@@ -96,9 +99,7 @@ class TestAsyncConcurrent:
         num_requests = 50
         urls = [f"{httpbin_url}/get?batch_id={i}" for i in range(num_requests)]
 
-        responses = await asyncio.gather(*[
-            cycletls.aget(url) for url in urls
-        ])
+        responses = await asyncio.gather(*[cycletls.aget(url) for url in urls])
 
         assert len(responses) == num_requests
         assert all(r.status_code == 200 for r in responses)
@@ -119,10 +120,10 @@ class TestAsyncConcurrent:
         assert all(r.status_code == 200 for r in responses)
 
         # Verify parameters were applied
-        assert responses[0].json()["args"]["type"] == "json"
-        assert responses[1].json()["args"]["type"] == "html"
-        assert responses[2].json()["headers"]["X-Test"] == "header"
-        assert responses[3].json()["headers"]["User-Agent"] == "Custom-Agent"
+        assert _v(responses[0].json()["args"], "type") == "json"
+        assert _v(responses[1].json()["args"], "type") == "html"
+        assert _v(responses[2].json()["headers"], "X-Test") == "header"
+        assert _v(responses[3].json()["headers"], "User-Agent") == "Custom-Agent"
 
 
 class TestAsyncPerformance:
@@ -143,10 +144,9 @@ class TestAsyncPerformance:
 
         # Concurrent execution
         start = time.time()
-        await asyncio.gather(*[
-            cycletls.aget(f"{httpbin_url}/delay/{delay_seconds}")
-            for _ in range(num_requests)
-        ])
+        await asyncio.gather(
+            *[cycletls.aget(f"{httpbin_url}/delay/{delay_seconds}") for _ in range(num_requests)]
+        )
         concurrent_time = time.time() - start
 
         # Concurrent should be significantly faster
@@ -161,10 +161,9 @@ class TestAsyncPerformance:
         num_requests = 20
         start = time.time()
 
-        responses = await asyncio.gather(*[
-            cycletls.aget(f"{httpbin_url}/get?id={i}")
-            for i in range(num_requests)
-        ])
+        responses = await asyncio.gather(
+            *[cycletls.aget(f"{httpbin_url}/get?id={i}") for i in range(num_requests)]
+        )
 
         elapsed = time.time() - start
 
@@ -205,10 +204,9 @@ class TestAsyncErrorHandlingConcurrent:
     async def test_concurrent_all_success(self, httpbin_url):
         """Test that all concurrent requests succeed."""
         num_requests = 15
-        responses = await asyncio.gather(*[
-            cycletls.aget(f"{httpbin_url}/status/200")
-            for _ in range(num_requests)
-        ])
+        responses = await asyncio.gather(
+            *[cycletls.aget(f"{httpbin_url}/status/200") for _ in range(num_requests)]
+        )
 
         assert len(responses) == num_requests
         assert all(r.status_code == 200 for r in responses)
@@ -222,10 +220,7 @@ class TestAsyncTaskCancellation:
     async def test_cancel_pending_requests(self, httpbin_url):
         """Test cancelling pending async requests."""
         # Start multiple long-running requests
-        tasks = [
-            asyncio.create_task(cycletls.aget(f"{httpbin_url}/delay/5"))
-            for _ in range(3)
-        ]
+        tasks = [asyncio.create_task(cycletls.aget(f"{httpbin_url}/delay/5")) for _ in range(3)]
 
         # Wait a bit
         await asyncio.sleep(0.1)
@@ -244,11 +239,8 @@ class TestAsyncTaskCancellation:
         # This should timeout
         with pytest.raises(asyncio.TimeoutError):
             await asyncio.wait_for(
-                asyncio.gather(*[
-                    cycletls.aget(f"{httpbin_url}/delay/10")
-                    for _ in range(3)
-                ]),
-                timeout=1.0  # 1 second timeout
+                asyncio.gather(*[cycletls.aget(f"{httpbin_url}/delay/10") for _ in range(3)]),
+                timeout=1.0,  # 1 second timeout
             )
 
 
@@ -297,10 +289,9 @@ class TestAsyncBatchPatterns:
                 return await cycletls.aget(url)
 
         # Launch 20 requests, but only 5 at a time
-        responses = await asyncio.gather(*[
-            limited_request(f"{httpbin_url}/get?id={i}")
-            for i in range(20)
-        ])
+        responses = await asyncio.gather(
+            *[limited_request(f"{httpbin_url}/get?id={i}") for i in range(20)]
+        )
 
         assert len(responses) == 20
         assert all(r.status_code == 200 for r in responses)

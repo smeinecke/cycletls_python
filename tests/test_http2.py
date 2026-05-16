@@ -108,8 +108,9 @@ class TestHTTP2:
 
         # Verify custom headers were sent
         headers = data.get("headers", {})
-        assert headers.get("X-Custom-Header") == "test-value"
-        assert headers.get("Accept") == "application/json"
+        _h = lambda k: headers[k][0] if isinstance(headers.get(k), list) else headers.get(k)
+        assert _h("X-Custom-Header") == "test-value"
+        assert _h("Accept") == "application/json"
 
     def test_http2_post_with_json_body(self, cycle):
         """Test HTTP/2 POST request with JSON body"""

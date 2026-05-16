@@ -19,6 +19,12 @@ from test_utils import (
     assert_valid_json_response,
 )
 
+def _v(container, key):
+    """Normalize go-httpbin list values to a single value."""
+    val = container[key]
+    return val[0] if isinstance(val, list) else val
+
+
 pytestmark = pytest.mark.live
 
 
@@ -42,9 +48,9 @@ class TestBasicURLEncodedForm:
         # Verify the form data was received
         data = assert_valid_json_response(response)
         assert 'form' in data, "Response should contain 'form' field"
-        assert data['form']['key1'] == 'value1', \
+        assert _v(data['form'], 'key1') == 'value1', \
             f"Expected key1='value1', got {data['form'].get('key1')}"
-        assert data['form']['key2'] == 'value2', \
+        assert _v(data['form'], 'key2') == 'value2', \
             f"Expected key2='value2', got {data['form'].get('key2')}"
 
     def test_simple_login_form(self, cycletls_client, httpbin_url):
@@ -64,9 +70,9 @@ class TestBasicURLEncodedForm:
 
         data = assert_valid_json_response(response)
         assert 'form' in data, "Response should contain 'form' field"
-        assert data['form']['username'] == 'testuser', "Username should be preserved"
-        assert data['form']['password'] == 'testpassword123', "Password should be preserved"
-        assert data['form']['remember'] == 'on', "Remember flag should be preserved"
+        assert _v(data['form'], 'username') == 'testuser', "Username should be preserved"
+        assert _v(data['form'], 'password') == 'testpassword123', "Password should be preserved"
+        assert _v(data['form'], 'remember') == 'on', "Remember flag should be preserved"
 
     def test_empty_form_submission(self, cycletls_client, httpbin_url):
         """Test submitting an empty form."""
@@ -107,11 +113,11 @@ class TestSpecialCharacters:
         assert 'form' in data, "Response should contain 'form' field"
 
         # Verify special characters are preserved correctly
-        assert data['form']['email'] == form_data['email'], \
+        assert _v(data['form'], 'email') == form_data['email'], \
             "Email with + sign should be preserved"
-        assert data['form']['message'] == form_data['message'], \
+        assert _v(data['form'], 'message') == form_data['message'], \
             "Message with & should be preserved"
-        assert data['form']['query'] == form_data['query'], \
+        assert _v(data['form'], 'query') == form_data['query'], \
             "Query with special chars should be preserved"
 
     def test_unicode_characters(self, cycletls_client, httpbin_url):
@@ -136,11 +142,11 @@ class TestSpecialCharacters:
         assert 'form' in data, "Response should contain 'form' field"
 
         # Verify Unicode characters are preserved
-        assert data['form']['name'] == form_data['name'], \
+        assert _v(data['form'], 'name') == form_data['name'], \
             "Name with accents should be preserved"
-        assert data['form']['greeting'] == form_data['greeting'], \
+        assert _v(data['form'], 'greeting') == form_data['greeting'], \
             "Greeting with Chinese characters should be preserved"
-        assert data['form']['emoji'] == form_data['emoji'], \
+        assert _v(data['form'], 'emoji') == form_data['emoji'], \
             "Emoji should be preserved"
 
     def test_whitespace_and_newlines(self, cycletls_client, httpbin_url):
@@ -186,9 +192,9 @@ class TestSpecialCharacters:
         assert 'form' in data, "Response should contain 'form' field"
 
         # Verify quotes and backslashes are preserved
-        assert data['form']['single_quote'] == form_data['single_quote'], \
+        assert _v(data['form'], 'single_quote') == form_data['single_quote'], \
             "Single quotes should be preserved"
-        assert data['form']['backslash'] == form_data['backslash'], \
+        assert _v(data['form'], 'backslash') == form_data['backslash'], \
             "Backslashes should be preserved"
 
 
@@ -246,9 +252,9 @@ class TestArrayValues:
 
         # Verify array items are present (as separate keys)
         assert 'items[0]' in data['form'], "Array item 0 should be present"
-        assert data['form']['items[0]'] == 'first', "Array item 0 value should match"
+        assert _v(data['form'], 'items[0]') == 'first', "Array item 0 value should match"
         assert 'items[1]' in data['form'], "Array item 1 should be present"
-        assert data['form']['items[1]'] == 'second', "Array item 1 value should match"
+        assert _v(data['form'], 'items[1]') == 'second', "Array item 1 value should match"
 
 
 class TestNestedStructures:
@@ -277,9 +283,9 @@ class TestNestedStructures:
 
         # Verify nested fields are present (as flat keys)
         assert 'user[name]' in data['form'], "Nested user name should be present"
-        assert data['form']['user[name]'] == 'John Doe', "User name should match"
+        assert _v(data['form'], 'user[name]') == 'John Doe', "User name should match"
         assert 'user[email]' in data['form'], "Nested user email should be present"
-        assert data['form']['user[email]'] == 'john@example.com', "User email should match"
+        assert _v(data['form'], 'user[email]') == 'john@example.com', "User email should match"
         assert 'address[city]' in data['form'], "Nested address city should be present"
 
     def test_deeply_nested_notation(self, cycletls_client, httpbin_url):
@@ -305,7 +311,7 @@ class TestNestedStructures:
         # Verify deeply nested fields are present
         assert 'data[user][profile][name]' in data['form'], \
             "Deeply nested name should be present"
-        assert data['form']['data[user][profile][name]'] == 'Jane Doe', \
+        assert _v(data['form'], 'data[user][profile][name]') == 'Jane Doe', \
             "Deeply nested name should match"
 
 
@@ -331,7 +337,7 @@ class TestLargeFormData:
         assert 'field_0' in data['form'], "First field should be present"
         assert 'field_50' in data['form'], "Middle field should be present"
         assert 'field_99' in data['form'], "Last field should be present"
-        assert data['form']['field_0'] == 'value_0', "Field value should match"
+        assert _v(data['form'], 'field_0') == 'value_0', "Field value should match"
 
     def test_long_field_values(self, cycletls_client, httpbin_url):
         """Test form with long field values."""
@@ -356,9 +362,9 @@ class TestLargeFormData:
 
         # Verify long values are preserved
         assert 'description' in data['form'], "Description field should be present"
-        assert len(data['form']['description']) > 2000, \
+        assert len(_v(data['form'], 'description')) > 2000, \
             "Description should be long"
-        assert data['form']['title'] == 'Short title', \
+        assert _v(data['form'], 'title') == 'Short title', \
             "Title should be preserved"
 
 
@@ -387,7 +393,7 @@ class TestEdgeCases:
         # Verify empty values are handled
         assert 'field1' in data['form'], "Field with empty value should be present"
         assert 'field2' in data['form'], "Field with value should be present"
-        assert data['form']['field2'] == 'value2', "Non-empty value should match"
+        assert _v(data['form'], 'field2') == 'value2', "Non-empty value should match"
 
     def test_numeric_values(self, cycletls_client, httpbin_url):
         """Test form with numeric values (sent as strings)."""
@@ -409,9 +415,9 @@ class TestEdgeCases:
         assert 'form' in data, "Response should contain 'form' field"
 
         # Verify numeric values are preserved as strings
-        assert data['form']['age'] == '25', "Age should be preserved"
-        assert data['form']['price'] == '19.99', "Price should be preserved"
-        assert data['form']['quantity'] == '100', "Quantity should be preserved"
+        assert _v(data['form'], 'age') == '25', "Age should be preserved"
+        assert _v(data['form'], 'price') == '19.99', "Price should be preserved"
+        assert _v(data['form'], 'quantity') == '100', "Quantity should be preserved"
 
     def test_boolean_like_values(self, cycletls_client, httpbin_url):
         """Test form with boolean-like string values."""
@@ -435,6 +441,6 @@ class TestEdgeCases:
         assert 'form' in data, "Response should contain 'form' field"
 
         # Verify boolean-like values are preserved as strings
-        assert data['form']['active'] == 'true', "Boolean string should be preserved"
-        assert data['form']['checked'] == 'on', "On value should be preserved"
-        assert data['form']['unchecked'] == 'off', "Off value should be preserved"
+        assert _v(data['form'], 'active') == 'true', "Boolean string should be preserved"
+        assert _v(data['form'], 'checked') == 'on', "On value should be preserved"
+        assert _v(data['form'], 'unchecked') == 'off', "Off value should be preserved"
