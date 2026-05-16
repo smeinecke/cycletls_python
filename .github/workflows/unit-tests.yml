@@ -61,14 +61,19 @@ jobs:
         shell: bash
         run: |
           go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@latest
+          export PATH="$(go env GOPATH)/bin:$PATH"
           go-httpbin -port 8080 &
           echo "Waiting for httpbin to become ready..."
-          if ! timeout 30 bash -c 'until curl -sf http://localhost:8080/get > /dev/null; do sleep 1; done'; then
-            echo "httpbin did not become ready."
-            exit 1
-          fi
-          echo "HTTPBIN_URL=http://localhost:8080" >> "$GITHUB_ENV"
-          echo "httpbin is ready on http://localhost:8080"
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/get > /dev/null; then
+              echo "httpbin is ready on http://localhost:8080"
+              echo "HTTPBIN_URL=http://localhost:8080" >> "$GITHUB_ENV"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "httpbin did not become ready."
+          exit 1
 
       - name: Run unit tests with coverage
         run: >
