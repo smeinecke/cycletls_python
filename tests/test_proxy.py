@@ -67,12 +67,12 @@ def client():
 
 
 @pytest.mark.skipif(
-    not is_proxy_available("http://127.0.0.1:8080"),
-    reason="HTTP proxy not available at 127.0.0.1:8080"
+    not is_proxy_available("http://127.0.0.1:8888"),
+    reason="HTTP proxy not available at 127.0.0.1:8888"
 )
 def test_http_proxy(client):
     """Test HTTP proxy connection"""
-    proxy_url = "http://127.0.0.1:8080"
+    proxy_url = "http://127.0.0.1:8888"
 
     result = client.get(
         f"{_HTTPBIN_URL}/ip",
@@ -205,7 +205,7 @@ def test_proxy_authentication_format(client):
     """Test proxy URL with authentication credentials format"""
     # This test verifies the format is accepted, even if proxy isn't available
     # It will skip if the proxy isn't available
-    proxy_url = "http://username:password@127.0.0.1:8080"
+    proxy_url = "http://username:password@127.0.0.1:8888"
 
     if not is_proxy_available(proxy_url):
         pytest.skip("Authenticated proxy not available")
@@ -242,7 +242,7 @@ def test_proxy_with_post_request(client):
 
 
 @pytest.mark.parametrize("proxy_type", [
-    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8888",
     "https://127.0.0.1:8443",
     "socks4://127.0.0.1:9050",
     "socks5://127.0.0.1:9050",
