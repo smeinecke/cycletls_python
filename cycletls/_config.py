@@ -30,6 +30,7 @@ _CONFIG_TO_PARAM_MAPPING = {
     "default_disable_redirect": "disable_redirect",
     "default_header_order": "header_order",
     "default_order_headers_as_provided": "order_headers_as_provided",
+    "default_headers": "headers",
 }
 
 # Valid configuration attributes (derived from mapping to avoid duplication)
@@ -56,6 +57,7 @@ def _validate_config(name: str, value: Any) -> None:
         "default_http2_fingerprint": lambda v: v is None or isinstance(v, str),
         "default_quic_fingerprint": lambda v: v is None or isinstance(v, str),
         "default_header_order": lambda v: v is None or isinstance(v, list),
+        "default_headers": lambda v: v is None or isinstance(v, dict),
     }
 
     validator = validators.get(name)

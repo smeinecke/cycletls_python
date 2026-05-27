@@ -69,6 +69,7 @@ class TLSFingerprint:
     quic_fingerprint: Optional[str] = None
     user_agent: Optional[str] = None
     header_order: Optional[list[str]] = None
+    headers: Optional[dict[str, str]] = None
     disable_grease: bool = False
     force_http1: bool = False
     force_http3: bool = False
@@ -83,6 +84,7 @@ class TLSFingerprint:
             quic_fingerprint=data.get("quic_fingerprint"),
             user_agent=data.get("user_agent"),
             header_order=data.get("header_order"),
+            headers=data.get("headers"),
             disable_grease=data.get("disable_grease", False),
             force_http1=data.get("force_http1", False),
             force_http3=data.get("force_http3", False),
@@ -109,6 +111,8 @@ class TLSFingerprint:
             result["user_agent"] = self.user_agent
         if self.header_order is not None:
             result["header_order"] = self.header_order
+        if self.headers is not None:
+            result["headers"] = self.headers
         if self.disable_grease:
             result["disable_grease"] = True
         if self.force_http1:
@@ -120,6 +124,64 @@ class TLSFingerprint:
     def to_json(self, path: str | Path) -> None:
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
+
+    def _dynamic_sec_ch_ua(self) -> dict[str, str] | None:
+        """Compute sec-ch-ua headers from user_agent for Chromium-family browsers."""
+        if not self.user_agent or not self.header_order:
+            return None
+        ua = self.user_agent
+        # Extract major version
+        match = re.search(r"(?:Chrome|Chromium|HeadlessChrome)/(\d+)", ua)
+        if not match:
+            return None
+        major = match.group(1)
+        # Determine platform
+        if "Linux" in ua:
+            platform = "Linux"
+        elif "Macintosh" in ua or "Mac OS X" in ua:
+            platform = "macOS"
+        elif "Windows" in ua:
+            platform = "Windows"
+        elif "Android" in ua:
+            platform = "Android"
+        else:
+            platform = ""
+        # Determine mobile
+        mobile = "?1" if "Android" in ua or "Mobile" in ua else "?0"
+        # Determine browser brand from profile name and UA
+        name = self.name.lower()
+        if name.startswith("brave"):
+            brand = "Brave"
+        elif name.startswith("opera") or "opr/" in ua.lower():
+            brand = "Opera"
+        elif name.startswith("edge") or name.startswith("msedge"):
+            brand = "Microsoft Edge"
+        elif name.startswith("chrome"):
+            brand = "Google Chrome"
+        elif name.startswith("chromium"):
+            brand = None
+        else:
+            # Fallback: Chrome if "Chrome/" in UA but not Chromium
+            brand = "Google Chrome" if "Chrome/" in ua and "Chromium/" not in ua else None
+        # Determine brand version (Opera uses its own version, others match Chromium)
+        if brand == "Opera":
+            opr_match = re.search(r"OPR/(\d+)", ua, re.IGNORECASE)
+            brand_version = opr_match.group(1) if opr_match else major
+        else:
+            brand_version = major
+        # Build brand string (Chrome 120+ format)
+        if brand:
+            sec_ch_ua = f'"Chromium";v="{major}", "{brand}";v="{brand_version}", "Not/A)Brand";v="99"'
+        else:
+            sec_ch_ua = f'"Chromium";v="{major}", "Not/A)Brand";v="99"'
+        result: dict[str, str] = {}
+        if "sec-ch-ua" in self.header_order:
+            result["sec-ch-ua"] = sec_ch_ua
+        if "sec-ch-ua-mobile" in self.header_order:
+            result["sec-ch-ua-mobile"] = mobile
+        if "sec-ch-ua-platform" in self.header_order:
+            result["sec-ch-ua-platform"] = f'"{platform}"' if platform else ""
+        return result if result else None
 
     def apply_to_kwargs(self, kwargs: dict[str, Any]) -> dict[str, Any]:
         if "ja3" not in kwargs:
@@ -134,6 +196,18 @@ class TLSFingerprint:
             kwargs["user_agent"] = self.user_agent
         if self.header_order is not None and "header_order" not in kwargs:
             kwargs["header_order"] = self.header_order
+        if self.headers is not None:
+            request_headers = kwargs.get("headers") or {}
+            merged = {**self.headers, **request_headers}
+            kwargs["headers"] = merged
+        # Inject dynamic sec-ch-ua headers (computed from user_agent)
+        dynamic_ua = self._dynamic_sec_ch_ua()
+        if dynamic_ua:
+            request_headers = kwargs.get("headers") or {}
+            for key, value in dynamic_ua.items():
+                if key not in request_headers:
+                    request_headers.setdefault(key, value)
+            kwargs["headers"] = request_headers
         if self.disable_grease and "disable_grease" not in kwargs:
             kwargs["disable_grease"] = True
         if self.force_http1 and "force_http1" not in kwargs:
