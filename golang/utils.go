@@ -1041,6 +1041,7 @@ func genMap(disableGrease bool) (extMap map[string]utls.TLSExtension) {
 		"65281": &utls.RenegotiationInfoExtension{
 			Renegotiation: utls.RenegotiateOnceAsClient,
 		},
+		"51764": &utls.GenericExtension{Id: 51764}, // Chrome 149 experimental extension
 		"65037": utls.BoringGREASEECH(),
 	}
 	return
