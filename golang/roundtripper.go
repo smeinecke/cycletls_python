@@ -5,19 +5,19 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"net"
+	stdhttp "net/http"
+	"strings"
+	"sync"
+	"time"
+
 	http "github.com/Danny-Dasilva/fhttp"
-	"io"
 	http2 "github.com/Danny-Dasilva/fhttp/http2"
 	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"
 	uquic "github.com/refraction-networking/uquic"
 	utls "github.com/refraction-networking/utls"
 	"golang.org/x/net/proxy"
-	"net"
-	stdhttp "net/http"
-	"strings"
-	"sync"
-	"time"
 )
 
 var errProtocolNegotiated = errors.New("protocol negotiated")
@@ -232,17 +232,9 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 	rt.Lock()
 	defer rt.Unlock()
 
-	// Return cached connection if available and alive
+	// Return cached connection if available
 	if conn := rt.cachedConnections[addr]; conn != nil {
-		if err := conn.SetReadDeadline(time.Now().Add(100 * time.Millisecond)); err == nil {
-			buf := make([]byte, 1)
-			if _, err := conn.Read(buf); err == nil || errors.Is(err, io.EOF) {
-				_ = conn.SetReadDeadline(time.Time{})
-				return conn, nil
-			}
-		}
-		// Connection is dead, remove from cache
-		delete(rt.cachedConnections, addr)
+		return conn, nil
 	}
 
 	// Establish raw connection
@@ -442,6 +434,10 @@ func (rt *roundTripper) retryWithTLS13CompatibleCurves(ctx context.Context, netw
 		return nil, fmt.Errorf("TLS 1.3 compatible handshake failed: %+v", err)
 	}
 
+	// If transport already exists (e.g., called from dialTLSHTTP2 after aliveness check),
+	// just cache the connection and return it directly.
+	transportAlreadyExists := rt.cachedTransports[addr] != nil
+
 	// Create appropriate transport based on negotiated protocol
 	switch conn.ConnectionState().NegotiatedProtocol {
 	case http2.NextProtoTLS:
@@ -470,22 +466,29 @@ func (rt *roundTripper) retryWithTLS13CompatibleCurves(ctx context.Context, netw
 			}
 		}
 
-		rt.cachedTransports[addr] = &http2Transport
+		if !transportAlreadyExists {
+			rt.cachedTransports[addr] = &http2Transport
+		}
 	default:
 		// HTTP/1.x transport - optimized for connection reuse
-		rt.cachedTransports[addr] = &http.Transport{
-			DialTLSContext:      rt.dialTLS,
-			MaxIdleConns:        100,
-			MaxConnsPerHost:     100,
-			MaxIdleConnsPerHost: 100, // Go default is 2, which causes 98% of connections to close
-			IdleConnTimeout:     60 * time.Second,
-			DisableKeepAlives:   rt.DisableKeepAlives, // Bound to enable_connection_reuse=False
+		if !transportAlreadyExists {
+			rt.cachedTransports[addr] = &http.Transport{
+				DialTLSContext:      rt.dialTLS,
+				MaxIdleConns:        100,
+				MaxConnsPerHost:     100,
+				MaxIdleConnsPerHost: 100, // Go default is 2, which causes 98% of connections to close
+				IdleConnTimeout:     60 * time.Second,
+				DisableKeepAlives:   rt.DisableKeepAlives, // Bound to enable_connection_reuse=False
+			}
 		}
 	}
 
 	// Cache the successful TLS 1.3 connection
 	rt.cachedConnections[addr] = conn
 
+	if transportAlreadyExists {
+		return conn, nil
+	}
 	return nil, errProtocolNegotiated
 }
 
@@ -521,6 +524,10 @@ func (rt *roundTripper) retryWithOriginalTLS12JA3(ctx context.Context, network, 
 		return nil, fmt.Errorf("original TLS 1.2 handshake failed: %+v", err)
 	}
 
+	// If transport already exists (e.g., called from dialTLSHTTP2 after aliveness check),
+	// just cache the connection and return it directly.
+	transportAlreadyExists := rt.cachedTransports[addr] != nil
+
 	// Create appropriate transport based on negotiated protocol
 	switch conn.ConnectionState().NegotiatedProtocol {
 	case http2.NextProtoTLS:
@@ -549,22 +556,29 @@ func (rt *roundTripper) retryWithOriginalTLS12JA3(ctx context.Context, network, 
 			}
 		}
 
-		rt.cachedTransports[addr] = &http2Transport
+		if !transportAlreadyExists {
+			rt.cachedTransports[addr] = &http2Transport
+		}
 	default:
 		// HTTP/1.x transport - optimized for connection reuse
-		rt.cachedTransports[addr] = &http.Transport{
-			DialTLSContext:      rt.dialTLS,
-			MaxIdleConns:        100,
-			MaxConnsPerHost:     100,
-			MaxIdleConnsPerHost: 100, // Go default is 2, which causes 98% of connections to close
-			IdleConnTimeout:     60 * time.Second,
-			DisableKeepAlives:   rt.DisableKeepAlives, // Bound to enable_connection_reuse=False
+		if !transportAlreadyExists {
+			rt.cachedTransports[addr] = &http.Transport{
+				DialTLSContext:      rt.dialTLS,
+				MaxIdleConns:        100,
+				MaxConnsPerHost:     100,
+				MaxIdleConnsPerHost: 100, // Go default is 2, which causes 98% of connections to close
+				IdleConnTimeout:     60 * time.Second,
+				DisableKeepAlives:   rt.DisableKeepAlives, // Bound to enable_connection_reuse=False
+			}
 		}
 	}
 
 	// Cache the successful TLS 1.2 fallback connection
 	rt.cachedConnections[addr] = conn
 
+	if transportAlreadyExists {
+		return conn, nil
+	}
 	return nil, errProtocolNegotiated
 }
 
