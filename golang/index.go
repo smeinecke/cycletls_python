@@ -218,7 +218,11 @@ var activeWebSocketsMutex sync.RWMutex
 
 // ready Request
 func processRequest(request cycleTLSRequest) (result fullRequest) {
-	ctx, cancel := context.WithCancel(context.Background())
+	timeout := request.Options.Timeout
+	if timeout <= 0 {
+		timeout = 15
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 
 	var browser = Browser{
 		// TLS fingerprinting options
@@ -1759,7 +1763,13 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 	} else {
 		bodyReader = strings.NewReader(options.Body)
 	}
-	req, err := http.NewRequest(Method, URL, bodyReader)
+	reqTimeout := options.Timeout
+	if reqTimeout <= 0 {
+		reqTimeout = 15
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(reqTimeout)*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, Method, URL, bodyReader)
 	if err != nil {
 		return Response{}, err
 	}

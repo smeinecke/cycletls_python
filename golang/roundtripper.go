@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	http "github.com/Danny-Dasilva/fhttp"
+	"io"
 	http2 "github.com/Danny-Dasilva/fhttp/http2"
 	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"
@@ -184,12 +185,14 @@ func (rt *roundTripper) getTransport(req *http.Request, addr string) error {
 	case "http":
 		// Allow connection reuse with optimized connection pooling
 		rt.cachedTransports[addr] = &http.Transport{
-			DialContext:         rt.dialer.DialContext,
-			MaxIdleConns:        100,
-			MaxConnsPerHost:     100,
-			MaxIdleConnsPerHost: 100, // Go default is 2, which causes 98% of connections to close
-			IdleConnTimeout:     60 * time.Second,
-			DisableKeepAlives:   rt.DisableKeepAlives,
+			DialContext:           rt.dialer.DialContext,
+			MaxIdleConns:          100,
+			MaxConnsPerHost:       100,
+			MaxIdleConnsPerHost:   100, // Go default is 2, which causes 98% of connections to close
+			IdleConnTimeout:       60 * time.Second,
+			ResponseHeaderTimeout: 10 * time.Second,
+			TLSHandshakeTimeout:   10 * time.Second,
+			DisableKeepAlives:     rt.DisableKeepAlives,
 		}
 		return nil
 	case "https":
@@ -229,9 +232,17 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 	rt.Lock()
 	defer rt.Unlock()
 
-	// Return cached connection if available
+	// Return cached connection if available and alive
 	if conn := rt.cachedConnections[addr]; conn != nil {
-		return conn, nil
+		if err := conn.SetReadDeadline(time.Now().Add(100 * time.Millisecond)); err == nil {
+			buf := make([]byte, 1)
+			if _, err := conn.Read(buf); err == nil || errors.Is(err, io.EOF) {
+				_ = conn.SetReadDeadline(time.Time{})
+				return conn, nil
+			}
+		}
+		// Connection is dead, remove from cache
+		delete(rt.cachedConnections, addr)
 	}
 
 	// Establish raw connection
