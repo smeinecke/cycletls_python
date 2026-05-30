@@ -171,7 +171,9 @@ class TLSFingerprint:
             brand_version = major
         # Build brand string (Chrome 120+ format)
         if brand:
-            sec_ch_ua = f'"Chromium";v="{major}", "{brand}";v="{brand_version}", "Not/A)Brand";v="99"'
+            sec_ch_ua = (
+                f'"Chromium";v="{major}", "{brand}";v="{brand_version}", "Not/A)Brand";v="99"'
+            )
         else:
             sec_ch_ua = f'"Chromium";v="{major}", "Not/A)Brand";v="99"'
         result: dict[str, str] = {}
