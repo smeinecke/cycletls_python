@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Minimal HTTP server that serves a brotli-compressed /brotli endpoint over HTTPS."""
 
+import http.server
 import json
 import os
-import http.server
 import socketserver
 import ssl
 import subprocess
@@ -34,12 +34,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
 def _generate_self_signed_cert(cert_path: str, key_path: str) -> None:
     subprocess.run(
         [
-            "openssl", "req", "-x509", "-newkey", "rsa:4096",
-            "-keyout", key_path,
-            "-out", cert_path,
-            "-sha256", "-days", "1", "-nodes",
-            "-subj", "/CN=localhost",
-            "-addext", "subjectAltName=IP:127.0.0.1,DNS:localhost",
+            "openssl",
+            "req",
+            "-x509",
+            "-newkey",
+            "rsa:4096",
+            "-keyout",
+            key_path,
+            "-out",
+            cert_path,
+            "-sha256",
+            "-days",
+            "1",
+            "-nodes",
+            "-subj",
+            "/CN=localhost",
+            "-addext",
+            "subjectAltName=IP:127.0.0.1,DNS:localhost",
         ],
         check=True,
         capture_output=True,

@@ -101,7 +101,7 @@ jobs:
           BROTLI_CERT: /tmp/brotli-certs/cert.pem
           BROTLI_KEY: /tmp/brotli-certs/key.pem
         run: |
-          python tests/brotli_server.py &
+          uv run python tests/brotli_server.py &
           sleep 2
           curl -skf https://localhost:8081/brotli || { echo "Brotli server failed to start"; exit 1; }
 
