@@ -85,18 +85,32 @@ jobs:
           fi
           echo "tlsfingerprint.com server is ready."
 
+      - name: Generate TLS certificates for brotli test server
+        run: |
+          mkdir -p /tmp/brotli-certs
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout /tmp/brotli-certs/key.pem \
+            -out /tmp/brotli-certs/cert.pem \
+            -sha256 -days 1 -nodes \
+            -subj "/CN=localhost" \
+            -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+          cat /tmp/combined-test-cas.crt /tmp/brotli-certs/cert.pem > /tmp/combined-all-cas.crt
+
       - name: Start brotli test server
+        env:
+          BROTLI_CERT: /tmp/brotli-certs/cert.pem
+          BROTLI_KEY: /tmp/brotli-certs/key.pem
         run: |
           python tests/brotli_server.py &
           sleep 2
-          curl -sf http://localhost:8081/brotli || { echo "Brotli server failed to start"; exit 1; }
+          curl -skf https://localhost:8081/brotli || { echo "Brotli server failed to start"; exit 1; }
 
       - name: Run live tests
         env:
           TLSFP_URL: https://localhost
-          SSL_CERT_FILE: /tmp/combined-test-cas.crt
+          SSL_CERT_FILE: /tmp/combined-all-cas.crt
           HTTPBIN_URL: http://localhost:8080
-          BROTLI_URL: http://localhost:8081
+          BROTLI_URL: https://localhost:8081
         run: uv run pytest -v --color=yes --reruns=3 -m "live and not blocking" tests/
 
       - name: Tear down tlsfingerprint.com server

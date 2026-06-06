@@ -118,7 +118,7 @@ def httpbin_url():
 @pytest.fixture
 def brotli_url():
     """Brotli test server URL."""
-    return os.environ.get("BROTLI_URL", "http://localhost:8081")
+    return os.environ.get("BROTLI_URL", "https://localhost:8081")
 
 
 @pytest.fixture
