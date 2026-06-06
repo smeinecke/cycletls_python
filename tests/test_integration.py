@@ -23,7 +23,7 @@ from test_utils import (
     assert_valid_response,
 )
 
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 pytestmark = pytest.mark.live
@@ -43,7 +43,7 @@ class TestBasicRequests:
 
     def test_get_with_ja3er(self, cycletls_client):
         """Test GET request to TLS fingerprint service to verify JA3 fingerprinting."""
-        # Use tls.peet.ws instead of ja3er.com which is unreliable
+        # Use tlsfingerprint.com instead of ja3er.com which is unreliable
         response = cycletls_client.get(f"{_TLSFP_URL}/api/clean", timeout=30)
 
         assert_valid_response(response, expected_status=200)
@@ -97,7 +97,7 @@ class TestUserAgent:
         """Test user-agent with JA3 fingerprint on TLS fingerprint service."""
         custom_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36"
 
-        # Use tls.peet.ws instead of ja3er.com which is unreliable
+        # Use tlsfingerprint.com instead of ja3er.com which is unreliable
         response = cycletls_client.get(
             f"{_TLSFP_URL}/api/clean", user_agent=custom_ua, ja3=firefox_ja3, timeout=30
         )

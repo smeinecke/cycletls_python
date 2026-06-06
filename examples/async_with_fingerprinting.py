@@ -192,7 +192,7 @@ async def example_ja4r_fingerprint():
     print("Making request with JA4R fingerprint...")
 
     response = await cycletls.aget(
-        "https://tls.peet.ws/api/all",
+        "https://tlsfingerprint.com/api/all",
         ja4r=ja4r,
         user_agent=CHROME_PROFILE["user_agent"]
     )

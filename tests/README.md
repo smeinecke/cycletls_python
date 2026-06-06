@@ -5,14 +5,14 @@
 ```bash
 uv sync --all-extras --dev
 uv run pytest -m "not live" tests/        # offline, no external deps
-uv run pytest -m live tests/               # hits https://tls.peet.ws by default
+uv run pytest -m live tests/               # hits https://tlsfingerprint.com by default
 ```
 
 ## Live tests against a local tlsfingerprint.com Docker instance
 
-Live tests target `https://tls.peet.ws` by default. To run them against a
+Live tests target `https://tlsfingerprint.com` by default. To run them against a
 local instance of [Danny-Dasilva/tlsfingerprint.com](https://github.com/Danny-Dasilva/tlsfingerprint.com)
-(the open-source server behind `tls.peet.ws`), bring up a local container and
+(the open-source server behind `tlsfingerprint.com`), bring up a local container and
 point the suite at it via the `TLSFP_URL` env var. CI does this automatically;
 locally:
 
@@ -44,16 +44,16 @@ TLSFP_URL=https://localhost SSL_CERT_FILE=/tmp/combined-test-cas.crt \
     uv run pytest -v -m live tests/
 ```
 
-If `TLSFP_URL` is unset, the suite falls back to `https://tls.peet.ws`.
+If `TLSFP_URL` is unset, the suite falls back to `https://tlsfingerprint.com`.
 
 ## Markers
 
-- `live` — exercises a real fingerprint server (`tls.peet.ws` or local).
+- `live` — exercises a real fingerprint server (`tlsfingerprint.com` or local).
 - `blocking` — CI-critical fingerprint validation; subset of `live`.
 
 ## Connection reuse note
 
-`tls.peet.ws` and the local tlsfingerprint.com container both close the TLS
+`tlsfingerprint.com` and the local tlsfingerprint.com container both close the TLS
 connection after each response. The CycleTLS Go transport caches connections
 globally, so a closed connection can leak into the next test as
 `use of closed network connection`. Most fixtures default

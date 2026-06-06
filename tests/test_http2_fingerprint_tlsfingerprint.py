@@ -1,8 +1,8 @@
 """
-HTTP/2 Fingerprint Validation Tests against tls.peet.ws
+HTTP/2 Fingerprint Validation Tests against tlsfingerprint.com
 
 Tests HTTP/2 Akamai fingerprint generation and validation by verifying the
-observed fingerprints at tls.peet.ws.
+observed fingerprints at tlsfingerprint.com.
 
 Run with: pytest tests/test_http2_fingerprint_tlsfingerprint.py -v -m live
 Skip with: pytest -m "not live"
@@ -20,12 +20,12 @@ from cycletls import CycleTLS
 pytestmark = pytest.mark.live
 
 # Base URL — override with TLSFP_URL to point at a local tlsfingerprint.com Docker instance
-BASE_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+BASE_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 def extract_http2_from_response(data: dict) -> dict:
     """
-    Extract HTTP/2 fingerprint data from tls.peet.ws response.
+    Extract HTTP/2 fingerprint data from tlsfingerprint.com response.
 
     Response format:
     {
@@ -64,7 +64,7 @@ class TestHTTP2FingerprintData:
     """Test that HTTP/2 fingerprint data is returned"""
 
     def test_response_contains_http2_data(self, cycle_client):
-        """Test that tls.peet.ws returns HTTP/2 data"""
+        """Test that tlsfingerprint.com returns HTTP/2 data"""
         response = cycle_client.get(f"{BASE_URL}/api/all")
 
         assert response.status_code == 200

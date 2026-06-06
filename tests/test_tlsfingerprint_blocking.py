@@ -1,5 +1,5 @@
 """
-TLS Fingerprint Blocking Tests against tls.peet.ws
+TLS Fingerprint Blocking Tests against tlsfingerprint.com
 
 These tests are marked as 'blocking' and will cause CI to fail if they fail.
 They verify core TLS fingerprinting functionality including:
@@ -9,8 +9,7 @@ They verify core TLS fingerprinting functionality including:
 - Fingerprint consistency and exact matching
 
 Test endpoints:
-- tls.peet.ws - Primary TLS fingerprint verification service (reliable)
-- tlsfingerprint.com - Secondary verification service
+- tlsfingerprint.com - Primary TLS fingerprint verification service (reliable)
 
 Run blocking tests only:
     pytest -m blocking tests/test_tlsfingerprint_blocking.py -v
@@ -29,7 +28,7 @@ import os
 import pytest
 
 # Structural JA4_r matchers (see tests/conftest.py for full rationale).
-# Production tls.peet.ws strips leading zeros from the cipher_count/ext_count
+# Production tlsfingerprint.com strips leading zeros from the cipher_count/ext_count
 # header field (e.g. "t12d128h2" for 12 ciphers + 8 extensions), while the
 # local tlsfingerprint.com Docker image used by CI emits the spec-compliant
 # zero-padded form ("t12d1208h2"). We assert structural equivalence rather
@@ -42,7 +41,7 @@ from cycletls import CycleTLS
 pytestmark = [pytest.mark.blocking, pytest.mark.live]
 
 # Primary test URL — override with TLSFP_URL to point at a local tlsfingerprint.com Docker instance
-PEET_WS_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+PEET_WS_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 # ==============================================================================
@@ -115,7 +114,7 @@ class TestJA3FingerprintBlocking:
         [BLOCKING] Verify Chrome JA3 fingerprint is correctly applied.
 
         The observed JA3 string should exactly match our input when using
-        tls.peet.ws/api/clean which echoes back the exact JA3.
+        tlsfingerprint.com/api/clean which echoes back the exact JA3.
         """
         response = cycle_client.get(
             f"{PEET_WS_URL}/api/clean",

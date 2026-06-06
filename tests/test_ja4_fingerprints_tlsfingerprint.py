@@ -1,8 +1,8 @@
 """
-JA4 Fingerprint Validation Tests against tls.peet.ws
+JA4 Fingerprint Validation Tests against tlsfingerprint.com
 
 Tests JA4 and JA4_r fingerprinting functionality by verifying the observed
-fingerprints at tls.peet.ws when different JA4_r configurations are used.
+fingerprints at tlsfingerprint.com when different JA4_r configurations are used.
 
 Run with: pytest tests/test_ja4_fingerprints_tlsfingerprint.py -v -m live
 Skip with: pytest -m "not live"
@@ -20,7 +20,7 @@ from cycletls import CycleTLS
 pytestmark = pytest.mark.live
 
 # Base URL — override with TLSFP_URL to point at a local tlsfingerprint.com Docker instance
-BASE_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+BASE_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 # JA4_r fingerprints from test_ja4_fingerprints.py
 JA4R_FINGERPRINTS = [
@@ -49,7 +49,7 @@ JA4R_FINGERPRINTS = [
 
 def extract_ja4_from_response(data: dict) -> dict:
     """
-    Extract JA4 data from tls.peet.ws response.
+    Extract JA4 data from tlsfingerprint.com response.
 
     Response format:
     {
@@ -97,7 +97,7 @@ class TestJA4FingerprintApplication:
     """Test that JA4 fingerprints are correctly applied"""
 
     def test_response_contains_ja4_data(self, cycle_client):
-        """Test that tls.peet.ws returns JA4 data"""
+        """Test that tlsfingerprint.com returns JA4 data"""
         response = cycle_client.get(f"{BASE_URL}/api/all")
 
         assert response.status_code == 200

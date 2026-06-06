@@ -10,12 +10,12 @@ from urllib.parse import urlparse
 import pytest
 
 # tlsfingerprint.com base URL — override with TLSFP_URL env var to point at a local instance.
-# Default is the production endpoint (https://tls.peet.ws); CI sets TLSFP_URL to a local Docker
-# container running Danny-Dasilva/tlsfingerprint.com (the source of tls.peet.ws).
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+# Default is the production endpoint (https://tlsfingerprint.com); CI sets TLSFP_URL to a local Docker
+# container running Danny-Dasilva/tlsfingerprint.com (the source of tlsfingerprint.com).
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 # TrackMe base URL — override with TRACKME_URL env var to point at a local instance
-_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tlsfingerprint.com")
 
 # HTTPBin base URL — override with HTTPBIN_URL env var to point at a local instance.
 # Default is the public endpoint; CI sets HTTPBIN_URL to a local Docker container.
@@ -27,7 +27,7 @@ def _is_external_endpoint(url: str) -> bool:
     hostname = urlparse(url).hostname
     if hostname is None:
         return False
-    # Local tlsfingerprint.com Docker and the production tls.peet.ws both close
+    # Local tlsfingerprint.com Docker and the production tlsfingerprint.com both close
     # connections after every response.
     if _TLSFP_URL in url:
         return True
@@ -163,7 +163,7 @@ async def async_cycletls_client_function():
 #
 # JA4_r header format: t<TLS_ver>d<cipher_count><ext_count><ALPN>
 # Per the JA4 spec, cipher_count and ext_count are 2-digit zero-padded.
-# Production tls.peet.ws emits an unpadded form (e.g. "t12d128h2" for 12+8),
+# Production tlsfingerprint.com emits an unpadded form (e.g. "t12d128h2" for 12+8),
 # while local tlsfingerprint.com Docker emits the spec form ("t12d1208h2").
 # Both are accepted: helpers validate STRUCTURE rather than exact prefixes.
 
@@ -212,7 +212,7 @@ def parse_ja4r(s: str) -> dict:
 
     The cipher_count and ext_count fields in the header may be either:
       - Unpadded (e.g. "128" -- 12 ciphers + 8 extensions, the format
-        currently produced by the production tls.peet.ws server)
+        currently produced by the production tlsfingerprint.com server)
       - Zero-padded to 2 digits each (e.g. "1208" -- 12 + 08, per the JA4
         spec, the format produced by the local tlsfingerprint.com Docker
         server)

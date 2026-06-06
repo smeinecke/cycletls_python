@@ -369,7 +369,7 @@ func CreateExtensionFromID(extID uint16, tlsVersion uint16, components *JA4RComp
 	case 0x001c: // Record Size Limit
 		return NewCustomRecordSizeLimitExtension(extID, 0x4001)
 	case 0x0022: // Delegated Credentials - PROBLEMATIC EXTENSION
-		// This extension causes connection resets with some servers (like peet.ws)
+		// This extension causes connection resets with some servers (like tlsfingerprint.com)
 		// Instead of implementing the complex RFC format, use a simpler fallback
 		// that maintains compatibility but avoids server-side rejections
 		return &utls.GenericExtension{

@@ -6,7 +6,7 @@ Based on CycleTLS TypeScript http2-fingerprint tests, these tests verify:
 - Priority configuration
 - Stream dependency
 - Fingerprint validation with various browsers
-- Testing with fingerprint detection endpoints (peet.ws, scrapfly.io)
+- Testing with fingerprint detection endpoints (tlsfingerprint.com, scrapfly.io)
 
 HTTP/2 fingerprints allow customization of HTTP/2 connection settings to mimic
 different browsers and avoid detection.
@@ -23,11 +23,11 @@ from test_utils import assert_valid_response
 
 
 _HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 pytestmark = pytest.mark.live
 
-_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tls.peet.ws")
+_TRACKME_URL = os.environ.get("TRACKME_URL", "https://tlsfingerprint.com")
 
 pytestmark = pytest.mark.live
 
@@ -36,7 +36,7 @@ class TestHTTP2FingerprintBasic:
     """Test basic HTTP/2 fingerprinting functionality."""
 
     def test_firefox_http2_fingerprint_peetws(self, cycletls_client):
-        """Test Firefox HTTP/2 fingerprint with peet.ws."""
+        """Test Firefox HTTP/2 fingerprint with tlsfingerprint.com."""
         # Firefox HTTP/2 fingerprint format:
         # SETTINGS_HEADER_TABLE_SIZE:SETTINGS_ENABLE_PUSH:SETTINGS_MAX_CONCURRENT_STREAMS:SETTINGS_INITIAL_WINDOW_SIZE|WINDOW_UPDATE|PRIORITY_FRAMES|STREAM_PRIORITY
         firefox_http2 = "1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s"
@@ -68,10 +68,10 @@ class TestHTTP2FingerprintBasic:
                     "Response should contain HTTP/2 fingerprint information"
         except json.JSONDecodeError:
             # Response might not be JSON or endpoint might be down
-            pytest.skip("peet.ws response format unexpected or endpoint unavailable")
+            pytest.skip("tlsfingerprint.com response format unexpected or endpoint unavailable")
 
     def test_chrome_http2_fingerprint_peetws(self, cycletls_client):
-        """Test Chrome HTTP/2 fingerprint with peet.ws."""
+        """Test Chrome HTTP/2 fingerprint with tlsfingerprint.com."""
         # Chrome HTTP/2 fingerprint
         chrome_http2 = "1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"
 
@@ -97,7 +97,7 @@ class TestHTTP2FingerprintBasic:
             if 'http2' in data:
                 assert data['http2'] is not None, "HTTP/2 data should be present"
         except json.JSONDecodeError:
-            pytest.skip("peet.ws response format unexpected or endpoint unavailable")
+            pytest.skip("tlsfingerprint.com response format unexpected or endpoint unavailable")
 
     def test_firefox_http2_fingerprint_scrapfly(self, cycletls_client):
         """Test Firefox HTTP/2 fingerprint with scrapfly.io."""

@@ -101,7 +101,7 @@ class TestTLSFingerprintBasicPOSTRequests:
 
         assert_tls_fields_present(body)
 
-        # Note: tlsfingerprint.com may redirect to tls.peet.ws which can lose the body
+        # Note: tlsfingerprint.com may redirect to tlsfingerprint.com which can lose the body
         # The important thing is that the POST was made with TLS fingerprint fields present
         # Verify the method is captured as POST
         assert body.get("method") == "POST"

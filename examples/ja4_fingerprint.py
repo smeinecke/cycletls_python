@@ -44,7 +44,7 @@ def run_examples(client):
 
     try:
         response = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=firefox_ja4r,
             disable_grease=False,  # Allow GREASE for more realistic fingerprint
             user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',
@@ -90,7 +90,7 @@ def run_examples(client):
 
     try:
         response = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=chrome_ja4r,
             disable_grease=False,
             user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
@@ -135,7 +135,7 @@ def run_examples(client):
     try:
         # Request with GREASE disabled
         response_no_grease = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=firefox_ja4r,
             disable_grease=True,  # Exact fingerprint matching
             user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',
@@ -152,7 +152,7 @@ def run_examples(client):
 
         # Request with GREASE enabled (default)
         response_with_grease = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=firefox_ja4r,
             disable_grease=False,  # Allow GREASE values
             user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',
@@ -204,7 +204,7 @@ def run_examples(client):
         # Test with JA4R
         print("\nTesting with JA4R fingerprint...")
         response_ja4 = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=chrome_ja4r,
             user_agent=chrome_user_agent,
             timeout=15
@@ -239,7 +239,7 @@ def run_examples(client):
 
     try:
         response = client.get(
-            'https://tls.peet.ws/api/all',
+            'https://tlsfingerprint.com/api/all',
             ja4r=tls12_ja4r,
             disable_grease=False,
             user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',

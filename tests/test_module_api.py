@@ -20,7 +20,7 @@ def _v(container, key):
     return val[0] if isinstance(val, list) else val
 
 
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 pytestmark = pytest.mark.live

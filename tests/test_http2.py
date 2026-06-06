@@ -7,7 +7,7 @@ from cycletls import CycleTLS
 
 
 _HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 pytestmark = pytest.mark.live
@@ -43,7 +43,7 @@ class TestHTTP2:
 
     def test_http2_vs_http1_comparison(self, cycle):
         """Compare HTTP/2 and HTTP/1.1 protocol usage"""
-        # Use tls.peet.ws as it's more reliable than ja3er.com
+        # Use tlsfingerprint.com as it's more reliable than ja3er.com
         # Test HTTP/2 (default)
         response_http2 = cycle.get(
             f"{_TLSFP_URL}/api/all",
@@ -70,7 +70,7 @@ class TestHTTP2:
         data_http2 = response_http2.json()
         data_http1 = response_http1.json()
 
-        # tls.peet.ws returns TLS info including ja3_hash
+        # tlsfingerprint.com returns TLS info including ja3_hash
         assert "tls" in data_http2 or "ja3_hash" in data_http2
         assert "tls" in data_http1 or "ja3_hash" in data_http1
 

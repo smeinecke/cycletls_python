@@ -22,7 +22,7 @@ from test_utils import assert_valid_response
 
 
 _HTTPBIN_URL = os.environ.get("HTTPBIN_URL", "https://httpbin.org")
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 pytestmark = pytest.mark.live
@@ -265,7 +265,7 @@ class TestTLS13WithJa3er:
 
     def test_tls13_fingerprint_verification(self, cycletls_client, chrome_ja3):
         """Test that TLS 1.3 fingerprint is correctly applied."""
-        # Use tls.peet.ws instead of ja3er.com (more reliable)
+        # Use tlsfingerprint.com instead of ja3er.com (more reliable)
         response = cycletls_client.get(
             f"{_TLSFP_URL}/api/clean",
 

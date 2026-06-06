@@ -634,7 +634,7 @@ from cycletls import CycleTLS
 with CycleTLS() as client:
     # Chrome 138 JA4R fingerprint
     response = client.get(
-        'https://tls.peet.ws/api/all',
+        'https://tlsfingerprint.com/api/all',
         ja4r='t13d1516h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0000,0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,fe0d,ff01_0403,0804,0401,0503,0805,0501,0806,0601',
         disable_grease=False,
         user_agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36'
@@ -675,7 +675,7 @@ from cycletls import CycleTLS
 with CycleTLS() as client:
     # Firefox HTTP/2 fingerprint
     response = client.get(
-        'https://tls.peet.ws/api/all',
+        'https://tlsfingerprint.com/api/all',
         http2_fingerprint='1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s',
         ja3='771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0',
         user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0'
@@ -2081,7 +2081,7 @@ from cycletls import CycleTLS
 
 with CycleTLS() as client:
     response = client.get(
-        'https://tls.peet.ws/api/all',
+        'https://tlsfingerprint.com/api/all',
         ja3='771,4865-4866-4867...',
         ja4r='t13d1516h2_002f,0035...',
         http2_fingerprint='1:65536;2:0;4:131072...',

@@ -13,7 +13,7 @@ import pytest
 
 # Structural JA4_r matchers live in tests/conftest.py so they can be reused by
 # test_tlsfingerprint_blocking.py. See conftest for full rationale on why we
-# match structure rather than exact strings (production tls.peet.ws strips
+# match structure rather than exact strings (production tlsfingerprint.com strips
 # leading zeros in the cipher_count/ext_count header field).
 from conftest import (
     assert_ja4r_equivalent as _assert_ja4r_equivalent,
@@ -24,7 +24,7 @@ from conftest import (
 
 from cycletls import CycleTLS
 
-_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tls.peet.ws")
+_TLSFP_URL = os.environ.get("TLSFP_URL", "https://tlsfingerprint.com")
 
 
 pytestmark = pytest.mark.live
@@ -243,7 +243,7 @@ class TestJA4Fingerprints:
         assert result.get("http_version") == "h2", f"Expected HTTP/2, got {result.get('http_version')}"
 
         # Validate structure: TLS 1.2, h2 ALPN, 12 ciphers + 8 extensions.
-        # Production tls.peet.ws emits the unpadded "t12d128h2" form, while
+        # Production tlsfingerprint.com emits the unpadded "t12d128h2" form, while
         # local tlsfingerprint.com Docker emits the spec-compliant
         # zero-padded "t12d1208h2" form. Both are accepted.
         parsed = _parse_ja4r(result["tls"]["ja4_r"])
@@ -436,7 +436,7 @@ class TestCustomJA4RParameter:
         result = response.json()
 
         # Verify the custom JA4_r was used (header padding may differ between
-        # production tls.peet.ws and the local Docker server, so compare the
+        # production tlsfingerprint.com and the local Docker server, so compare the
         # cipher / extension / sigalg bodies rather than the exact string).
         _assert_ja4r_equivalent(result["tls"]["ja4_r"], custom_ja4r)
 

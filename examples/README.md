@@ -96,7 +96,7 @@ pip install cycletls
 ## Testing Endpoints
 
 Recommended endpoints for testing fingerprints:
-- **JA3/JA4**: https://tls.peet.ws/api/all
+- **JA3/JA4**: https://tlsfingerprint.com/api/all
 - **JA3 Hash**: https://ja3er.com/json
 - **HTTP/2**: https://tools.scrapfly.io/api/fp/anything
 - **HTTP/3**: https://cloudflare-quic.com/

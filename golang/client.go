@@ -184,7 +184,7 @@ func clientBuilder(browser Browser, dialer proxy.ContextDialer, timeout int, dis
 //		Transport:     cycletls.NewTransport(ja3, ua),
 //	}
 //
-// cycleClient.Get("https://tls.peet.ws/")
+// cycleClient.Get("https://tlsfingerprint.com/")
 func NewTransport(ja3 string, useragent string) fhttp.RoundTripper {
 	return newRoundTripper(Browser{
 		JA3:       ja3,

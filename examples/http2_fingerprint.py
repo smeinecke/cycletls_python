@@ -364,10 +364,10 @@ def run_examples(client):
     ]
 
     for config in test_configs:
-        print(f"Testing {config['name']} fingerprint with tls.peet.ws...")
+        print(f"Testing {config['name']} fingerprint with tlsfingerprint.com...")
         try:
             response = client.get(
-                'https://tls.peet.ws/api/all',
+                'https://tlsfingerprint.com/api/all',
                 http2_fingerprint=config['fingerprint'],
                 user_agent=config['user_agent'],
                 timeout=15
