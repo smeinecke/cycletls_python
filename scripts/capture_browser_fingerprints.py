@@ -253,10 +253,28 @@ def capture_fingerprint(
     api_url = f"{url}/api/all"
     print(f"[{target['label']}] Fetching {api_url} ...", flush=True)
 
-    response = page.goto(api_url, wait_until="domcontentloaded", timeout=30_000)
-    if response is None or response.status != 200:
-        status = response.status if response else "no response"
-        raise RuntimeError(f"[{target['label']}] GET {api_url} returned status {status}")
+    last_exc: Exception | None = None
+    for attempt in range(1, 4):
+        try:
+            response = page.goto(
+                api_url, wait_until="domcontentloaded", timeout=30_000
+            )
+            if response is not None and response.status == 200:
+                break
+            status = response.status if response else "no response"
+            raise RuntimeError(
+                f"[{target['label']}] GET {api_url} returned status {status}"
+            )
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            print(
+                f"[{target['label']}] Attempt {attempt}/3 failed: {exc}",
+                flush=True,
+            )
+            if attempt < 3:
+                time.sleep(2 ** attempt)
+    else:
+        raise last_exc  # type: ignore[misc]
 
     body = page.inner_text("body")
     data = json.loads(body)
@@ -578,10 +596,26 @@ def _capture_android_cdp(serial: str, url: str, ignore_https_errors: bool, local
 
             api_url = f"{url}/api/all"
             print(f"[{label}] Fetching {api_url} ...", flush=True)
-            response = page.goto(api_url, wait_until="domcontentloaded", timeout=60_000)
-            if response is None or response.status != 200:
-                status = response.status if response else "no response"
-                raise RuntimeError(f"GET {api_url} returned status {status}")
+            last_exc: Exception | None = None
+            for attempt in range(1, 4):
+                try:
+                    response = page.goto(
+                        api_url, wait_until="domcontentloaded", timeout=60_000
+                    )
+                    if response is not None and response.status == 200:
+                        break
+                    status = response.status if response else "no response"
+                    raise RuntimeError(f"GET {api_url} returned status {status}")
+                except Exception as exc:  # noqa: BLE001
+                    last_exc = exc
+                    print(
+                        f"[{label}] Attempt {attempt}/3 failed: {exc}",
+                        flush=True,
+                    )
+                    if attempt < 3:
+                        time.sleep(2 ** attempt)
+            else:
+                raise last_exc  # type: ignore[misc]
 
             body = page.inner_text("body")
             data = json.loads(body)
