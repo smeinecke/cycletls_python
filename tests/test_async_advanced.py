@@ -238,8 +238,7 @@ class TestAsyncCompression:
     @pytest.mark.asyncio
     async def test_async_brotli_encoding(self, httpbin_url):
         """Test async request with brotli encoding."""
-        # Use public httpbin.org for /brotli until a local alternative is available
-        response = await cycletls.aget("https://httpbin.org/brotli")
+        response = await cycletls.aget(f"{httpbin_url}/brotli")
         assert response.status_code == 200
         data = response.json()
         assert data["brotli"] is True
