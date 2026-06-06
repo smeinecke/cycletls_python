@@ -236,9 +236,9 @@ class TestAsyncCompression:
         assert data["deflated"] is True
 
     @pytest.mark.asyncio
-    async def test_async_brotli_encoding(self, httpbin_url):
+    async def test_async_brotli_encoding(self, brotli_url):
         """Test async request with brotli encoding."""
-        response = await cycletls.aget(f"{httpbin_url}/brotli")
+        response = await cycletls.aget(f"{brotli_url}/brotli")
         assert response.status_code == 200
         data = response.json()
         assert data["brotli"] is True

@@ -83,10 +83,9 @@ def test_deflate_decompression(client, chrome_ja3, chrome_user_agent):
     assert "headers" in data
 
 
-def test_brotli_decompression(client, chrome_ja3, chrome_user_agent):
+def test_brotli_decompression(client, chrome_ja3, chrome_user_agent, brotli_url):
     """Test that brotli-compressed responses are properly decompressed"""
-    # Use public httpbin.org for /brotli until a local alternative is available
-    url = "https://httpbin.org/brotli"
+    url = f"{brotli_url}/brotli"
 
     result = client.get(
         url,
@@ -152,10 +151,9 @@ def test_deflate_response_headers(client, chrome_ja3, chrome_user_agent):
     assert "deflate" in enc_str.lower()
 
 
-def test_brotli_response_headers(client, chrome_ja3, chrome_user_agent):
+def test_brotli_response_headers(client, chrome_ja3, chrome_user_agent, brotli_url):
     """Test that brotli response contains correct headers"""
-    # Use public httpbin.org for /brotli until a local alternative is available
-    url = "https://httpbin.org/brotli"
+    url = f"{brotli_url}/brotli"
 
     result = client.get(
         url,
@@ -284,10 +282,9 @@ def test_deflate_text_response(client, chrome_ja3, chrome_user_agent):
     assert isinstance(text, str)
 
 
-def test_brotli_text_response(client, chrome_ja3, chrome_user_agent):
+def test_brotli_text_response(client, chrome_ja3, chrome_user_agent, brotli_url):
     """Test that brotli-compressed text responses are readable"""
-    # Use public httpbin.org for /brotli until a local alternative is available
-    url = "https://httpbin.org/brotli"
+    url = f"{brotli_url}/brotli"
 
     result = client.get(
         url,
@@ -339,10 +336,9 @@ def test_selective_encoding_gzip_only(client, chrome_ja3, chrome_user_agent):
     assert (enc == "gzip" or (isinstance(enc, list) and enc[0] == "gzip"))
 
 
-def test_selective_encoding_brotli_only(client, chrome_ja3, chrome_user_agent):
+def test_selective_encoding_brotli_only(client, chrome_ja3, chrome_user_agent, brotli_url):
     """Test requesting only brotli encoding"""
-    # Use public httpbin.org for /brotli until a local alternative is available
-    url = "https://httpbin.org/brotli"
+    url = f"{brotli_url}/brotli"
 
     result = client.get(
         url,
