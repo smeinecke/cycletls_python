@@ -11,19 +11,25 @@ import tempfile
 
 import brotli
 
-# Pre-compute brotli-compressed JSON {"brotli": true}
-_BODY = json.dumps({"brotli": True}).encode("utf-8")
-_COMPRESSED = brotli.compress(_BODY)
-
-
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/brotli":
+            # Build response matching httpbin /brotli format
+            accept_encoding = self.headers.get("Accept-Encoding", "")
+            body = json.dumps({
+                "brotli": True,
+                "method": "GET",
+                "headers": {
+                    "Accept-Encoding": accept_encoding,
+                },
+            }).encode("utf-8")
+            compressed = brotli.compress(body)
+
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Encoding", "br")
             self.end_headers()
-            self.wfile.write(_COMPRESSED)
+            self.wfile.write(compressed)
         else:
             self.send_error(404)
 
