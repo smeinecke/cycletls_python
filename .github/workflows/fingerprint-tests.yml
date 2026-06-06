@@ -158,16 +158,16 @@ jobs:
           # Chromium/Firefox/WebKit are sufficient for fingerprint capture.
           playwright install chrome msedge || true
 
-      - name: Checkout Danny-Dasilva/tlsfingerprint.com (Linux/Windows)
-        if: runner.os != 'macOS'
+      - name: Checkout Danny-Dasilva/tlsfingerprint.com (Linux)
+        if: runner.os == 'Linux'
         uses: actions/checkout@v6
         with:
           repository: Danny-Dasilva/tlsfingerprint.com
           ref: master
           path: .tlsfingerprint-server
 
-      - name: Generate TLS certificates for tlsfingerprint.com (Linux/Windows capture)
-        if: runner.os != 'macOS'
+      - name: Generate TLS certificates for tlsfingerprint.com (Linux capture)
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p .tlsfingerprint-server/certs
@@ -180,8 +180,8 @@ jobs:
           jq '.log_to_db = false | .mongo_url = "" | .device = ""' \
             .tlsfingerprint-server/config.example.json > .tlsfingerprint-server/config.json
 
-      - name: Start tlsfingerprint.com for Linux/Windows capture
-        if: runner.os != 'macOS'
+      - name: Start tlsfingerprint.com for Linux capture
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           docker compose -f docker-compose.fingerprint-tests.yml up -d --build tlsfingerprint
@@ -195,8 +195,8 @@ jobs:
             exit 1
           fi
 
-      - name: Capture real browser fingerprints via Playwright (Linux/Windows)
-        if: runner.os != 'macOS'
+      - name: Capture real browser fingerprints via Playwright (Linux/local tlsfingerprint.com)
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p tests/integration/artifacts
@@ -206,17 +206,14 @@ jobs:
             --ignore-https-errors \
             --headless-chrome
 
-      - name: Capture real browser fingerprints via Playwright (macOS)
-        if: runner.os == 'macOS'
-        continue-on-error: true
+      - name: Capture real browser fingerprints via Playwright (macOS/Windows)
+        if: runner.os != 'Linux'
         shell: bash
         run: |
           mkdir -p tests/integration/artifacts
           python scripts/capture_browser_fingerprints.py \
-            --url https://localhost \
-            --output tests/integration/artifacts/captured-${{ runner.os }}.json \
-            --ignore-https-errors \
-            --headless-chrome || true
+            --url https://tlsfingerprint.com \
+            --output tests/integration/artifacts/captured-${{ runner.os }}.json
 
       - name: Upload desktop fingerprint artifact
         if: always()
@@ -226,8 +223,8 @@ jobs:
           path: tests/integration/artifacts/captured-${{ runner.os }}.json
           if-no-files-found: warn
 
-      - name: Cleanup Linux/Windows capture stack
-        if: always() && runner.os != 'macOS'
+      - name: Cleanup Linux capture stack
+        if: always() && runner.os == 'Linux'
         shell: bash
         run: docker compose -f docker-compose.fingerprint-tests.yml down -v || true
 
