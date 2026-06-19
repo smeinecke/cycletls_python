@@ -35,7 +35,7 @@ jobs:
           - 8080:8080
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup CycleTLS (Go build)
         uses: ./.github/actions/setup-cycletls
@@ -50,7 +50,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Checkout Danny-Dasilva/tlsfingerprint.com
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Danny-Dasilva/tlsfingerprint.com
           ref: master
