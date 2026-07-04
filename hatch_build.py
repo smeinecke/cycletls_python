@@ -79,6 +79,22 @@ class CycleTLSBuildHook(BuildHookInterface):
         if binary_path.exists():
             return binary_path
 
+        # Fall back to generic (non-arch-tagged) library name
+        system = platform.system()
+        if system == "Windows":
+            generic_name = "cycletls.dll"
+        elif system == "Darwin":
+            generic_name = "libcycletls.dylib"
+        elif system == "Linux":
+            generic_name = "libcycletls.so"
+        else:
+            generic_name = None
+
+        if generic_name:
+            generic_path = dist_dir / generic_name
+            if generic_path.exists():
+                return generic_path
+
         build_script = Path(self.root) / "scripts" / "build_shared_lib.sh"
         if not build_script.exists():
             raise RuntimeError(

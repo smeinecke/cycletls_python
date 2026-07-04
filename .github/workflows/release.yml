@@ -55,7 +55,8 @@ jobs:
         run: |
           cd golang
           mkdir -p ../cycletls/dist
-          go build -buildmode=c-shared -ldflags="-s -w" -o ../cycletls/dist/libcycletls.so .
+          ARCH=$(go env GOARCH | sed 's/amd64/x64/')
+          go build -buildmode=c-shared -ldflags="-s -w" -o "../cycletls/dist/libcycletls-linux-${ARCH}.so" .
           ls -lh ../cycletls/dist/
 
       - name: Build Go shared library (macOS)
@@ -63,7 +64,8 @@ jobs:
         run: |
           cd golang
           mkdir -p ../cycletls/dist
-          go build -buildmode=c-shared -ldflags="-s -w" -o ../cycletls/dist/libcycletls.dylib .
+          ARCH=$(go env GOARCH | sed 's/amd64/x64/')
+          go build -buildmode=c-shared -ldflags="-s -w" -o "../cycletls/dist/libcycletls-darwin-${ARCH}.dylib" .
           ls -lh ../cycletls/dist/
 
       - name: Build Go shared library (Windows)
@@ -71,7 +73,8 @@ jobs:
         run: |
           cd golang
           New-Item -ItemType Directory -Force -Path ../cycletls/dist
-          go build -buildmode=c-shared -ldflags="-s -w" -o ../cycletls/dist/cycletls.dll .
+          $ARCH = (go env GOARCH) -replace "amd64", "x64"
+          go build -buildmode=c-shared -ldflags="-s -w" -o ("../cycletls/dist/cycletls-win-" + $ARCH + ".dll") .
           Get-ChildItem ../cycletls/dist/
         shell: pwsh
 
