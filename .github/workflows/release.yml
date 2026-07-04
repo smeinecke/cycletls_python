@@ -140,46 +140,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         # No password/token needed - uses OIDC trusted publishing
 
-  publish-to-github-packages:
-    name: Publish to GitHub Packages
-    needs: build-wheels
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    permissions:
-      contents: read
-      packages: write
-    environment:
-      name: github-packages
-      url: https://github.com/${{ github.repository }}/packages
-
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v8
-        with:
-          path: dist-artifacts
-
-      - name: Prepare dist directory
-        run: |
-          mkdir -p dist
-          find dist-artifacts -name '*.whl' -exec cp {} dist/ \;
-          find dist-artifacts -name '*.tar.gz' -exec cp {} dist/ \;
-          ls -lh dist/
-
-      - name: Install twine
-        run: pip install twine
-
-      - name: Publish to GitHub Packages
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          twine upload --repository-url https://upload.pkg.github.com/${{ github.repository_owner }} dist/*
-
   create-github-release:
     name: Create GitHub Release
     needs: build-wheels
