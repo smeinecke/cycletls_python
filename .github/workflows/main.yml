@@ -43,13 +43,13 @@ jobs:
             run: cd docs && uv run make html
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup CycleTLS (Go build)
         uses: ./.github/actions/setup-cycletls
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
         with:
           python-version: '3.12'
           enable-cache: true

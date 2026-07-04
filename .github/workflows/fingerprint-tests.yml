@@ -30,7 +30,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Enable KVM
         run: |
@@ -50,7 +50,7 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Checkout Danny-Dasilva/tlsfingerprint.com
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Danny-Dasilva/tlsfingerprint.com
           ref: master
@@ -130,7 +130,7 @@ jobs:
         python: ['3.12']
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -160,7 +160,7 @@ jobs:
 
       - name: Checkout Danny-Dasilva/tlsfingerprint.com (Linux)
         if: runner.os == 'Linux'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Danny-Dasilva/tlsfingerprint.com
           ref: master
@@ -242,13 +242,13 @@ jobs:
         python: ['3.12']
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup CycleTLS (Go build)
         uses: ./.github/actions/setup-cycletls
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
         with:
           python-version: ${{ matrix.python }}
           enable-cache: true
@@ -276,7 +276,7 @@ jobs:
           EOF
 
       - name: Checkout Danny-Dasilva/tlsfingerprint.com
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Danny-Dasilva/tlsfingerprint.com
           ref: master
