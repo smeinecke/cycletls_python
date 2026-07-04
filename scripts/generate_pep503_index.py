@@ -47,6 +47,22 @@ def generate_index(
             )
         f.write("</body>\n</html>\n")
 
+    # Root index.html so the top-level Pages URL doesn't 404
+    root_index = output_dir.parent / "index.html"
+    root_index.parent.mkdir(parents=True, exist_ok=True)
+    with open(root_index, "w") as f:
+        f.write("<!DOCTYPE html>\n<html>\n<head>")
+        f.write(f'<title>{html.escape(package_name)} Package Index</title>')
+        f.write("</head>\n<body>\n")
+        f.write(f"<h1>{html.escape(package_name)} Package Index</h1>\n")
+        f.write(f'<p><a href="simple/{html.escape(package_name)}/">'
+                f"PEP 503 simple index for {html.escape(package_name)}</a></p>\n")
+        f.write(f"<p>Install with pip:</p>\n")
+        f.write(f"<pre>pip install --index-url "
+                f"https://OWNER.github.io/REPO/simple "
+                f"{html.escape(package_name)}</pre>\n")
+        f.write("</body>\n</html>\n")
+
     print(f"Generated PEP 503 index at {output_dir}")
 
 
