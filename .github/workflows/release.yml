@@ -170,3 +170,53 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+
+  deploy-pages:
+    name: Deploy PEP 503 index to GitHub Pages
+    needs: create-github-release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: dist-artifacts
+
+      - name: Prepare dist directory
+        run: |
+          mkdir -p dist
+          find dist-artifacts -name '*.whl' -exec cp {} dist/ \;
+          find dist-artifacts -name '*.tar.gz' -exec cp {} dist/ \;
+          ls -lh dist/
+
+      - name: Generate PEP 503 index
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          BASE_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}"
+          python scripts/generate_pep503_index.py \
+            --base-url "$BASE_URL" \
+            --output-dir site/simple \
+            dist/*
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
