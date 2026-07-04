@@ -106,7 +106,8 @@ jobs:
     name: Publish to PyPI
     needs: build-wheels
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    # Only publish on the upstream repo, not forks
+    if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Danny-Dasilva/cycletls_python'
     environment:
       name: pypi
       url: https://pypi.org/p/cycletls
@@ -177,12 +178,13 @@ jobs:
           TWINE_USERNAME: ${{ github.actor }}
           TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          twine upload --repository-url https://upload.pkg.github.com/${{ github.repository }} dist/*
+          twine upload --repository-url https://upload.pkg.github.com/${{ github.repository_owner }} dist/*
 
   create-github-release:
     name: Create GitHub Release
-    needs: publish-to-pypi
+    needs: build-wheels
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
 
