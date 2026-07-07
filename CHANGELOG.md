@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.8] - 2026-07-08
+
+### Fixed
+- Brotli decompression no longer fails when servers append trailing bytes after a valid Brotli stream (e.g. Brave Search over HTTP/2)
+
 ### Added
 - `local_address` parameter to bind outgoing TCP connections to a specific local IP for outbound interface/IP selection (#65)
+- Regression test for Brotli responses with trailing bytes
 
 ### Fixed
 - `Do()` dropped `ServerName`, `TLS13AutoRetry`, and `DisableGrease` request fields when constructing the underlying request (#65)
