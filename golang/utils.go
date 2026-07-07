@@ -129,6 +129,16 @@ func enflateData(data []byte) (resData []byte, err error) {
 func unBrotliData(data []byte) (resData []byte, err error) {
 	br := brotli.NewReader(bytes.NewReader(data))
 	respBody, err := io.ReadAll(br)
+	if err != nil {
+		// The andybalholm/brotli decoder is strict: if bytes remain after the
+		// Brotli stream ends, it returns "brotli: excessive input". Some servers
+		// append a trailing newline or other framing bytes after an otherwise
+		// valid stream. In that case the decompressed bytes are usable, so
+		// return them instead of failing.
+		if err.Error() == "brotli: excessive input" && len(respBody) > 0 {
+			return respBody, nil
+		}
+	}
 	return respBody, err
 }
 
