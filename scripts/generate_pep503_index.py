@@ -57,6 +57,7 @@ def generate_index(
         f.write(f"<h1>{html.escape(package_name)} Package Index</h1>\n")
         f.write(f'<p><a href="simple/{html.escape(package_name)}/">'
                 f"PEP 503 simple index for {html.escape(package_name)}</a></p>\n")
+        f.write('<p><a href="docs/">Documentation</a></p>\n')
         f.write("<p>Install with pip:</p>\n")
         f.write(f"<pre>pip install --extra-index-url "
                 f"https://smeinecke.github.io/cycletls_python/simple "
