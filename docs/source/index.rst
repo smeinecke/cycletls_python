@@ -31,6 +31,7 @@ anti-bot detection that relies on TLS fingerprinting.
 
    api
    advanced
+   reference
 
 .. toctree::
    :maxdepth: 1

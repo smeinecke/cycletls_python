@@ -38,7 +38,7 @@ class CaseInsensitiveDict(MutableMapping):
     was originally stored.
 
     If the constructor, .update, or equality comparison operations are given keys
-    that have equal ``.lower()``s, the behavior is undefined.
+    that have equal ``.lower()`` values, the behavior is undefined.
     """
 
     def __init__(self, data=None, **kwargs):

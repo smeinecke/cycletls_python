@@ -1,4 +1,4 @@
-# API Reference
+# API Usage
 
 ## Module-Level Functions
 

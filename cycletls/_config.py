@@ -178,7 +178,7 @@ def get_default(key: str) -> Optional[Any]:
     Get a default configuration value.
 
     Args:
-        key: Configuration key (without 'default_' prefix)
+        key: Configuration key (without ``default_`` prefix)
 
     Returns:
         The configuration value, or None if not set

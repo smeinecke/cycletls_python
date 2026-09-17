@@ -513,10 +513,11 @@ class CycleTLS:
             json: Alias for json_data (matching requests library convention)
             files: File uploads
             fingerprint: TLS fingerprint profile name or TLSFingerprint instance.
-                        If a string, looks up the profile in FingerprintRegistry.
-                        Applies the profile's ja3, user_agent, header_order, etc.
+                If a string, looks up the profile in FingerprintRegistry.
+                Applies the profile's ja3, user_agent, header_order, etc.
             auth: (username, password) tuple for HTTP Basic authentication
             **kwargs: Additional CycleTLS options. Notable options include:
+
                 - headers: dict of extra HTTP headers
                 - cookies: list of cookie dicts
                 - ja3: JA3 TLS fingerprint string
