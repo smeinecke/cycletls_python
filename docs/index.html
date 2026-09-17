@@ -199,8 +199,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Module Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#clients">Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#module-level-functions">Module-level functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#configuration">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#response-and-data-structures">Response and data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#fingerprints">Fingerprints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#websocket">WebSocket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#server-sent-events">Server-Sent Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#exceptions">Exceptions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project</span></p>
 <ul>
@@ -286,7 +295,7 @@ anti-bot detection that relies on TLS fingerprinting.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-level-functions">Module-Level Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#request-parameters">Request Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#response-object">Response Object</a></li>
@@ -311,6 +320,69 @@ anti-bot detection that relies on TLS fingerprinting.</p>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#binary-data">Binary Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#cookie-handling">Cookie Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Module Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#clients">Clients</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.CycleTLS"><code class="docutils literal notranslate"><span class="pre">CycleTLS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.AsyncCycleTLS"><code class="docutils literal notranslate"><span class="pre">AsyncCycleTLS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#module-level-functions">Module-level functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#sync">Sync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#async">Async</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#configuration">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.set_default"><code class="docutils literal notranslate"><span class="pre">set_default()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.get_default"><code class="docutils literal notranslate"><span class="pre">get_default()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.reset_defaults"><code class="docutils literal notranslate"><span class="pre">reset_defaults()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.close_global_session"><code class="docutils literal notranslate"><span class="pre">close_global_session()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#response-and-data-structures">Response and data structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.schema.Response"><code class="docutils literal notranslate"><span class="pre">Response</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.schema.Request"><code class="docutils literal notranslate"><span class="pre">Request</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.schema.Cookie"><code class="docutils literal notranslate"><span class="pre">Cookie</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.CaseInsensitiveDict"><code class="docutils literal notranslate"><span class="pre">CaseInsensitiveDict</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.CookieJar"><code class="docutils literal notranslate"><span class="pre">CookieJar</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#fingerprints">Fingerprints</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.TLSFingerprint"><code class="docutils literal notranslate"><span class="pre">TLSFingerprint</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.FingerprintRegistry"><code class="docutils literal notranslate"><span class="pre">FingerprintRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.BrowserFamily"><code class="docutils literal notranslate"><span class="pre">BrowserFamily</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.Platform"><code class="docutils literal notranslate"><span class="pre">Platform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#loading-profiles">Loading profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#websocket">WebSocket</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.WebSocketConnection"><code class="docutils literal notranslate"><span class="pre">WebSocketConnection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.WebSocketMessage"><code class="docutils literal notranslate"><span class="pre">WebSocketMessage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.MessageType"><code class="docutils literal notranslate"><span class="pre">MessageType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#server-sent-events">Server-Sent Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.SSEConnection"><code class="docutils literal notranslate"><span class="pre">SSEConnection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.SSEEvent"><code class="docutils literal notranslate"><span class="pre">SSEEvent</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.CycleTLSError"><code class="docutils literal notranslate"><span class="pre">CycleTLSError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.RequestException"><code class="docutils literal notranslate"><span class="pre">RequestException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.HTTPError"><code class="docutils literal notranslate"><span class="pre">HTTPError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.Timeout"><code class="docutils literal notranslate"><span class="pre">Timeout</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.ConnectTimeout"><code class="docutils literal notranslate"><span class="pre">ConnectTimeout</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.ReadTimeout"><code class="docutils literal notranslate"><span class="pre">ReadTimeout</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.TooManyRedirects"><code class="docutils literal notranslate"><span class="pre">TooManyRedirects</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.InvalidURL"><code class="docutils literal notranslate"><span class="pre">InvalidURL</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.TLSError"><code class="docutils literal notranslate"><span class="pre">TLSError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.ProxyError"><code class="docutils literal notranslate"><span class="pre">ProxyError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.InvalidHeader"><code class="docutils literal notranslate"><span class="pre">InvalidHeader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.WebSocketError"><code class="docutils literal notranslate"><span class="pre">WebSocketError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cycletls.SSEError"><code class="docutils literal notranslate"><span class="pre">SSEError</span></code></a></li>
 </ul>
 </li>
 </ul>
