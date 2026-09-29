@@ -62,8 +62,8 @@ If you have an API change or feature request feel free to open an [Issue](https:
 ## Dependencies
 
 ```
-python ^3.8
-golang ^1.21x (for building from source)
+python >=3.9
+golang >=1.26 (for building from source)
 ```
 
 ## Installation
