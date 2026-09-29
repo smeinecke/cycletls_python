@@ -740,6 +740,22 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 
 	resp, err := res.client.Do(res.req)
 
+	if err != nil && strings.Contains(err.Error(), "response missing Location") && res.client.Transport != nil {
+		// fhttp (like net/http) discards 3xx responses that lack a Location
+		// header before CheckRedirect ever runs, so neither redirect
+		// following nor ErrUseLastResponse can recover them — the caller
+		// gets status 0 and loses all response headers. Re-issue the
+		// request through the transport directly so the response the
+		// server actually sent (status, headers, body) reaches the caller.
+		retry := res.req.Clone(res.req.Context())
+		if res.req.GetBody != nil {
+			retry.Body, _ = res.req.GetBody()
+		}
+		if r2, rerr := res.client.Transport.RoundTrip(retry); rerr == nil {
+			resp, err = r2, nil
+		}
+	}
+
 	if err != nil {
 		parsedError := parseError(err)
 
@@ -1790,6 +1806,21 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 
 	// Make request
 	resp, err := httpClient.Do(req)
+	if err != nil && strings.Contains(err.Error(), "response missing Location") && httpClient.Transport != nil {
+		// fhttp (like net/http) discards 3xx responses that lack a Location
+		// header before CheckRedirect ever runs, so neither redirect
+		// following nor ErrUseLastResponse can recover them — the caller
+		// gets status 0 and loses all response headers. Re-issue the
+		// request through the transport directly so the response the
+		// server actually sent (status, headers, body) reaches the caller.
+		retry := req.Clone(req.Context())
+		if req.GetBody != nil {
+			retry.Body, _ = req.GetBody()
+		}
+		if r2, rerr := httpClient.Transport.RoundTrip(retry); rerr == nil {
+			resp, err = r2, nil
+		}
+	}
 	if err != nil {
 		parsedError := parseError(err)
 		return Response{
