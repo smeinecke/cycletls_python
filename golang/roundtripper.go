@@ -292,6 +292,14 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 		if err != nil {
 			return nil, err
 		}
+	} else if rt.JA4r != "" {
+		// JA4r takes precedence over JA3 when both are provided. The JA3
+		// string is still passed along: its cipher/extension lists preserve
+		// the browser's wire order, which JA4r loses to sorting.
+		spec, err = JA4RStringToSpec(rt.JA4r, rt.UserAgent, rt.ForceHTTP1, rt.DisableGrease, serverName, rt.JA3)
+		if err != nil {
+			return nil, err
+		}
 	} else if rt.JA3 != "" {
 		// Check if we should proactively upgrade TLS 1.2 to TLS 1.3
 		if rt.TLS13AutoRetry && strings.HasPrefix(rt.JA3, "771,") {
@@ -302,12 +310,6 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 			// Use original JA3 fingerprint
 			spec, err = StringToSpec(rt.JA3, rt.UserAgent, rt.ForceHTTP1)
 		}
-		if err != nil {
-			return nil, err
-		}
-	} else if rt.JA4r != "" {
-		// Use JA4r (raw) fingerprint
-		spec, err = JA4RStringToSpec(rt.JA4r, rt.UserAgent, rt.ForceHTTP1, rt.DisableGrease, serverName)
 		if err != nil {
 			return nil, err
 		}
@@ -427,17 +429,20 @@ func (rt *roundTripper) retryWithTLS13CompatibleCurves(ctx context.Context, netw
 		if err != nil {
 			return nil, fmt.Errorf("failed to create QUIC spec for TLS 1.3 retry: %v", err)
 		}
+	} else if rt.JA4r != "" {
+		// For JA4r, we'll use a fallback to default Chrome with TLS 1.3 compatible curves.
+		// Checked before JA3 like the main dispatch: JA3 may be present alongside JA4r
+		// as an ordering hint, and its curve list can contain groups this spec
+		// cannot generate key shares for.
+		spec, err = StringToTLS13CompatibleSpec(DefaultChrome_JA3, rt.UserAgent, rt.ForceHTTP1)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create TLS 1.3 compatible JA4 fallback spec: %v", err)
+		}
 	} else if rt.JA3 != "" {
 		// Use TLS 1.3 compatible JA3 spec
 		spec, err = StringToTLS13CompatibleSpec(rt.JA3, rt.UserAgent, rt.ForceHTTP1)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create TLS 1.3 compatible JA3 spec: %v", err)
-		}
-	} else if rt.JA4r != "" {
-		// For JA4r, we'll use a fallback to default Chrome with TLS 1.3 compatible curves
-		spec, err = StringToTLS13CompatibleSpec(DefaultChrome_JA3, rt.UserAgent, rt.ForceHTTP1)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create TLS 1.3 compatible JA4 fallback spec: %v", err)
 		}
 	} else {
 		// Default to TLS 1.3 compatible Chrome fingerprint

@@ -200,9 +200,11 @@ class Request:
             "enableConnectionReuse": self.enable_connection_reuse,
         }
 
-        # Handle TLS fingerprint options: ja4r takes precedence over ja3 when both are set.
+        # Handle TLS fingerprint options: ja4r takes precedence over ja3 on the
+        # Go side, but ja3 is still sent alongside it — its cipher/extension
+        # lists preserve the browser's wire order, which JA4_r loses to sorting.
         # http2_fingerprint and quic_fingerprint are independent and should not suppress ja3.
-        if self.ja4r is None and self.ja3 is not None:
+        if self.ja3 is not None:
             result["ja3"] = self.ja3
 
         # Add optional fields only if set (minimize conditionals)

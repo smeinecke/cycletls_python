@@ -103,40 +103,6 @@ func (c *CustomApplicationSettingsExtension) GetPreservedID() uint16 {
 	return c.OriginalID
 }
 
-// CustomCompressCertificateExtension preserves the original extension ID
-type CustomCompressCertificateExtension struct {
-	*utls.GenericExtension
-	OriginalID uint16
-	Algorithms []utls.CertCompressionAlgo
-}
-
-// NewCustomCompressCertificateExtension creates a new compress certificate extension
-func NewCustomCompressCertificateExtension(extID uint16, algorithms []utls.CertCompressionAlgo) *CustomCompressCertificateExtension {
-	// Build extension data: algorithm list
-	var data []byte
-	data = append(data, byte(len(algorithms)*2)) // length of algorithms list
-
-	for _, algo := range algorithms {
-		algoBytes := make([]byte, 2)
-		binary.BigEndian.PutUint16(algoBytes, uint16(algo))
-		data = append(data, algoBytes...)
-	}
-
-	return &CustomCompressCertificateExtension{
-		GenericExtension: &utls.GenericExtension{
-			Id:   extID,
-			Data: data,
-		},
-		OriginalID: extID,
-		Algorithms: algorithms,
-	}
-}
-
-// GetPreservedID returns the original extension ID
-func (c *CustomCompressCertificateExtension) GetPreservedID() uint16 {
-	return c.OriginalID
-}
-
 // CustomRecordSizeLimitExtension preserves the original extension ID
 type CustomRecordSizeLimitExtension struct {
 	*utls.GenericExtension
@@ -330,9 +296,15 @@ func CreateExtensionFromID(extID uint16, tlsVersion uint16, components *JA4RComp
 	case 0x0017: // Extended Master Secret
 		return &utls.ExtendedMasterSecretExtension{}
 	case 0x001b: // Compress Certificate
-		return NewCustomCompressCertificateExtension(extID, []utls.CertCompressionAlgo{
-			utls.CertCompressionBrotli,
-		})
+		// Must be the real uTLS extension: its writeToUConn registers the
+		// decompressors (uc.certCompressionAlgs). A GenericExtension would
+		// advertise the algorithms on the wire but leave uTLS unable to parse
+		// the CompressedCertificate servers then send.
+		return &utls.UtlsCompressCertExtension{
+			Algorithms: []utls.CertCompressionAlgo{
+				utls.CertCompressionBrotli,
+			},
+		}
 	case 0x001c: // Record Size Limit
 		return NewCustomRecordSizeLimitExtension(extID, 0x4001)
 	case 0x0022: // Delegated Credentials - PROBLEMATIC EXTENSION
@@ -362,13 +334,16 @@ func CreateExtensionFromID(extID uint16, tlsVersion uint16, components *JA4RComp
 		}
 	case 0x0033: // Key Share
 		if tlsVersion == utls.VersionTLS13 {
-			keyShares := []utls.KeyShare{
-				{Group: utls.X25519},
-				{Group: utls.CurveP256},
-			}
-			// Add post-quantum key share if supported
+			// Offer a hybrid post-quantum share alongside the classical ones.
+			// Modern browsers advertise X25519MLKEM768 in supported_groups and
+			// send a share for it; uTLS generates the key material during
+			// ApplyPreset when Data is empty.
 			return &utls.KeyShareExtension{
-				KeyShares: keyShares,
+				KeyShares: []utls.KeyShare{
+					{Group: utls.X25519MLKEM768},
+					{Group: utls.X25519},
+					{Group: utls.CurveP256},
+				},
 			}
 		}
 		return nil

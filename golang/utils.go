@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -708,8 +709,112 @@ func ParseJA4HString(ja4h string) (*JA4HComponents, error) {
 // Since JA4 uses hashes, we create a spec with common TLS parameters
 // that would produce a similar fingerprint
 
-// JA4RStringToSpec creates a ClientHelloSpec from a JA4_r (raw) string
-func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGrease bool, serverName string) (*utls.ClientHelloSpec, error) {
+// ja4rExtension pairs a built extension with its wire ID so the emission
+// order can be re-sorted to match a captured browser order.
+type ja4rExtension struct {
+	id  uint16
+	ext utls.TLSExtension
+}
+
+// parseJA3Order extracts cipher suite and extension wire order from a JA3
+// string. JA3 lists are dash-separated decimal values in the order they
+// appeared on the wire, whereas JA4_r stores them sorted. Returns nil slices
+// when the string cannot be used.
+func parseJA3Order(ja3 string) (cipherOrder []uint16, extOrder []uint16, curveOrder []uint16) {
+	parts := strings.Split(ja3, ",")
+	if len(parts) < 3 {
+		return nil, nil, nil
+	}
+	parse := func(list string) []uint16 {
+		if list == "" {
+			return nil
+		}
+		var out []uint16
+		for _, f := range strings.Split(list, "-") {
+			v, err := strconv.ParseUint(f, 10, 16)
+			if err != nil {
+				return nil
+			}
+			out = append(out, uint16(v))
+		}
+		return out
+	}
+	cipherOrder, extOrder = parse(parts[1]), parse(parts[2])
+	if len(parts) > 3 {
+		curveOrder = parse(parts[3])
+	}
+	return cipherOrder, extOrder, curveOrder
+}
+
+// wireRank builds an id -> position map from a captured wire-order list.
+func wireRank(order []uint16) map[uint16]int {
+	rank := make(map[uint16]int, len(order))
+	for i, id := range order {
+		if _, ok := rank[id]; !ok {
+			rank[id] = i
+		}
+	}
+	return rank
+}
+
+// rankOf resolves an extension ID against a wire-rank map, treating the two
+// ALPS draft IDs (0x4469 old, 0x44cd new) as equivalent: JA3 captures may
+// carry one while JA4_r carries the other.
+func rankOf(rank map[uint16]int, id uint16) (int, bool) {
+	if r, ok := rank[id]; ok {
+		return r, true
+	}
+	alt := uint16(0)
+	switch id {
+	case 0x4469:
+		alt = 0x44cd
+	case 0x44cd:
+		alt = 0x4469
+	}
+	r, ok := rank[alt]
+	return r, ok
+}
+
+// orderByWireOrder stable-sorts items to match the captured wire order.
+// Items absent from the order map keep their relative positions at the end.
+func orderByWireOrder(items []uint16, rank map[uint16]int) []uint16 {
+	if len(rank) == 0 || len(items) < 2 {
+		return items
+	}
+	out := append([]uint16(nil), items...)
+	sort.SliceStable(out, func(i, j int) bool {
+		ri, iOK := rank[out[i]]
+		rj, jOK := rank[out[j]]
+		if iOK != jOK {
+			return iOK
+		}
+		return iOK && ri < rj
+	})
+	return out
+}
+
+// orderExtensionsByWireOrder does the same for built extensions.
+func orderExtensionsByWireOrder(entries []ja4rExtension, rank map[uint16]int) []ja4rExtension {
+	if len(rank) == 0 || len(entries) < 2 {
+		return entries
+	}
+	out := append([]ja4rExtension(nil), entries...)
+	sort.SliceStable(out, func(i, j int) bool {
+		ri, iOK := rankOf(rank, out[i].id)
+		rj, jOK := rankOf(rank, out[j].id)
+		if iOK != jOK {
+			return iOK
+		}
+		return iOK && ri < rj
+	})
+	return out
+}
+
+// JA4RStringToSpec creates a ClientHelloSpec from a JA4_r (raw) string.
+// ja3Order, when non-empty, is the originating profile's JA3 string: its
+// cipher and extension lists preserve the browser's wire order, which JA4_r
+// loses to sorting, and are used to restore that order in the emitted hello.
+func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGrease bool, serverName string, ja3Order string) (*utls.ClientHelloSpec, error) {
 	components, err := ParseJA4RString(ja4r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse JA4_r: %w", err)
@@ -777,7 +882,7 @@ func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGre
 	}
 
 	// Build extensions based on raw values using the new extension framework
-	extensions := []utls.TLSExtension{}
+	entries := []ja4rExtension{}
 
 	// Calculate how many extensions we'll actually have after processing
 	actualExtensionCount := len(components.Extensions)
@@ -796,16 +901,15 @@ func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGre
 
 	// Add SNI extension FIRST if needed (0x0000 comes first numerically)
 	if shouldAddSNI {
-		sniExt := &utls.SNIExtension{
+		entries = append(entries, ja4rExtension{0x0000, &utls.SNIExtension{
 			ServerName: serverName,
-		}
-		extensions = append(extensions, sniExt)
+		}})
 	}
 
 	// Process extensions from JA4_r AFTER SNI to maintain proper numerical order
 	for _, extCode := range components.Extensions {
 		if ext := CreateExtensionFromID(extCode, tlsVersion, components, disableGrease, serverName); ext != nil {
-			extensions = append(extensions, ext)
+			entries = append(entries, ja4rExtension{extCode, ext})
 		}
 	}
 
@@ -829,7 +933,36 @@ func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGre
 		alpnExt := &utls.ALPNExtension{
 			AlpnProtocols: alpnProtocols,
 		}
-		extensions = append(extensions, alpnExt)
+		entries = append(entries, ja4rExtension{0x0010, alpnExt})
+	}
+
+	// Restore the browser's wire order for ciphers and extensions when the
+	// profile's JA3 is available: JA3 lists preserve wire order, JA4_r does not.
+	cipherOrder, extOrder, curveOrder := parseJA3Order(ja3Order)
+	cipherSuites = orderByWireOrder(cipherSuites, wireRank(cipherOrder))
+	entries = orderExtensionsByWireOrder(entries, wireRank(extOrder))
+
+	// The JA3 curves field carries the browser's real supported_groups list
+	// (e.g. Firefox adds P-521 and FFDHE), which JA4_r omits. Use it in place
+	// of the generic default when present.
+	if len(curveOrder) > 0 {
+		for _, e := range entries {
+			if e.id == 0x000a {
+				if sc, ok := e.ext.(*utls.SupportedCurvesExtension); ok {
+					curves := make([]utls.CurveID, len(curveOrder))
+					for i, c := range curveOrder {
+						curves[i] = utls.CurveID(c)
+					}
+					sc.Curves = curves
+				}
+				break
+			}
+		}
+	}
+
+	extensions := make([]utls.TLSExtension, len(entries))
+	for i, e := range entries {
+		extensions[i] = e.ext
 	}
 
 	return &utls.ClientHelloSpec{
