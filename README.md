@@ -68,14 +68,18 @@ golang ^1.21x (for building from source)
 
 ## Installation
 
+> **Note:** The `cycletls` name on PyPI points to the older upstream package
+> (Danny-Dasilva). This fork publishes releases on its own PEP 503 index —
+> pass the index URL to get the latest version.
+
 **With uv (Recommended):**
 ```bash
-uv add cycletls
+uv pip install cycletls --index-url https://smeinecke.github.io/cycletls_python/simple/
 ```
 
 **With pip:**
 ```bash
-pip install cycletls
+pip install cycletls --index-url https://smeinecke.github.io/cycletls_python/simple/
 ```
 
 ## Quick Start
