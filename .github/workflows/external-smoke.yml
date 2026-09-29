@@ -1,0 +1,44 @@
+name: External Smoke Test
+
+concurrency:
+  group: external-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  # Daily: catches fingerprint registry updates or external TLS-stack
+  # changes that break handshakes even when no code changed.
+  schedule:
+    - cron: "17 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  external-smoke:
+    name: Strict-server handshake smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup CycleTLS (Go build)
+        uses: ./.github/actions/setup-cycletls
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Handshake smoke against strict TLS servers
+        run: uv run python scripts/external_smoke.py
