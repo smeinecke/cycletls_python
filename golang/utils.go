@@ -960,6 +960,48 @@ func JA4RStringToSpec(ja4r string, userAgent string, forceHTTP1 bool, disableGre
 		}
 	}
 
+	// Match the browser family's compress_certificate algorithm list:
+	// Chromium offers brotli only (the CreateExtensionFromID default);
+	// Firefox offers zlib, brotli and zstd. uTLS decompresses all three.
+	if strings.Contains(userAgent, "Firefox/") {
+		for _, e := range entries {
+			if cc, ok := e.ext.(*utls.UtlsCompressCertExtension); ok {
+				cc.Algorithms = []utls.CertCompressionAlgo{
+					utls.CertCompressionZlib,
+					utls.CertCompressionBrotli,
+					utls.CertCompressionZstd,
+				}
+				break
+			}
+		}
+	}
+
+	// GREASE is stripped from both JA3 and JA4, so neither string can say
+	// whether the browser greases. Chromium-family agents (incl. Brave/Edge)
+	// all contain "Chrome/"; Firefox and Safari send no GREASE at all.
+	if strings.Contains(userAgent, "Chrome/") && !disableGrease {
+		// GREASE placeholders — ApplyPreset rewrites them to random GREASE
+		// values. Chrome puts the grease cipher/version/group/share first.
+		cipherSuites = append([]uint16{0x0a0a}, cipherSuites...)
+		for _, e := range entries {
+			switch ext := e.ext.(type) {
+			case *utls.SupportedVersionsExtension:
+				ext.Versions = append([]uint16{0x0a0a}, ext.Versions...)
+			case *utls.SupportedCurvesExtension:
+				ext.Curves = append([]utls.CurveID{0x0a0a}, ext.Curves...)
+			case *utls.KeyShareExtension:
+				ext.KeyShares = append([]utls.KeyShare{
+					{Group: 0x0a0a, Data: []byte{0}},
+				}, ext.KeyShares...)
+			}
+		}
+		// ... and a GREASE extension first and last.
+		entries = append(
+			[]ja4rExtension{{0x0a0a, &utls.UtlsGREASEExtension{}}},
+			append(entries, ja4rExtension{0x0a0a, &utls.UtlsGREASEExtension{}})...,
+		)
+	}
+
 	extensions := make([]utls.TLSExtension, len(entries))
 	for i, e := range entries {
 		extensions[i] = e.ext

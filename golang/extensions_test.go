@@ -211,6 +211,47 @@ func TestJA4RSpecRestoresJA3Curves(t *testing.T) {
 	t.Fatal("no SupportedCurvesExtension in spec")
 }
 
+// TestJA4RSpecChromiumGrease checks that a Chromium user agent inserts the
+// GREASE placeholders Chrome sends (uTLS randomizes them at ApplyPreset),
+// while a Firefox UA or disableGrease emits none.
+func TestJA4RSpecChromiumGrease(t *testing.T) {
+	ja4r := "t13d1516h2_002f,0035,009c,009d,1301,1302,1303,c013_0005,000a,002b,0033_0403"
+	spec, err := JA4RStringToSpec(ja4r, "Mozilla/5.0 Chrome/146.0.0.0", false, false, "example.com", "")
+	if err != nil {
+		t.Fatalf("JA4RStringToSpec failed: %v", err)
+	}
+	if len(spec.CipherSuites) == 0 || spec.CipherSuites[0] != 0x0a0a {
+		t.Fatalf("expected GREASE cipher first, got %v", spec.CipherSuites)
+	}
+	if _, ok := spec.Extensions[0].(*utls.UtlsGREASEExtension); !ok {
+		t.Fatalf("expected GREASE extension first, got %T", spec.Extensions[0])
+	}
+	if _, ok := spec.Extensions[len(spec.Extensions)-1].(*utls.UtlsGREASEExtension); !ok {
+		t.Fatalf("expected GREASE extension last, got %T", spec.Extensions[len(spec.Extensions)-1])
+	}
+
+	spec, err = JA4RStringToSpec(ja4r, "Mozilla/5.0 Firefox/155.0", false, false, "example.com", "")
+	if err != nil {
+		t.Fatalf("JA4RStringToSpec failed: %v", err)
+	}
+	if len(spec.CipherSuites) == 0 || spec.CipherSuites[0] == 0x0a0a {
+		t.Fatal("Firefox UA must not emit GREASE cipher")
+	}
+	for i, ext := range spec.Extensions {
+		if _, ok := ext.(*utls.UtlsGREASEExtension); ok {
+			t.Fatalf("Firefox UA must not emit GREASE extension (index %d)", i)
+		}
+	}
+
+	spec, err = JA4RStringToSpec(ja4r, "Mozilla/5.0 Chrome/146.0.0.0", false, true, "example.com", "")
+	if err != nil {
+		t.Fatalf("JA4RStringToSpec failed: %v", err)
+	}
+	if len(spec.CipherSuites) == 0 || spec.CipherSuites[0] == 0x0a0a {
+		t.Fatal("disableGrease must suppress the GREASE cipher")
+	}
+}
+
 // TestKeyShareOffersPostQuantum verifies the TLS 1.3 JA4R path advertises an
 // X25519MLKEM768 share, consistent with the supported_groups list that leads
 // with the same hybrid group. uTLS fills in the key material at ApplyPreset.
