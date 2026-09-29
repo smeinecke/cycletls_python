@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
 
     <link rel="shortcut icon" href="../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls - cycletls v0.0.10</title>
+        <title>cycletls - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,34 +248,34 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">CycleTLS - Advanced TLS Fingerprinting HTTP Client</span>
 
 <span class="sd">Usage:</span>
 <span class="sd">    Basic request (auto-setup, auto-cleanup):</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')</span>
 <span class="sd">        &gt;&gt;&gt; print(response.status_code)</span>
 <span class="sd">        200</span>
 
 <span class="sd">    Configure defaults:</span>
 <span class="sd">        &gt;&gt;&gt; cycletls.set_default(</span>
-<span class="sd">        ...     proxy=&#39;socks5://127.0.0.1:9050&#39;,</span>
+<span class="sd">        ...     proxy='socks5://127.0.0.1:9050',</span>
 <span class="sd">        ...     timeout=10,</span>
-<span class="sd">        ...     ja3=&#39;771,4865-4866...&#39;</span>
+<span class="sd">        ...     ja3='771,4865-4866...'</span>
 <span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)  # Uses defaults</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')  # Uses defaults</span>
 
 <span class="sd">    Per-request overrides:</span>
 <span class="sd">        &gt;&gt;&gt; response = cycletls.get(</span>
-<span class="sd">        ...     &#39;https://example.com&#39;,</span>
+<span class="sd">        ...     'https://example.com',</span>
 <span class="sd">        ...     timeout=5  # Override default</span>
 <span class="sd">        ... )</span>
 
 <span class="sd">    Manual session management:</span>
 <span class="sd">        &gt;&gt;&gt; with cycletls.CycleTLS() as client:</span>
-<span class="sd">        ...     response = client.get(&#39;https://example.com&#39;)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ...     response = client.get('https://example.com')</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
@@ -363,8 +363,8 @@
 <span class="c1"># Module-level convenience functions</span>
 <div class="viewcode-block" id="request">
 <a class="viewcode-back" href="../reference.html#cycletls.request">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make an HTTP request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -377,8 +377,8 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.request(&#39;GET&#39;, &#39;https://example.com&#39;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.request('GET', 'https://example.com')</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -387,8 +387,8 @@
 
 <div class="viewcode-block" id="get">
 <a class="viewcode-back" href="../reference.html#cycletls.get">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a GET request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -400,9 +400,9 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')</span>
 <span class="sd">        &gt;&gt;&gt; print(response.status_code)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -413,8 +413,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.post">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a POST request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -428,8 +428,8 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.post(&#39;https://api.example.com&#39;, json_data={&#39;key&#39;: &#39;value&#39;})</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.post('https://api.example.com', json_data={'key': 'value'})</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -440,8 +440,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.put">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a PUT request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -452,7 +452,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Response object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -463,8 +463,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.patch">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a PATCH request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -475,7 +475,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Response object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -484,8 +484,8 @@
 
 <div class="viewcode-block" id="delete">
 <a class="viewcode-back" href="../reference.html#cycletls.delete">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a DELETE request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -494,7 +494,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Response object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -503,8 +503,8 @@
 
 <div class="viewcode-block" id="head">
 <a class="viewcode-back" href="../reference.html#cycletls.head">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a HEAD request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -513,7 +513,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Response object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -522,8 +522,8 @@
 
 <div class="viewcode-block" id="options">
 <a class="viewcode-back" href="../reference.html#cycletls.options">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make an OPTIONS request using the global session with defaults.</span>
 
 <span class="sd">    Args:</span>
@@ -532,7 +532,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Response object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
     <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -545,8 +545,8 @@
 
 <div class="viewcode-block" id="async_request">
 <a class="viewcode-back" href="../reference.html#cycletls.async_request">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make an async HTTP request.</span>
 
 <span class="sd">    Args:</span>
@@ -559,8 +559,8 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = await cycletls.async_request(&#39;GET&#39;, &#39;https://example.com&#39;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = await cycletls.async_request('GET', 'https://example.com')</span>
+<span class="sd">    """</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -569,9 +569,9 @@
 
 <div class="viewcode-block" id="aget">
 <a class="viewcode-back" href="../reference.html#cycletls.aget">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aget</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Make an async GET request (use &#39;aget&#39; or just &#39;get&#39; with await).</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aget</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Make an async GET request (use 'aget' or just 'get' with await).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        url: Target URL</span>
@@ -582,10 +582,10 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = await cycletls.aget(&#39;https://example.com&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; response = await cycletls.aget('https://example.com')</span>
 <span class="sd">        &gt;&gt;&gt; # Or use the original function with await:</span>
 <span class="sd">        &gt;&gt;&gt; response = await cycletls.get(url)  # Will auto-detect async context</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -596,8 +596,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.apost">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">apost</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make an async POST request.</span>
 
 <span class="sd">    Args:</span>
@@ -611,8 +611,8 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = await cycletls.apost(&#39;https://api.example.com&#39;, json_data={&#39;key&#39;: &#39;value&#39;})</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = await cycletls.apost('https://api.example.com', json_data={'key': 'value'})</span>
+<span class="sd">    """</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -623,8 +623,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.aput">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aput</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an async PUT request.&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Make an async PUT request."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aput</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -635,8 +635,8 @@
 <a class="viewcode-back" href="../reference.html#cycletls.apatch">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">apatch</span><span class="p">(</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an async PATCH request.&quot;&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Make an async PATCH request."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">apatch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -645,8 +645,8 @@
 
 <div class="viewcode-block" id="adelete">
 <a class="viewcode-back" href="../reference.html#cycletls.adelete">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">adelete</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an async DELETE request.&quot;&quot;&quot;</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">adelete</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Make an async DELETE request."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">adelete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -655,8 +655,8 @@
 
 <div class="viewcode-block" id="ahead">
 <a class="viewcode-back" href="../reference.html#cycletls.ahead">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ahead</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an async HEAD request.&quot;&quot;&quot;</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ahead</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Make an async HEAD request."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ahead</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -665,8 +665,8 @@
 
 <div class="viewcode-block" id="aoptions">
 <a class="viewcode-back" href="../reference.html#cycletls.aoptions">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aoptions</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an async OPTIONS request.&quot;&quot;&quot;</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aoptions</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Response"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Make an async OPTIONS request."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">merged_kwargs</span> <span class="o">=</span> <span class="n">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aoptions</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_kwargs</span><span class="p">)</span></div>
@@ -675,94 +675,94 @@
 
 <span class="c1"># Module-level __getattr__ for configuration access (Python 3.7+)</span>
 <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Dynamic attribute access for configuration.</span>
 
 <span class="sd">    Supports reading default_* configuration attributes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_CONFIGURABLE_ATTRS</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;module &#39;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; has no attribute &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"module '</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">' has no attribute '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 
 
 <span class="c1"># Export public API</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># Version</span>
-    <span class="s2">&quot;__version__&quot;</span><span class="p">,</span>
+    <span class="s2">"__version__"</span><span class="p">,</span>
     <span class="c1"># Core classes</span>
-    <span class="s2">&quot;CycleTLS&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;AsyncCycleTLS&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Session&quot;</span><span class="p">,</span>
+    <span class="s2">"CycleTLS"</span><span class="p">,</span>
+    <span class="s2">"AsyncCycleTLS"</span><span class="p">,</span>
+    <span class="s2">"Session"</span><span class="p">,</span>
     <span class="c1"># Fingerprint plugin system</span>
-    <span class="s2">&quot;BrowserFamily&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Platform&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TLSFingerprint&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;FingerprintRegistry&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DEFAULT_FINGERPRINTS_FILE&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CHROME_120&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CHROME_121&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;FIREFOX_121&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SAFARI_17&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;EDGE_120&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CHROME_ANDROID&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SAFARI_IOS&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_trackme_fingerprints&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_fingerprints_from_dir&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_fingerprints_from_env&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_fingerprint_from_file&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;create_fingerprint_template&quot;</span><span class="p">,</span>
+    <span class="s2">"BrowserFamily"</span><span class="p">,</span>
+    <span class="s2">"Platform"</span><span class="p">,</span>
+    <span class="s2">"TLSFingerprint"</span><span class="p">,</span>
+    <span class="s2">"FingerprintRegistry"</span><span class="p">,</span>
+    <span class="s2">"DEFAULT_FINGERPRINTS_FILE"</span><span class="p">,</span>
+    <span class="s2">"CHROME_120"</span><span class="p">,</span>
+    <span class="s2">"CHROME_121"</span><span class="p">,</span>
+    <span class="s2">"FIREFOX_121"</span><span class="p">,</span>
+    <span class="s2">"SAFARI_17"</span><span class="p">,</span>
+    <span class="s2">"EDGE_120"</span><span class="p">,</span>
+    <span class="s2">"CHROME_ANDROID"</span><span class="p">,</span>
+    <span class="s2">"SAFARI_IOS"</span><span class="p">,</span>
+    <span class="s2">"load_trackme_fingerprints"</span><span class="p">,</span>
+    <span class="s2">"load_fingerprints_from_dir"</span><span class="p">,</span>
+    <span class="s2">"load_fingerprints_from_env"</span><span class="p">,</span>
+    <span class="s2">"load_fingerprint_from_file"</span><span class="p">,</span>
+    <span class="s2">"create_fingerprint_template"</span><span class="p">,</span>
     <span class="c1"># WebSocket support</span>
-    <span class="s2">&quot;MessageType&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketMessage&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">"MessageType"</span><span class="p">,</span>
+    <span class="s2">"WebSocketMessage"</span><span class="p">,</span>
+    <span class="s2">"WebSocketError"</span><span class="p">,</span>
+    <span class="s2">"WebSocketConnection"</span><span class="p">,</span>
     <span class="c1"># SSE (Server-Sent Events) support</span>
-    <span class="s2">&quot;SSEEvent&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SSEError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SSEConnection&quot;</span><span class="p">,</span>
+    <span class="s2">"SSEEvent"</span><span class="p">,</span>
+    <span class="s2">"SSEError"</span><span class="p">,</span>
+    <span class="s2">"SSEConnection"</span><span class="p">,</span>
     <span class="c1"># Convenience functions (sync)</span>
-    <span class="s2">&quot;request&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;post&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;put&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;delete&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;head&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;options&quot;</span><span class="p">,</span>
+    <span class="s2">"request"</span><span class="p">,</span>
+    <span class="s2">"get"</span><span class="p">,</span>
+    <span class="s2">"post"</span><span class="p">,</span>
+    <span class="s2">"put"</span><span class="p">,</span>
+    <span class="s2">"patch"</span><span class="p">,</span>
+    <span class="s2">"delete"</span><span class="p">,</span>
+    <span class="s2">"head"</span><span class="p">,</span>
+    <span class="s2">"options"</span><span class="p">,</span>
     <span class="c1"># Convenience functions (async)</span>
-    <span class="s2">&quot;aget&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;apost&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;aput&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;apatch&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adelete&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ahead&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;aoptions&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_request&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_get&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_post&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_put&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_delete&quot;</span><span class="p">,</span>
+    <span class="s2">"aget"</span><span class="p">,</span>
+    <span class="s2">"apost"</span><span class="p">,</span>
+    <span class="s2">"aput"</span><span class="p">,</span>
+    <span class="s2">"apatch"</span><span class="p">,</span>
+    <span class="s2">"adelete"</span><span class="p">,</span>
+    <span class="s2">"ahead"</span><span class="p">,</span>
+    <span class="s2">"aoptions"</span><span class="p">,</span>
+    <span class="s2">"async_request"</span><span class="p">,</span>
+    <span class="s2">"async_get"</span><span class="p">,</span>
+    <span class="s2">"async_post"</span><span class="p">,</span>
+    <span class="s2">"async_put"</span><span class="p">,</span>
+    <span class="s2">"async_delete"</span><span class="p">,</span>
     <span class="c1"># Configuration</span>
-    <span class="s2">&quot;set_default&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;reset_defaults&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_default&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;close_global_session&quot;</span><span class="p">,</span>
+    <span class="s2">"set_default"</span><span class="p">,</span>
+    <span class="s2">"reset_defaults"</span><span class="p">,</span>
+    <span class="s2">"get_default"</span><span class="p">,</span>
+    <span class="s2">"close_global_session"</span><span class="p">,</span>
     <span class="c1"># Structures</span>
-    <span class="s2">&quot;CaseInsensitiveDict&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CookieJar&quot;</span><span class="p">,</span>
+    <span class="s2">"CaseInsensitiveDict"</span><span class="p">,</span>
+    <span class="s2">"CookieJar"</span><span class="p">,</span>
     <span class="c1"># Exceptions</span>
-    <span class="s2">&quot;CycleTLSError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;RequestException&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;HTTPError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ConnectionError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Timeout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TooManyRedirects&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;InvalidURL&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TLSError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ProxyError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;InvalidHeader&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ConnectTimeout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ReadTimeout&quot;</span><span class="p">,</span>
+    <span class="s2">"CycleTLSError"</span><span class="p">,</span>
+    <span class="s2">"RequestException"</span><span class="p">,</span>
+    <span class="s2">"HTTPError"</span><span class="p">,</span>
+    <span class="s2">"ConnectionError"</span><span class="p">,</span>
+    <span class="s2">"Timeout"</span><span class="p">,</span>
+    <span class="s2">"TooManyRedirects"</span><span class="p">,</span>
+    <span class="s2">"InvalidURL"</span><span class="p">,</span>
+    <span class="s2">"TLSError"</span><span class="p">,</span>
+    <span class="s2">"ProxyError"</span><span class="p">,</span>
+    <span class="s2">"InvalidHeader"</span><span class="p">,</span>
+    <span class="s2">"ConnectTimeout"</span><span class="p">,</span>
+    <span class="s2">"ReadTimeout"</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>
@@ -803,7 +803,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../_static/documentation_options.js?v=0c446633"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

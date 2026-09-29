@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.schema - cycletls v0.0.10</title>
+        <title>cycletls.schema - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.schema</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Data models shared across the CycleTLS Python client.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Data models shared across the CycleTLS Python client."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -274,90 +274,90 @@
 <span class="c1"># Module-level constant: HTTP status phrases (avoids recreating dict on every .reason access)</span>
 <span class="n">_STATUS_PHRASES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># 1xx Informational</span>
-    <span class="mi">100</span><span class="p">:</span> <span class="s2">&quot;Continue&quot;</span><span class="p">,</span>
-    <span class="mi">101</span><span class="p">:</span> <span class="s2">&quot;Switching Protocols&quot;</span><span class="p">,</span>
-    <span class="mi">102</span><span class="p">:</span> <span class="s2">&quot;Processing&quot;</span><span class="p">,</span>
-    <span class="mi">103</span><span class="p">:</span> <span class="s2">&quot;Early Hints&quot;</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">:</span> <span class="s2">"Continue"</span><span class="p">,</span>
+    <span class="mi">101</span><span class="p">:</span> <span class="s2">"Switching Protocols"</span><span class="p">,</span>
+    <span class="mi">102</span><span class="p">:</span> <span class="s2">"Processing"</span><span class="p">,</span>
+    <span class="mi">103</span><span class="p">:</span> <span class="s2">"Early Hints"</span><span class="p">,</span>
     <span class="c1"># 2xx Success</span>
-    <span class="mi">200</span><span class="p">:</span> <span class="s2">&quot;OK&quot;</span><span class="p">,</span>
-    <span class="mi">201</span><span class="p">:</span> <span class="s2">&quot;Created&quot;</span><span class="p">,</span>
-    <span class="mi">202</span><span class="p">:</span> <span class="s2">&quot;Accepted&quot;</span><span class="p">,</span>
-    <span class="mi">203</span><span class="p">:</span> <span class="s2">&quot;Non-Authoritative Information&quot;</span><span class="p">,</span>
-    <span class="mi">204</span><span class="p">:</span> <span class="s2">&quot;No Content&quot;</span><span class="p">,</span>
-    <span class="mi">205</span><span class="p">:</span> <span class="s2">&quot;Reset Content&quot;</span><span class="p">,</span>
-    <span class="mi">206</span><span class="p">:</span> <span class="s2">&quot;Partial Content&quot;</span><span class="p">,</span>
-    <span class="mi">207</span><span class="p">:</span> <span class="s2">&quot;Multi-Status&quot;</span><span class="p">,</span>
-    <span class="mi">208</span><span class="p">:</span> <span class="s2">&quot;Already Reported&quot;</span><span class="p">,</span>
-    <span class="mi">226</span><span class="p">:</span> <span class="s2">&quot;IM Used&quot;</span><span class="p">,</span>
+    <span class="mi">200</span><span class="p">:</span> <span class="s2">"OK"</span><span class="p">,</span>
+    <span class="mi">201</span><span class="p">:</span> <span class="s2">"Created"</span><span class="p">,</span>
+    <span class="mi">202</span><span class="p">:</span> <span class="s2">"Accepted"</span><span class="p">,</span>
+    <span class="mi">203</span><span class="p">:</span> <span class="s2">"Non-Authoritative Information"</span><span class="p">,</span>
+    <span class="mi">204</span><span class="p">:</span> <span class="s2">"No Content"</span><span class="p">,</span>
+    <span class="mi">205</span><span class="p">:</span> <span class="s2">"Reset Content"</span><span class="p">,</span>
+    <span class="mi">206</span><span class="p">:</span> <span class="s2">"Partial Content"</span><span class="p">,</span>
+    <span class="mi">207</span><span class="p">:</span> <span class="s2">"Multi-Status"</span><span class="p">,</span>
+    <span class="mi">208</span><span class="p">:</span> <span class="s2">"Already Reported"</span><span class="p">,</span>
+    <span class="mi">226</span><span class="p">:</span> <span class="s2">"IM Used"</span><span class="p">,</span>
     <span class="c1"># 3xx Redirection</span>
-    <span class="mi">300</span><span class="p">:</span> <span class="s2">&quot;Multiple Choices&quot;</span><span class="p">,</span>
-    <span class="mi">301</span><span class="p">:</span> <span class="s2">&quot;Moved Permanently&quot;</span><span class="p">,</span>
-    <span class="mi">302</span><span class="p">:</span> <span class="s2">&quot;Found&quot;</span><span class="p">,</span>
-    <span class="mi">303</span><span class="p">:</span> <span class="s2">&quot;See Other&quot;</span><span class="p">,</span>
-    <span class="mi">304</span><span class="p">:</span> <span class="s2">&quot;Not Modified&quot;</span><span class="p">,</span>
-    <span class="mi">305</span><span class="p">:</span> <span class="s2">&quot;Use Proxy&quot;</span><span class="p">,</span>
-    <span class="mi">307</span><span class="p">:</span> <span class="s2">&quot;Temporary Redirect&quot;</span><span class="p">,</span>
-    <span class="mi">308</span><span class="p">:</span> <span class="s2">&quot;Permanent Redirect&quot;</span><span class="p">,</span>
+    <span class="mi">300</span><span class="p">:</span> <span class="s2">"Multiple Choices"</span><span class="p">,</span>
+    <span class="mi">301</span><span class="p">:</span> <span class="s2">"Moved Permanently"</span><span class="p">,</span>
+    <span class="mi">302</span><span class="p">:</span> <span class="s2">"Found"</span><span class="p">,</span>
+    <span class="mi">303</span><span class="p">:</span> <span class="s2">"See Other"</span><span class="p">,</span>
+    <span class="mi">304</span><span class="p">:</span> <span class="s2">"Not Modified"</span><span class="p">,</span>
+    <span class="mi">305</span><span class="p">:</span> <span class="s2">"Use Proxy"</span><span class="p">,</span>
+    <span class="mi">307</span><span class="p">:</span> <span class="s2">"Temporary Redirect"</span><span class="p">,</span>
+    <span class="mi">308</span><span class="p">:</span> <span class="s2">"Permanent Redirect"</span><span class="p">,</span>
     <span class="c1"># 4xx Client Error</span>
-    <span class="mi">400</span><span class="p">:</span> <span class="s2">&quot;Bad Request&quot;</span><span class="p">,</span>
-    <span class="mi">401</span><span class="p">:</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">,</span>
-    <span class="mi">402</span><span class="p">:</span> <span class="s2">&quot;Payment Required&quot;</span><span class="p">,</span>
-    <span class="mi">403</span><span class="p">:</span> <span class="s2">&quot;Forbidden&quot;</span><span class="p">,</span>
-    <span class="mi">404</span><span class="p">:</span> <span class="s2">&quot;Not Found&quot;</span><span class="p">,</span>
-    <span class="mi">405</span><span class="p">:</span> <span class="s2">&quot;Method Not Allowed&quot;</span><span class="p">,</span>
-    <span class="mi">406</span><span class="p">:</span> <span class="s2">&quot;Not Acceptable&quot;</span><span class="p">,</span>
-    <span class="mi">407</span><span class="p">:</span> <span class="s2">&quot;Proxy Authentication Required&quot;</span><span class="p">,</span>
-    <span class="mi">408</span><span class="p">:</span> <span class="s2">&quot;Request Timeout&quot;</span><span class="p">,</span>
-    <span class="mi">409</span><span class="p">:</span> <span class="s2">&quot;Conflict&quot;</span><span class="p">,</span>
-    <span class="mi">410</span><span class="p">:</span> <span class="s2">&quot;Gone&quot;</span><span class="p">,</span>
-    <span class="mi">411</span><span class="p">:</span> <span class="s2">&quot;Length Required&quot;</span><span class="p">,</span>
-    <span class="mi">412</span><span class="p">:</span> <span class="s2">&quot;Precondition Failed&quot;</span><span class="p">,</span>
-    <span class="mi">413</span><span class="p">:</span> <span class="s2">&quot;Payload Too Large&quot;</span><span class="p">,</span>
-    <span class="mi">414</span><span class="p">:</span> <span class="s2">&quot;URI Too Long&quot;</span><span class="p">,</span>
-    <span class="mi">415</span><span class="p">:</span> <span class="s2">&quot;Unsupported Media Type&quot;</span><span class="p">,</span>
-    <span class="mi">416</span><span class="p">:</span> <span class="s2">&quot;Range Not Satisfiable&quot;</span><span class="p">,</span>
-    <span class="mi">417</span><span class="p">:</span> <span class="s2">&quot;Expectation Failed&quot;</span><span class="p">,</span>
-    <span class="mi">418</span><span class="p">:</span> <span class="s2">&quot;I&#39;m a teapot&quot;</span><span class="p">,</span>
-    <span class="mi">421</span><span class="p">:</span> <span class="s2">&quot;Misdirected Request&quot;</span><span class="p">,</span>
-    <span class="mi">422</span><span class="p">:</span> <span class="s2">&quot;Unprocessable Entity&quot;</span><span class="p">,</span>
-    <span class="mi">423</span><span class="p">:</span> <span class="s2">&quot;Locked&quot;</span><span class="p">,</span>
-    <span class="mi">424</span><span class="p">:</span> <span class="s2">&quot;Failed Dependency&quot;</span><span class="p">,</span>
-    <span class="mi">425</span><span class="p">:</span> <span class="s2">&quot;Too Early&quot;</span><span class="p">,</span>
-    <span class="mi">426</span><span class="p">:</span> <span class="s2">&quot;Upgrade Required&quot;</span><span class="p">,</span>
-    <span class="mi">428</span><span class="p">:</span> <span class="s2">&quot;Precondition Required&quot;</span><span class="p">,</span>
-    <span class="mi">429</span><span class="p">:</span> <span class="s2">&quot;Too Many Requests&quot;</span><span class="p">,</span>
-    <span class="mi">431</span><span class="p">:</span> <span class="s2">&quot;Request Header Fields Too Large&quot;</span><span class="p">,</span>
-    <span class="mi">451</span><span class="p">:</span> <span class="s2">&quot;Unavailable For Legal Reasons&quot;</span><span class="p">,</span>
+    <span class="mi">400</span><span class="p">:</span> <span class="s2">"Bad Request"</span><span class="p">,</span>
+    <span class="mi">401</span><span class="p">:</span> <span class="s2">"Unauthorized"</span><span class="p">,</span>
+    <span class="mi">402</span><span class="p">:</span> <span class="s2">"Payment Required"</span><span class="p">,</span>
+    <span class="mi">403</span><span class="p">:</span> <span class="s2">"Forbidden"</span><span class="p">,</span>
+    <span class="mi">404</span><span class="p">:</span> <span class="s2">"Not Found"</span><span class="p">,</span>
+    <span class="mi">405</span><span class="p">:</span> <span class="s2">"Method Not Allowed"</span><span class="p">,</span>
+    <span class="mi">406</span><span class="p">:</span> <span class="s2">"Not Acceptable"</span><span class="p">,</span>
+    <span class="mi">407</span><span class="p">:</span> <span class="s2">"Proxy Authentication Required"</span><span class="p">,</span>
+    <span class="mi">408</span><span class="p">:</span> <span class="s2">"Request Timeout"</span><span class="p">,</span>
+    <span class="mi">409</span><span class="p">:</span> <span class="s2">"Conflict"</span><span class="p">,</span>
+    <span class="mi">410</span><span class="p">:</span> <span class="s2">"Gone"</span><span class="p">,</span>
+    <span class="mi">411</span><span class="p">:</span> <span class="s2">"Length Required"</span><span class="p">,</span>
+    <span class="mi">412</span><span class="p">:</span> <span class="s2">"Precondition Failed"</span><span class="p">,</span>
+    <span class="mi">413</span><span class="p">:</span> <span class="s2">"Payload Too Large"</span><span class="p">,</span>
+    <span class="mi">414</span><span class="p">:</span> <span class="s2">"URI Too Long"</span><span class="p">,</span>
+    <span class="mi">415</span><span class="p">:</span> <span class="s2">"Unsupported Media Type"</span><span class="p">,</span>
+    <span class="mi">416</span><span class="p">:</span> <span class="s2">"Range Not Satisfiable"</span><span class="p">,</span>
+    <span class="mi">417</span><span class="p">:</span> <span class="s2">"Expectation Failed"</span><span class="p">,</span>
+    <span class="mi">418</span><span class="p">:</span> <span class="s2">"I'm a teapot"</span><span class="p">,</span>
+    <span class="mi">421</span><span class="p">:</span> <span class="s2">"Misdirected Request"</span><span class="p">,</span>
+    <span class="mi">422</span><span class="p">:</span> <span class="s2">"Unprocessable Entity"</span><span class="p">,</span>
+    <span class="mi">423</span><span class="p">:</span> <span class="s2">"Locked"</span><span class="p">,</span>
+    <span class="mi">424</span><span class="p">:</span> <span class="s2">"Failed Dependency"</span><span class="p">,</span>
+    <span class="mi">425</span><span class="p">:</span> <span class="s2">"Too Early"</span><span class="p">,</span>
+    <span class="mi">426</span><span class="p">:</span> <span class="s2">"Upgrade Required"</span><span class="p">,</span>
+    <span class="mi">428</span><span class="p">:</span> <span class="s2">"Precondition Required"</span><span class="p">,</span>
+    <span class="mi">429</span><span class="p">:</span> <span class="s2">"Too Many Requests"</span><span class="p">,</span>
+    <span class="mi">431</span><span class="p">:</span> <span class="s2">"Request Header Fields Too Large"</span><span class="p">,</span>
+    <span class="mi">451</span><span class="p">:</span> <span class="s2">"Unavailable For Legal Reasons"</span><span class="p">,</span>
     <span class="c1"># 5xx Server Error</span>
-    <span class="mi">500</span><span class="p">:</span> <span class="s2">&quot;Internal Server Error&quot;</span><span class="p">,</span>
-    <span class="mi">501</span><span class="p">:</span> <span class="s2">&quot;Not Implemented&quot;</span><span class="p">,</span>
-    <span class="mi">502</span><span class="p">:</span> <span class="s2">&quot;Bad Gateway&quot;</span><span class="p">,</span>
-    <span class="mi">503</span><span class="p">:</span> <span class="s2">&quot;Service Unavailable&quot;</span><span class="p">,</span>
-    <span class="mi">504</span><span class="p">:</span> <span class="s2">&quot;Gateway Timeout&quot;</span><span class="p">,</span>
-    <span class="mi">505</span><span class="p">:</span> <span class="s2">&quot;HTTP Version Not Supported&quot;</span><span class="p">,</span>
-    <span class="mi">506</span><span class="p">:</span> <span class="s2">&quot;Variant Also Negotiates&quot;</span><span class="p">,</span>
-    <span class="mi">507</span><span class="p">:</span> <span class="s2">&quot;Insufficient Storage&quot;</span><span class="p">,</span>
-    <span class="mi">508</span><span class="p">:</span> <span class="s2">&quot;Loop Detected&quot;</span><span class="p">,</span>
-    <span class="mi">510</span><span class="p">:</span> <span class="s2">&quot;Not Extended&quot;</span><span class="p">,</span>
-    <span class="mi">511</span><span class="p">:</span> <span class="s2">&quot;Network Authentication Required&quot;</span><span class="p">,</span>
+    <span class="mi">500</span><span class="p">:</span> <span class="s2">"Internal Server Error"</span><span class="p">,</span>
+    <span class="mi">501</span><span class="p">:</span> <span class="s2">"Not Implemented"</span><span class="p">,</span>
+    <span class="mi">502</span><span class="p">:</span> <span class="s2">"Bad Gateway"</span><span class="p">,</span>
+    <span class="mi">503</span><span class="p">:</span> <span class="s2">"Service Unavailable"</span><span class="p">,</span>
+    <span class="mi">504</span><span class="p">:</span> <span class="s2">"Gateway Timeout"</span><span class="p">,</span>
+    <span class="mi">505</span><span class="p">:</span> <span class="s2">"HTTP Version Not Supported"</span><span class="p">,</span>
+    <span class="mi">506</span><span class="p">:</span> <span class="s2">"Variant Also Negotiates"</span><span class="p">,</span>
+    <span class="mi">507</span><span class="p">:</span> <span class="s2">"Insufficient Storage"</span><span class="p">,</span>
+    <span class="mi">508</span><span class="p">:</span> <span class="s2">"Loop Detected"</span><span class="p">,</span>
+    <span class="mi">510</span><span class="p">:</span> <span class="s2">"Not Extended"</span><span class="p">,</span>
+    <span class="mi">511</span><span class="p">:</span> <span class="s2">"Network Authentication Required"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Protocol</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol type for requests.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Protocol type for requests."""</span>
 
-    <span class="n">HTTP1</span> <span class="o">=</span> <span class="s2">&quot;http1&quot;</span>
-    <span class="n">HTTP2</span> <span class="o">=</span> <span class="s2">&quot;http2&quot;</span>
-    <span class="n">HTTP3</span> <span class="o">=</span> <span class="s2">&quot;http3&quot;</span>
-    <span class="n">WEBSOCKET</span> <span class="o">=</span> <span class="s2">&quot;websocket&quot;</span>
-    <span class="n">SSE</span> <span class="o">=</span> <span class="s2">&quot;sse&quot;</span>
+    <span class="n">HTTP1</span> <span class="o">=</span> <span class="s2">"http1"</span>
+    <span class="n">HTTP2</span> <span class="o">=</span> <span class="s2">"http2"</span>
+    <span class="n">HTTP3</span> <span class="o">=</span> <span class="s2">"http3"</span>
+    <span class="n">WEBSOCKET</span> <span class="o">=</span> <span class="s2">"websocket"</span>
+    <span class="n">SSE</span> <span class="o">=</span> <span class="s2">"sse"</span>
 
 
 <div class="viewcode-block" id="Cookie">
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Cookie">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Cookie</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cookie model with full attributes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cookie model with full attributes."""</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
@@ -370,12 +370,12 @@
     <span class="n">same_site</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return detailed string representation of the Cookie.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Cookie </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;any domain&#39;</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return detailed string representation of the Cookie."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;Cookie </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'any domain'</span><span class="si">}</span><span class="s2">&gt;"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return user-friendly string representation of the Cookie.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span></div>
+<span class="w">        </span><span class="sd">"""Return user-friendly string representation of the Cookie."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span></div>
 
 
 
@@ -383,11 +383,11 @@
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Request">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Request</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced request model with all CycleTLS features.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Enhanced request model with all CycleTLS features."""</span>
 
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">body_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
@@ -409,8 +409,8 @@
     <span class="n">protocol</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Protocol</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Connection options</span>
-    <span class="n">user_agent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0&quot;</span>
-    <span class="n">proxy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">user_agent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"</span>
+    <span class="n">proxy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">local_address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Bind outgoing TCP connections to this local IP address</span>
     <span class="n">cookies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cookie</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">timeout</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># Timeout in seconds (floats are rounded up to nearest integer)</span>
@@ -422,67 +422,67 @@
     <span class="n">order_headers_as_provided</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return detailed string representation of the Request.&quot;&quot;&quot;</span>
-        <span class="n">proxy_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; via </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Request [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}{</span><span class="n">proxy_info</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return detailed string representation of the Request."""</span>
+        <span class="n">proxy_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">" via </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;Request [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}{</span><span class="n">proxy_info</span><span class="si">}</span><span class="s2">]&gt;"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return user-friendly string representation of the Request.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="sd">"""Return user-friendly string representation of the Request."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span>
 
 <div class="viewcode-block" id="Request.to_dict">
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Request.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert Request to dictionary for serialization (optimized).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Convert Request to dictionary for serialization (optimized)."""</span>
         <span class="c1"># Convert timeout to integer (Go expects int, not float)</span>
-        <span class="c1"># Round up to ensure we don&#39;t timeout prematurely</span>
+        <span class="c1"># Round up to ensure we don't timeout prematurely</span>
         <span class="c1"># Minimum timeout is 1 second (Go defaults 0 to 15 seconds)</span>
         <span class="n">timeout_int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
 
         <span class="c1"># Build dict with required fields (batch assignment is faster)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
-            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
-            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
-            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
-            <span class="s2">&quot;disableGrease&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_grease</span><span class="p">,</span>
-            <span class="s2">&quot;insecureSkipVerify&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">insecure_skip_verify</span><span class="p">,</span>
-            <span class="s2">&quot;tls13AutoRetry&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tls13_auto_retry</span><span class="p">,</span>
-            <span class="s2">&quot;forceHTTP1&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_http1</span><span class="p">,</span>
-            <span class="s2">&quot;forceHTTP3&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_http3</span><span class="p">,</span>
-            <span class="s2">&quot;userAgent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span>
-            <span class="s2">&quot;proxy&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">,</span>
-            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout_int</span><span class="p">,</span>
-            <span class="s2">&quot;disableRedirect&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_redirect</span><span class="p">,</span>
-            <span class="s2">&quot;enableConnectionReuse&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_connection_reuse</span><span class="p">,</span>
+            <span class="s2">"url"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="s2">"method"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="s2">"body"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+            <span class="s2">"headers"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="s2">"disableGrease"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_grease</span><span class="p">,</span>
+            <span class="s2">"insecureSkipVerify"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">insecure_skip_verify</span><span class="p">,</span>
+            <span class="s2">"tls13AutoRetry"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tls13_auto_retry</span><span class="p">,</span>
+            <span class="s2">"forceHTTP1"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_http1</span><span class="p">,</span>
+            <span class="s2">"forceHTTP3"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_http3</span><span class="p">,</span>
+            <span class="s2">"userAgent"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span>
+            <span class="s2">"proxy"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">,</span>
+            <span class="s2">"timeout"</span><span class="p">:</span> <span class="n">timeout_int</span><span class="p">,</span>
+            <span class="s2">"disableRedirect"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_redirect</span><span class="p">,</span>
+            <span class="s2">"enableConnectionReuse"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_connection_reuse</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Handle TLS fingerprint options: ja4r takes precedence over ja3 when both are set.</span>
         <span class="c1"># http2_fingerprint and quic_fingerprint are independent and should not suppress ja3.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja4r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ja3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"ja3"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
 
         <span class="c1"># Add optional fields only if set (minimize conditionals)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;bodyBytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span>  <span class="c1"># Let msgpack handle binary</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"bodyBytes"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span>  <span class="c1"># Let msgpack handle binary</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja4r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ja4r&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja4r</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"ja4r"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja4r</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">http2_fingerprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;http2Fingerprint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http2_fingerprint</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"http2Fingerprint"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http2_fingerprint</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quic_fingerprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;quicFingerprint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quic_fingerprint</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"quicFingerprint"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quic_fingerprint</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;serverName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_name</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"serverName"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_name</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_address</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;localAddress&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_address</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"localAddress"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_address</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"protocol"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">value</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookies</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;cookies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_cookie_to_dict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookies</span><span class="p">]</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"cookies"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_cookie_to_dict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookies</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;headerOrder&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_order</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"headerOrder"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_order</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_headers_as_provided</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;orderHeadersAsProvided&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_headers_as_provided</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"orderHeadersAsProvided"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_headers_as_provided</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 </div>
@@ -491,33 +491,33 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">WebSocketMessage</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;WebSocket message model.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""WebSocket message model."""</span>
 
     <span class="n">message_type</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># 1 = text, 2 = binary</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;websocket&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"websocket"</span>
 
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SSEEvent</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Server-Sent Event model.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Server-Sent Event model."""</span>
 
     <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;message&quot;</span>
+    <span class="n">event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"message"</span>
     <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="Response">
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Response">[docs]</a>
-<span class="nd">@dataclass</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;slots&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">else</span> <span class="p">{})</span>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">"slots"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">else</span> <span class="p">{})</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced response model with binary data and cookies.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Enhanced response model with binary data and cookies."""</span>
 
     <span class="n">request_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">raw_headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">body_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">raw_cookies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cookie</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">final_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -527,118 +527,118 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for body. Returns the response body as a string.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Alias for body. Returns the response body as a string."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the response body as bytes.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Return the response body as bytes."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CaseInsensitiveDict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return headers as a case-insensitive dictionary.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return headers as a case-insensitive dictionary."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_headers_dict</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_headers</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers_dict</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CookieJar</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return cookies as a CookieJar object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return cookies as a CookieJar object."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookie_jar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cookie_jar</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_cookies</span> <span class="ow">or</span> <span class="p">[])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookie_jar</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if status code indicates success (200-399).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if status code indicates success (200-399)."""</span>
         <span class="k">return</span> <span class="mi">200</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">400</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if status code indicates a redirect (300-399).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if status code indicates a redirect (300-399)."""</span>
         <span class="k">return</span> <span class="mi">300</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">400</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_client_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if status code indicates a client error (400-499).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if status code indicates a client error (400-499)."""</span>
         <span class="k">return</span> <span class="mi">400</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">500</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_server_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if status code indicates a server error (500-599).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if status code indicates a server error (500-599)."""</span>
         <span class="k">return</span> <span class="mi">500</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">600</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if status code indicates any error (400+).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if status code indicates any error (400+)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">400</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">reason</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the HTTP reason phrase for the status code.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_STATUS_PHRASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Return the HTTP reason phrase for the status code."""</span>
+        <span class="k">return</span> <span class="n">_STATUS_PHRASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s2">"Unknown"</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for final_url. Returns the final URL after redirects.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Alias for final_url. Returns the final URL after redirects."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_url</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect encoding from Content-Type header, default to &#39;utf-8&#39;.&quot;&quot;&quot;</span>
-        <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;charset=([^\s;]+)&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Detect encoding from Content-Type header, default to 'utf-8'."""</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content-type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"charset=([^\s;]+)"</span><span class="p">,</span> <span class="n">content_type</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;utf-8&quot;</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"</span><span class="se">\"</span><span class="s2">'"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">"utf-8"</span>
 
 <div class="viewcode-block" id="Response.raise_for_status">
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Response.raise_for_status">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">raise_for_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Raise HTTPError if the response status indicates an error.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Raise HTTPError if the response status indicates an error."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_error</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>  <span class="c1"># Local import to avoid cycle</span>
 
-            <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_url</span><span class="p">:</span>
-                <span class="n">error_msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; for url: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">final_url</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">error_msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" for url: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">final_url</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Response.json">
 <a class="viewcode-back" href="../../reference.html#cycletls.schema.Response.json">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse response body as JSON.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Parse response body as JSON."""</span>
         <span class="k">return</span> <span class="n">_json_loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return detailed string representation of the Response.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Response [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return detailed string representation of the Response."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;Response [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">]&gt;"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return user-friendly string representation of the Response.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Response [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">]&gt;&quot;</span></div>
+<span class="w">        </span><span class="sd">"""Return user-friendly string representation of the Response."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;Response [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">]&gt;"</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_cookie_to_dict</span><span class="p">(</span><span class="n">cookie</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Cookie</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert Cookie or dict to dictionary for serialization.</span>
+<span class="w">    </span><span class="sd">"""Convert Cookie or dict to dictionary for serialization.</span>
 
 <span class="sd">    Accepts both Cookie dataclass instances and plain dictionaries for flexibility.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Extract fields from either dict or Cookie dataclass</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">)</span>
-        <span class="n">domain</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">)</span>
-        <span class="n">expires</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;expires&quot;</span><span class="p">)</span>
-        <span class="n">max_age</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maxAge&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_age&quot;</span><span class="p">)</span>
-        <span class="n">secure</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;secure&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">http_only</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;httpOnly&quot;</span><span class="p">,</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http_only&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
-        <span class="n">same_site</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sameSite&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;same_site&quot;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"path"</span><span class="p">)</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"domain"</span><span class="p">)</span>
+        <span class="n">expires</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"expires"</span><span class="p">)</span>
+        <span class="n">max_age</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"maxAge"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"max_age"</span><span class="p">)</span>
+        <span class="n">secure</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"secure"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">http_only</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"httpOnly"</span><span class="p">,</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http_only"</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="n">same_site</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sameSite"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cookie</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"same_site"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">name</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">value</span>
@@ -652,32 +652,32 @@
 
     <span class="c1"># Build result dict from extracted values</span>
     <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
-        <span class="s2">&quot;secure&quot;</span><span class="p">:</span> <span class="n">secure</span><span class="p">,</span>
-        <span class="s2">&quot;httpOnly&quot;</span><span class="p">:</span> <span class="n">http_only</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">"value"</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+        <span class="s2">"secure"</span><span class="p">:</span> <span class="n">secure</span><span class="p">,</span>
+        <span class="s2">"httpOnly"</span><span class="p">:</span> <span class="n">http_only</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"path"</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
     <span class="k">if</span> <span class="n">domain</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"domain"</span><span class="p">]</span> <span class="o">=</span> <span class="n">domain</span>
     <span class="k">if</span> <span class="n">expires</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">expires</span><span class="p">,</span> <span class="s2">&quot;strftime&quot;</span><span class="p">):</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;rawExpires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expires</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%a</span><span class="s2">, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S GMT&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">expires</span><span class="p">,</span> <span class="s2">"strftime"</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"rawExpires"</span><span class="p">]</span> <span class="o">=</span> <span class="n">expires</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"</span><span class="si">%a</span><span class="s2">, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S GMT"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;rawExpires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">expires</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"rawExpires"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">expires</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">max_age</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;maxAge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_age</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"maxAge"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_age</span>
     <span class="k">if</span> <span class="n">same_site</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;sameSite&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_convert_same_site</span><span class="p">(</span><span class="n">same_site</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"sameSite"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_convert_same_site</span><span class="p">(</span><span class="n">same_site</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="n">_SAME_SITE_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;lax&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="n">_SAME_SITE_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"default"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"lax"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"strict"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_convert_same_site</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert SameSite value to Go&#39;s nhttp.SameSite int type.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Convert SameSite value to Go's nhttp.SameSite int type."""</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -686,36 +686,36 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_dict_to_cookie</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cookie</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert dictionary to Cookie object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Convert dictionary to Cookie object."""</span>
     <span class="n">expires</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;expires&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]:</span>
-        <span class="c1"># Python 3.10&#39;s fromisoformat() doesn&#39;t support &#39;Z&#39; suffix</span>
-        <span class="c1"># Replace with &#39;+00:00&#39; for compatibility</span>
-        <span class="n">expires_str</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">expires_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">):</span>
-            <span class="n">expires_str</span> <span class="o">=</span> <span class="n">expires_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;+00:00&quot;</span>
+    <span class="k">if</span> <span class="s2">"expires"</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">"expires"</span><span class="p">]:</span>
+        <span class="c1"># Python 3.10's fromisoformat() doesn't support 'Z' suffix</span>
+        <span class="c1"># Replace with '+00:00' for compatibility</span>
+        <span class="n">expires_str</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"expires"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">expires_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"Z"</span><span class="p">):</span>
+            <span class="n">expires_str</span> <span class="o">=</span> <span class="n">expires_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"+00:00"</span>
         <span class="n">expires</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">expires_str</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Cookie</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-        <span class="n">path</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">),</span>
-        <span class="n">domain</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"value"</span><span class="p">],</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"path"</span><span class="p">),</span>
+        <span class="n">domain</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"domain"</span><span class="p">),</span>
         <span class="n">expires</span><span class="o">=</span><span class="n">expires</span><span class="p">,</span>
-        <span class="n">max_age</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maxAge&quot;</span><span class="p">),</span>
-        <span class="n">secure</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;secure&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-        <span class="n">http_only</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;httpOnly&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-        <span class="n">same_site</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sameSite&quot;</span><span class="p">),</span>
+        <span class="n">max_age</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"maxAge"</span><span class="p">),</span>
+        <span class="n">secure</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"secure"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="n">http_only</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"httpOnly"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="n">same_site</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sameSite"</span><span class="p">),</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_matches_any</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">patterns</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if any of the patterns appear in the text.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Check if any of the patterns appear in the text."""</span>
     <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_raise_for_error_response</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if response indicates an error and raise appropriate exception.</span>
+<span class="w">    </span><span class="sd">"""Check if response indicates an error and raise appropriate exception.</span>
 
 <span class="sd">    Go backend returns various status codes for different errors:</span>
 <span class="sd">    - Status 0: Generic error</span>
@@ -726,8 +726,8 @@
 <span class="sd">    - Status 405: Address errors</span>
 <span class="sd">    - Status 502: Connection refused</span>
 
-<span class="sd">    When Body contains &quot;Request returned a Syscall Error:&quot; or similar error</span>
-<span class="sd">    markers, it&#39;s an error response even with non-zero status codes.</span>
+<span class="sd">    When Body contains "Request returned a Syscall Error:" or similar error</span>
+<span class="sd">    markers, it's an error response even with non-zero status codes.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        data: Response dictionary from Go backend</span>
@@ -738,9 +738,9 @@
 <span class="sd">        InvalidURL: For invalid URL errors</span>
 <span class="sd">        TLSError: For certificate errors</span>
 <span class="sd">        CycleTLSError: For other errors</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Short-circuit for successful responses (2xx, 3xx) — skip expensive body checks</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Status"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">if</span> <span class="mi">200</span> <span class="o">&lt;=</span> <span class="n">status</span> <span class="o">&lt;</span> <span class="mi">400</span><span class="p">:</span>
         <span class="k">return</span>
 
@@ -753,130 +753,130 @@
         <span class="n">TLSError</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">error_msg</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">error_msg</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Body"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
     <span class="n">error_lower</span> <span class="o">=</span> <span class="n">error_msg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="c1"># Check if this is an error response from Go</span>
-    <span class="c1"># Go returns &quot;Request returned a Syscall Error:&quot; prefix for errors</span>
+    <span class="c1"># Go returns "Request returned a Syscall Error:" prefix for errors</span>
     <span class="n">is_error_response</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="ow">or</span> <span class="s2">&quot;syscall error:&quot;</span> <span class="ow">in</span> <span class="n">error_lower</span>
-        <span class="ow">or</span> <span class="p">(</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span> <span class="mi">408</span><span class="p">,</span> <span class="mi">421</span><span class="p">,</span> <span class="mi">495</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;-&gt;&quot;</span> <span class="ow">in</span> <span class="n">error_msg</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="s2">"syscall error:"</span> <span class="ow">in</span> <span class="n">error_lower</span>
+        <span class="ow">or</span> <span class="p">(</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span> <span class="mi">408</span><span class="p">,</span> <span class="mi">421</span><span class="p">,</span> <span class="mi">495</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"-&gt;"</span> <span class="ow">in</span> <span class="n">error_msg</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_error_response</span><span class="p">:</span>
-        <span class="k">return</span>  <span class="c1"># Not an error, don&#39;t raise</span>
+        <span class="k">return</span>  <span class="c1"># Not an error, don't raise</span>
 
     <span class="c1"># DNS/lookup failure (status 421 or DNS patterns) — check before timeout because a DNS</span>
-    <span class="c1"># lookup that times out contains both &quot;lookup&quot; and &quot;i/o timeout&quot;; DNS is more specific.</span>
+    <span class="c1"># lookup that times out contains both "lookup" and "i/o timeout"; DNS is more specific.</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">421</span> <span class="ow">or</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;no such host&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lookup&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dnserror&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;getaddrinfo&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;could not resolve&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dns&quot;</span><span class="p">,</span>
+            <span class="s2">"no such host"</span><span class="p">,</span>
+            <span class="s2">"lookup"</span><span class="p">,</span>
+            <span class="s2">"dnserror"</span><span class="p">,</span>
+            <span class="s2">"getaddrinfo"</span><span class="p">,</span>
+            <span class="s2">"could not resolve"</span><span class="p">,</span>
+            <span class="s2">"dns"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DNS lookup failed: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DNS lookup failed: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Timeout errors (status 408 or timeout patterns)</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">408</span> <span class="ow">or</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;timeout&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;deadline exceeded&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;request canceled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;context canceled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;context done&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;i/o timeout&quot;</span><span class="p">,</span>
+            <span class="s2">"timeout"</span><span class="p">,</span>
+            <span class="s2">"deadline exceeded"</span><span class="p">,</span>
+            <span class="s2">"request canceled"</span><span class="p">,</span>
+            <span class="s2">"context canceled"</span><span class="p">,</span>
+            <span class="s2">"context done"</span><span class="p">,</span>
+            <span class="s2">"i/o timeout"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="n">Timeout</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Request timed out: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">Timeout</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Request timed out: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Connection errors (general) - check BEFORE TLS status code to handle EOF, etc.</span>
     <span class="c1"># that might come with TLS-related status codes due to connection issues during handshake</span>
     <span class="k">if</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;connection reset&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;connection closed&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;closed network connection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;eof&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;broken pipe&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;network is unreachable&quot;</span><span class="p">,</span>
+            <span class="s2">"connection reset"</span><span class="p">,</span>
+            <span class="s2">"connection closed"</span><span class="p">,</span>
+            <span class="s2">"closed network connection"</span><span class="p">,</span>
+            <span class="s2">"eof"</span><span class="p">,</span>
+            <span class="s2">"broken pipe"</span><span class="p">,</span>
+            <span class="s2">"network is unreachable"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connection error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># TLS/certificate errors (status 495)</span>
     <span class="c1"># Only match if there are actual certificate-related keywords in the error</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">495</span> <span class="ow">and</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;certificate&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;x509:&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tls: failed to verify&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;handshake&quot;</span><span class="p">,</span>
+            <span class="s2">"certificate"</span><span class="p">,</span>
+            <span class="s2">"x509:"</span><span class="p">,</span>
+            <span class="s2">"tls: failed to verify"</span><span class="p">,</span>
+            <span class="s2">"handshake"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="n">TLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TLS error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"TLS error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Also check for TLS patterns without specific status code</span>
     <span class="k">if</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;certificate&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;x509:&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tls: failed to verify&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ssl&quot;</span><span class="p">,</span>
+            <span class="s2">"certificate"</span><span class="p">,</span>
+            <span class="s2">"x509:"</span><span class="p">,</span>
+            <span class="s2">"tls: failed to verify"</span><span class="p">,</span>
+            <span class="s2">"ssl"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="n">TLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TLS error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"TLS error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Connection refused (status 502 or connection refused patterns)</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">502</span> <span class="ow">or</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;connection refused&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;refused&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;no connection could be made&quot;</span><span class="p">,</span>
+            <span class="s2">"connection refused"</span><span class="p">,</span>
+            <span class="s2">"refused"</span><span class="p">,</span>
+            <span class="s2">"no connection could be made"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection refused: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connection refused: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Address errors (status 405)</span>
-    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">405</span> <span class="ow">and</span> <span class="s2">&quot;addr&quot;</span> <span class="ow">in</span> <span class="n">error_lower</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Address error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">405</span> <span class="ow">and</span> <span class="s2">"addr"</span> <span class="ow">in</span> <span class="n">error_lower</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Address error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Invalid URL patterns</span>
     <span class="k">if</span> <span class="n">_matches_any</span><span class="p">(</span>
         <span class="n">error_lower</span><span class="p">,</span>
         <span class="p">(</span>
-            <span class="s2">&quot;invalid url&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;unsupported protocol&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;missing protocol scheme&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;invalid character&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;parse&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;first path segment in url cannot contain colon&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;unsupported scheme&quot;</span><span class="p">,</span>
+            <span class="s2">"invalid url"</span><span class="p">,</span>
+            <span class="s2">"unsupported protocol"</span><span class="p">,</span>
+            <span class="s2">"missing protocol scheme"</span><span class="p">,</span>
+            <span class="s2">"invalid character"</span><span class="p">,</span>
+            <span class="s2">"parse"</span><span class="p">,</span>
+            <span class="s2">"first path segment in url cannot contain colon"</span><span class="p">,</span>
+            <span class="s2">"unsupported scheme"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">):</span>
-        <span class="k">raise</span> <span class="n">InvalidURL</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid URL: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">InvalidURL</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid URL: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Syscall errors (status 401 from Go)</span>
-    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">401</span> <span class="ow">and</span> <span class="s2">&quot;syscall&quot;</span> <span class="ow">in</span> <span class="n">error_lower</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Syscall error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">401</span> <span class="ow">and</span> <span class="s2">"syscall"</span> <span class="ow">in</span> <span class="n">error_lower</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Syscall error: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Generic error for unrecognized patterns with status 0</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">CycleTLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Request failed: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">CycleTLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Request failed: </span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_dict_to_response</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert dictionary to Response object.</span>
+<span class="w">    </span><span class="sd">"""Convert dictionary to Response object.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        data: Response dictionary from Go backend</span>
@@ -887,15 +887,15 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        Various exceptions if raise_on_error=True and response indicates an error</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Check for error response first</span>
     <span class="k">if</span> <span class="n">raise_on_error</span><span class="p">:</span>
         <span class="n">_raise_for_error_response</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="c1"># Handle body_bytes - msgpack returns raw bytes directly</span>
     <span class="n">body_bytes</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;BodyBytes&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;BodyBytes&quot;</span><span class="p">]:</span>
-        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;BodyBytes&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"BodyBytes"</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">"BodyBytes"</span><span class="p">]:</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"BodyBytes"</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="c1"># Msgpack returns raw bytes directly (zero-copy mode)</span>
             <span class="n">body_bytes</span> <span class="o">=</span> <span class="n">raw_data</span>
@@ -906,21 +906,21 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLSError</span>
 
-                <span class="k">raise</span> <span class="n">CycleTLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to decode BodyBytes from base64: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+                <span class="k">raise</span> <span class="n">CycleTLSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to decode BodyBytes from base64: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 
     <span class="c1"># Convert cookies</span>
     <span class="n">raw_cookies</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;Cookies&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Cookies&quot;</span><span class="p">]:</span>
-        <span class="n">raw_cookies</span> <span class="o">=</span> <span class="p">[</span><span class="n">_dict_to_cookie</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Cookies&quot;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="s2">"Cookies"</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">"Cookies"</span><span class="p">]:</span>
+        <span class="n">raw_cookies</span> <span class="o">=</span> <span class="p">[</span><span class="n">_dict_to_cookie</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">"Cookies"</span><span class="p">]]</span>
 
     <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
-        <span class="n">request_id</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RequestID&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-        <span class="n">status_code</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-        <span class="n">raw_headers</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Headers&quot;</span><span class="p">,</span> <span class="p">{}),</span>
-        <span class="n">body</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="n">request_id</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RequestID"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+        <span class="n">status_code</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Status"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">raw_headers</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Headers"</span><span class="p">,</span> <span class="p">{}),</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Body"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
         <span class="n">body_bytes</span><span class="o">=</span><span class="n">body_bytes</span><span class="p">,</span>
         <span class="n">raw_cookies</span><span class="o">=</span><span class="n">raw_cookies</span><span class="p">,</span>
-        <span class="n">final_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FinalUrl&quot;</span><span class="p">),</span>
+        <span class="n">final_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"FinalUrl"</span><span class="p">),</span>
     <span class="p">)</span>
 </pre></div>
         </article>
@@ -961,7 +961,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

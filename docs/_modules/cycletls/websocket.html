@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.websocket - cycletls v0.0.10</title>
+        <title>cycletls.websocket - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.websocket</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;WebSocket client for CycleTLS with TLS fingerprinting support.</span>
+<span></span><span class="sd">"""WebSocket client for CycleTLS with TLS fingerprinting support.</span>
 
 <span class="sd">This module provides a WebSocket client that uses the same TLS fingerprinting</span>
 <span class="sd">capabilities as the HTTP client for establishing WebSocket connections.</span>
@@ -258,16 +258,16 @@
 <span class="sd">    &gt;&gt;&gt; from cycletls.websocket import WebSocketConnection</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Using context manager</span>
-<span class="sd">    &gt;&gt;&gt; with WebSocketConnection(&quot;wss://echo.websocket.org&quot;) as ws:</span>
-<span class="sd">    ...     ws.send(&quot;Hello, World!&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; with WebSocketConnection("wss://echo.websocket.org") as ws:</span>
+<span class="sd">    ...     ws.send("Hello, World!")</span>
 <span class="sd">    ...     message = ws.receive()</span>
 <span class="sd">    ...     print(message.data)</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Async iteration</span>
-<span class="sd">    &gt;&gt;&gt; async with WebSocketConnection(&quot;wss://stream.example.com&quot;) as ws:</span>
+<span class="sd">    &gt;&gt;&gt; async with WebSocketConnection("wss://stream.example.com") as ws:</span>
 <span class="sd">    ...     async for message in ws:</span>
 <span class="sd">    ...         print(message.data)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -290,7 +290,7 @@
 <div class="viewcode-block" id="MessageType">
 <a class="viewcode-back" href="../../reference.html#cycletls.MessageType">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MessageType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;WebSocket message types.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""WebSocket message types."""</span>
 
     <span class="n">TEXT</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">BINARY</span> <span class="o">=</span> <span class="mi">2</span>
@@ -304,29 +304,29 @@
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketMessage">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">WebSocketMessage</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A WebSocket message received from the server.</span>
+<span class="w">    </span><span class="sd">"""A WebSocket message received from the server.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        type: Message type (TEXT=1, BINARY=2, CLOSE=8, PING=9, PONG=10)</span>
 <span class="sd">        data: Message data (str for text, bytes for binary)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">MessageType</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this is a text message.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if this is a text message."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">TEXT</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this is a binary message.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if this is a binary message."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BINARY</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this is a close message.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if this is a close message."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">CLOSE</span></div>
 
 
@@ -334,7 +334,7 @@
 <div class="viewcode-block" id="WebSocketError">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WebSocketError</span><span class="p">(</span><span class="n">CycleTLSError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a WebSocket operation fails.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Raised when a WebSocket operation fails."""</span>
 
     <span class="k">pass</span></div>
 
@@ -343,7 +343,7 @@
 <div class="viewcode-block" id="WebSocketConnection">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WebSocketConnection</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A WebSocket connection with TLS fingerprinting support.</span>
+<span class="w">    </span><span class="sd">"""A WebSocket connection with TLS fingerprinting support.</span>
 
 <span class="sd">    This class provides both synchronous and asynchronous APIs for WebSocket</span>
 <span class="sd">    communication. It supports context managers for automatic cleanup.</span>
@@ -358,22 +358,22 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; # Synchronous usage</span>
-<span class="sd">        &gt;&gt;&gt; ws = WebSocketConnection(&quot;wss://echo.websocket.org&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ws = WebSocketConnection("wss://echo.websocket.org")</span>
 <span class="sd">        &gt;&gt;&gt; ws.connect()</span>
-<span class="sd">        &gt;&gt;&gt; ws.send(&quot;Hello&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ws.send("Hello")</span>
 <span class="sd">        &gt;&gt;&gt; msg = ws.receive()</span>
 <span class="sd">        &gt;&gt;&gt; ws.close()</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Context manager</span>
-<span class="sd">        &gt;&gt;&gt; with WebSocketConnection(&quot;wss://echo.websocket.org&quot;) as ws:</span>
-<span class="sd">        ...     ws.send(&quot;Hello&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; with WebSocketConnection("wss://echo.websocket.org") as ws:</span>
+<span class="sd">        ...     ws.send("Hello")</span>
 <span class="sd">        ...     msg = ws.receive()</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Async context manager</span>
-<span class="sd">        &gt;&gt;&gt; async with WebSocketConnection(&quot;wss://stream.example.com&quot;) as ws:</span>
-<span class="sd">        ...     await ws.send_async(&quot;Hello&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; async with WebSocketConnection("wss://stream.example.com") as ws:</span>
+<span class="sd">        ...     await ws.send_async("Hello")</span>
 <span class="sd">        ...     msg = await ws.receive_async()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="WebSocketConnection.__init__">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.__init__">[docs]</a>
@@ -400,62 +400,62 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the WebSocket is currently connected.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if the WebSocket is currently connected."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span>
 
 <div class="viewcode-block" id="WebSocketConnection.connect">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.connect">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Establish the WebSocket connection.</span>
+<span class="w">        </span><span class="sd">"""Establish the WebSocket connection.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            WebSocketError: If connection fails</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
         <span class="c1"># Check if wsConnect is available</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;wsConnect&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"wsConnect"</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span>
-                <span class="s2">&quot;WebSocket support requires rebuilding the Go library with WebSocket exports. &quot;</span>
-                <span class="s2">&quot;The current library does not have wsConnect exported.&quot;</span>
+                <span class="s2">"WebSocket support requires rebuilding the Go library with WebSocket exports. "</span>
+                <span class="s2">"The current library does not have wsConnect exported."</span>
             <span class="p">)</span>
 
         <span class="c1"># Build connection options</span>
         <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
-            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
-            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="s2">"url"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="s2">"headers"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="s2">"timeout"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ja3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"ja3"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;userAgent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"userAgent"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"proxy"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span>
 
         <span class="c1"># Serialize and send</span>
         <span class="n">msgpack_data</span> <span class="o">=</span> <span class="n">ormsgpack</span><span class="o">.</span><span class="n">packb</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
         <span class="n">b64_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">msgpack_data</span><span class="p">)</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;char[]&quot;</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"char[]"</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connecting to WebSocket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connecting to WebSocket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">handle</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">wsConnect</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">handle</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to connect to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to connect to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WebSocket connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"WebSocket connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WebSocketConnection.send">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.send">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="n">binary</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a message over the WebSocket.</span>
+<span class="w">        </span><span class="sd">"""Send a message over the WebSocket.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data: Message data to send</span>
@@ -463,39 +463,39 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            WebSocketError: If not connected or send fails</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">&quot;WebSocket is not connected&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">"WebSocket is not connected"</span><span class="p">)</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;wsSend&quot;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">&quot;WebSocket send not supported in this library build&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"wsSend"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">"WebSocket send not supported in this library build"</span><span class="p">)</span>
 
         <span class="c1"># Determine message type</span>
         <span class="n">msg_type</span> <span class="o">=</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BINARY</span> <span class="k">if</span> <span class="n">binary</span> <span class="k">else</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">TEXT</span>
 
         <span class="c1"># Encode data</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">data</span>
 
         <span class="n">b64_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">data_bytes</span><span class="p">)</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;char[]&quot;</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"char[]"</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
         <span class="n">data_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_bytes</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending WebSocket message: type=</span><span class="si">{</span><span class="n">msg_type</span><span class="si">}</span><span class="s2">, len=</span><span class="si">{</span><span class="n">data_len</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sending WebSocket message: type=</span><span class="si">{</span><span class="n">msg_type</span><span class="si">}</span><span class="s2">, len=</span><span class="si">{</span><span class="n">data_len</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">wsSend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">msg_type</span><span class="p">),</span> <span class="n">buf</span><span class="p">,</span> <span class="n">data_len</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send WebSocket message: error code </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to send WebSocket message: error code </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WebSocketConnection.receive">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.receive">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebSocketMessage</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Receive a message from the WebSocket.</span>
+<span class="w">        </span><span class="sd">"""Receive a message from the WebSocket.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            timeout: Optional timeout in seconds (uses connection timeout if not specified)</span>
@@ -505,20 +505,20 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            WebSocketError: If not connected or receive fails</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">&quot;WebSocket is not connected&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">"WebSocket is not connected"</span><span class="p">)</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;wsReceive&quot;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">&quot;WebSocket receive not supported in this library build&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"wsReceive"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">"WebSocket receive not supported in this library build"</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting for WebSocket message...&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Waiting for WebSocket message..."</span><span class="p">)</span>
         <span class="n">response_ptr</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">wsReceive</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">response_ptr</span> <span class="o">==</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">&quot;Failed to receive WebSocket message&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WebSocketError</span><span class="p">(</span><span class="s2">"Failed to receive WebSocket message"</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">raw_b64</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">response_ptr</span><span class="p">)</span>
@@ -529,44 +529,44 @@
         <span class="n">raw</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">raw_b64</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">ormsgpack</span><span class="o">.</span><span class="n">unpackb</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
 
-        <span class="n">msg_type</span> <span class="o">=</span> <span class="n">MessageType</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">TEXT</span><span class="p">))</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">msg_type</span> <span class="o">=</span> <span class="n">MessageType</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">TEXT</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="c1"># Decode base64 data if binary</span>
         <span class="k">if</span> <span class="n">msg_type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BINARY</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received WebSocket message: type=</span><span class="si">{</span><span class="n">msg_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Received WebSocket message: type=</span><span class="si">{</span><span class="n">msg_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">WebSocketMessage</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">msg_type</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WebSocketConnection.close">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.close">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the WebSocket connection.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Close the WebSocket connection.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            code: WebSocket close code (default 1000 = normal closure)</span>
 <span class="sd">            reason: Optional close reason</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;wsClose&quot;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Closing WebSocket connection: code=</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"wsClose"</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Closing WebSocket connection: code=</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">lib</span><span class="o">.</span><span class="n">wsClose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;WebSocket connection closed&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"WebSocket connection closed"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WebSocketConnection.connect_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.connect_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of connect().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of connect()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">)</span></div>
 
@@ -574,7 +574,7 @@
 <div class="viewcode-block" id="WebSocketConnection.send_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.send_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="n">binary</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of send().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of send()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">binary</span><span class="p">)</span></div>
 
@@ -582,39 +582,39 @@
 <div class="viewcode-block" id="WebSocketConnection.receive_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.receive_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">receive_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebSocketMessage</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of receive().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of receive()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WebSocketConnection.close_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.WebSocketConnection.close_async">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of close().&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Async version of close()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;WebSocketConnection&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager entry.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"WebSocketConnection"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Context manager entry."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager exit.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Context manager exit."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;WebSocketConnection&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async context manager entry.&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"WebSocketConnection"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Async context manager entry."""</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_async</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async context manager exit.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async context manager exit."""</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_async</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">WebSocketMessage</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over incoming messages synchronously.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Iterate over incoming messages synchronously."""</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
@@ -622,7 +622,7 @@
                 <span class="k">break</span>
 
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">WebSocketMessage</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over incoming messages asynchronously.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Iterate over incoming messages asynchronously."""</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_async</span><span class="p">()</span>
@@ -632,10 +632,10 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;MessageType&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketMessage&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WebSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">"MessageType"</span><span class="p">,</span>
+    <span class="s2">"WebSocketMessage"</span><span class="p">,</span>
+    <span class="s2">"WebSocketError"</span><span class="p">,</span>
+    <span class="s2">"WebSocketConnection"</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>
@@ -676,7 +676,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

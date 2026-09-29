@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls._config - cycletls v0.0.10</title>
+        <title>cycletls._config - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls._config</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Configuration management for CycleTLS module-level defaults.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Configuration management for CycleTLS module-level defaults."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
@@ -262,25 +262,25 @@
 
 <span class="c1"># Mapping from config keys to parameter names (pre-computed for performance)</span>
 <span class="n">_CONFIG_TO_PARAM_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;default_ja3&quot;</span><span class="p">:</span> <span class="s2">&quot;ja3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_ja4r&quot;</span><span class="p">:</span> <span class="s2">&quot;ja4r&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_http2_fingerprint&quot;</span><span class="p">:</span> <span class="s2">&quot;http2_fingerprint&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_quic_fingerprint&quot;</span><span class="p">:</span> <span class="s2">&quot;quic_fingerprint&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_disable_grease&quot;</span><span class="p">:</span> <span class="s2">&quot;disable_grease&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_user_agent&quot;</span><span class="p">:</span> <span class="s2">&quot;user_agent&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_proxy&quot;</span><span class="p">:</span> <span class="s2">&quot;proxy&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_local_address&quot;</span><span class="p">:</span> <span class="s2">&quot;local_address&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;timeout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_enable_connection_reuse&quot;</span><span class="p">:</span> <span class="s2">&quot;enable_connection_reuse&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_insecure_skip_verify&quot;</span><span class="p">:</span> <span class="s2">&quot;insecure_skip_verify&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_server_name&quot;</span><span class="p">:</span> <span class="s2">&quot;server_name&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_force_http1&quot;</span><span class="p">:</span> <span class="s2">&quot;force_http1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_force_http3&quot;</span><span class="p">:</span> <span class="s2">&quot;force_http3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;protocol&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_disable_redirect&quot;</span><span class="p">:</span> <span class="s2">&quot;disable_redirect&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_header_order&quot;</span><span class="p">:</span> <span class="s2">&quot;header_order&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_order_headers_as_provided&quot;</span><span class="p">:</span> <span class="s2">&quot;order_headers_as_provided&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;default_headers&quot;</span><span class="p">:</span> <span class="s2">&quot;headers&quot;</span><span class="p">,</span>
+    <span class="s2">"default_ja3"</span><span class="p">:</span> <span class="s2">"ja3"</span><span class="p">,</span>
+    <span class="s2">"default_ja4r"</span><span class="p">:</span> <span class="s2">"ja4r"</span><span class="p">,</span>
+    <span class="s2">"default_http2_fingerprint"</span><span class="p">:</span> <span class="s2">"http2_fingerprint"</span><span class="p">,</span>
+    <span class="s2">"default_quic_fingerprint"</span><span class="p">:</span> <span class="s2">"quic_fingerprint"</span><span class="p">,</span>
+    <span class="s2">"default_disable_grease"</span><span class="p">:</span> <span class="s2">"disable_grease"</span><span class="p">,</span>
+    <span class="s2">"default_user_agent"</span><span class="p">:</span> <span class="s2">"user_agent"</span><span class="p">,</span>
+    <span class="s2">"default_proxy"</span><span class="p">:</span> <span class="s2">"proxy"</span><span class="p">,</span>
+    <span class="s2">"default_local_address"</span><span class="p">:</span> <span class="s2">"local_address"</span><span class="p">,</span>
+    <span class="s2">"default_timeout"</span><span class="p">:</span> <span class="s2">"timeout"</span><span class="p">,</span>
+    <span class="s2">"default_enable_connection_reuse"</span><span class="p">:</span> <span class="s2">"enable_connection_reuse"</span><span class="p">,</span>
+    <span class="s2">"default_insecure_skip_verify"</span><span class="p">:</span> <span class="s2">"insecure_skip_verify"</span><span class="p">,</span>
+    <span class="s2">"default_server_name"</span><span class="p">:</span> <span class="s2">"server_name"</span><span class="p">,</span>
+    <span class="s2">"default_force_http1"</span><span class="p">:</span> <span class="s2">"force_http1"</span><span class="p">,</span>
+    <span class="s2">"default_force_http3"</span><span class="p">:</span> <span class="s2">"force_http3"</span><span class="p">,</span>
+    <span class="s2">"default_protocol"</span><span class="p">:</span> <span class="s2">"protocol"</span><span class="p">,</span>
+    <span class="s2">"default_disable_redirect"</span><span class="p">:</span> <span class="s2">"disable_redirect"</span><span class="p">,</span>
+    <span class="s2">"default_header_order"</span><span class="p">:</span> <span class="s2">"header_order"</span><span class="p">,</span>
+    <span class="s2">"default_order_headers_as_provided"</span><span class="p">:</span> <span class="s2">"order_headers_as_provided"</span><span class="p">,</span>
+    <span class="s2">"default_headers"</span><span class="p">:</span> <span class="s2">"headers"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Valid configuration attributes (derived from mapping to avoid duplication)</span>
@@ -288,35 +288,35 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_config</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate configuration values.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Validate configuration values."""</span>
     <span class="n">validators</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;default_timeout&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;default_enable_connection_reuse&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_insecure_skip_verify&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_force_http1&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_force_http3&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_disable_redirect&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_disable_grease&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_order_headers_as_provided&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;default_proxy&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_local_address&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_ja3&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_ja4r&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_user_agent&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_server_name&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_http2_fingerprint&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_quic_fingerprint&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-        <span class="s2">&quot;default_header_order&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span>
-        <span class="s2">&quot;default_headers&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span>
+        <span class="s2">"default_timeout"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"default_enable_connection_reuse"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_insecure_skip_verify"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_force_http1"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_force_http3"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_disable_redirect"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_disable_grease"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_order_headers_as_provided"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"default_proxy"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_local_address"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_ja3"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_ja4r"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_user_agent"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_server_name"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_http2_fingerprint"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_quic_fingerprint"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+        <span class="s2">"default_header_order"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span>
+        <span class="s2">"default_headers"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span>
     <span class="p">}</span>
 
     <span class="n">validator</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">validator</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">validator</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid value for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_merge_defaults</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Merge module-level defaults with per-request kwargs.</span>
 
 <span class="sd">    Per-request kwargs take precedence over defaults.</span>
@@ -326,7 +326,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Merged dictionary with defaults + kwargs</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_merged_cache</span>
 
     <span class="c1"># Fast path 1: if no defaults are set, just return kwargs</span>
@@ -365,7 +365,7 @@
 <div class="viewcode-block" id="set_default">
 <a class="viewcode-back" href="../../reference.html#cycletls.set_default">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_default</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Set default configuration values for module-level functions.</span>
 
 <span class="sd">    Args:</span>
@@ -390,18 +390,18 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
 <span class="sd">        &gt;&gt;&gt; cycletls.set_default(</span>
-<span class="sd">        ...     proxy=&#39;socks5://127.0.0.1:9050&#39;,</span>
+<span class="sd">        ...     proxy='socks5://127.0.0.1:9050',</span>
 <span class="sd">        ...     timeout=10,</span>
-<span class="sd">        ...     ja3=&#39;771,4865-4866...&#39;</span>
+<span class="sd">        ...     ja3='771,4865-4866...'</span>
 <span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)  # Uses defaults</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')  # Uses defaults</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_merged_cache</span>
 
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">config_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;default_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">config_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"default_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="n">config_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_CONFIGURABLE_ATTRS</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown configuration option: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown configuration option: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">_validate_config</span><span class="p">(</span><span class="n">config_key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="n">_config</span><span class="p">[</span><span class="n">config_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -413,14 +413,14 @@
 <div class="viewcode-block" id="reset_defaults">
 <a class="viewcode-back" href="../../reference.html#cycletls.reset_defaults">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">reset_defaults</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Reset all default configuration values.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; cycletls.set_default(proxy=&#39;socks5://127.0.0.1:9050&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; cycletls.set_default(proxy='socks5://127.0.0.1:9050')</span>
 <span class="sd">        &gt;&gt;&gt; cycletls.reset_defaults()  # Clear all defaults</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_merged_cache</span>
 
     <span class="n">_config</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -432,7 +432,7 @@
 <div class="viewcode-block" id="get_default">
 <a class="viewcode-back" href="../../reference.html#cycletls.get_default">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_default</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get a default configuration value.</span>
 
 <span class="sd">    Args:</span>
@@ -444,12 +444,12 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
 <span class="sd">        &gt;&gt;&gt; cycletls.set_default(timeout=10)</span>
-<span class="sd">        &gt;&gt;&gt; cycletls.get_default(&#39;timeout&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; cycletls.get_default('timeout')</span>
 <span class="sd">        10</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;default_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">config_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"default_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">if</span> <span class="n">config_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_CONFIGURABLE_ATTRS</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown configuration option: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown configuration option: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">config_key</span><span class="p">)</span></div>
 
 </pre></div>
@@ -491,7 +491,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

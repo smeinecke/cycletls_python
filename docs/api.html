@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Advanced Usage" href="advanced.html"><link rel="prev" title="Overview" href="overview.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>API Usage - cycletls v0.0.10</title>
+        <title>API Usage - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -184,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -264,16 +264,16 @@ automatically – no setup or teardown required.</p>
 <h3>Making Requests<a class="headerlink" href="#making-requests" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;new&quot;</span><span class="p">})</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">})</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">})</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"field"</span><span class="p">:</span> <span class="s2">"new"</span><span class="p">})</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
 
 <span class="c1"># Generic method</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"https://example.com"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -284,13 +284,13 @@ automatically – no setup or teardown required.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aput</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apatch</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;new&quot;</span><span class="p">})</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">adelete</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">ahead</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aoptions</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aput</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apatch</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"field"</span><span class="p">:</span> <span class="s2">"new"</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">adelete</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">ahead</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aoptions</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
@@ -302,14 +302,14 @@ automatically – no setup or teardown required.</p>
 
 <span class="c1"># Set defaults that apply to all subsequent requests</span>
 <span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span>
-    <span class="n">proxy</span><span class="o">=</span><span class="s2">&quot;socks5://127.0.0.1:9050&quot;</span><span class="p">,</span>
+    <span class="n">proxy</span><span class="o">=</span><span class="s2">"socks5://127.0.0.1:9050"</span><span class="p">,</span>
     <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0&quot;</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Read a default back</span>
-<span class="n">timeout</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">)</span>  <span class="c1"># 10</span>
+<span class="n">timeout</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">)</span>  <span class="c1"># 10</span>
 
 <span class="c1"># Reset all defaults</span>
 <span class="n">cycletls</span><span class="o">.</span><span class="n">reset_defaults</span><span class="p">()</span>
@@ -439,13 +439,13 @@ automatically – no setup or teardown required.</p>
 <section id="response-object">
 <h2>Response Object<a class="headerlink" href="#response-object" title="Link to this heading">¶</a></h2>
 <p>Every request returns a <code class="docutils literal notranslate"><span class="pre">Response</span></code> object:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/get&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/get"</span><span class="p">)</span>
 
 <span class="c1"># Status</span>
 <span class="n">response</span><span class="o">.</span><span class="n">status_code</span>   <span class="c1"># 200</span>
 <span class="n">response</span><span class="o">.</span><span class="n">ok</span>            <span class="c1"># True (status 200-399)</span>
 <span class="n">response</span><span class="o">.</span><span class="n">is_error</span>      <span class="c1"># False</span>
-<span class="n">response</span><span class="o">.</span><span class="n">reason</span>        <span class="c1"># &quot;OK&quot;</span>
+<span class="n">response</span><span class="o">.</span><span class="n">reason</span>        <span class="c1"># "OK"</span>
 
 <span class="c1"># Body</span>
 <span class="n">response</span><span class="o">.</span><span class="n">text</span>          <span class="c1"># Response body as str</span>
@@ -453,17 +453,17 @@ automatically – no setup or teardown required.</p>
 <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>        <span class="c1"># Parse body as JSON</span>
 
 <span class="c1"># Headers (case-insensitive)</span>
-<span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span>
-<span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">)</span>  <span class="c1"># same key, case-insensitive</span>
+<span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span>
+<span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content-type"</span><span class="p">)</span>  <span class="c1"># same key, case-insensitive</span>
 
 <span class="c1"># Cookies</span>
-<span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s2">&quot;session_id&quot;</span><span class="p">]</span>
+<span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s2">"session_id"</span><span class="p">]</span>
 
 <span class="c1"># URL after redirects</span>
 <span class="n">response</span><span class="o">.</span><span class="n">url</span>
 
 <span class="c1"># Encoding</span>
-<span class="n">response</span><span class="o">.</span><span class="n">encoding</span>      <span class="c1"># &quot;utf-8&quot;</span>
+<span class="n">response</span><span class="o">.</span><span class="n">encoding</span>      <span class="c1"># "utf-8"</span>
 
 <span class="c1"># Raise on error status</span>
 <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># raises HTTPError if status &gt;= 400</span>
@@ -477,12 +477,12 @@ automatically – no setup or teardown required.</p>
 
 <span class="c1"># Context manager (recommended)</span>
 <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">})</span>
 
 <span class="c1"># Async context manager</span>
 <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"https://example.com"</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -540,18 +540,18 @@ automatically – no setup or teardown required.</p>
 authentication:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 
-<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.com&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">"https://api.example.com"</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="s2">"pass"</span><span class="p">))</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
     <span class="c1"># Persistent headers</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Custom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">"X-Custom"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"value"</span>
 
     <span class="c1"># Login -- response cookies are saved automatically</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">})</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/login"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"user"</span><span class="p">:</span> <span class="s2">"admin"</span><span class="p">})</span>
 
     <span class="c1"># Subsequent requests include saved cookies and headers</span>
-    <span class="n">profile</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/profile&quot;</span><span class="p">)</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/profile"</span><span class="p">)</span>
 
     <span class="c1"># Per-request auth overrides session auth</span>
-    <span class="n">admin</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;admin_pass&quot;</span><span class="p">))</span>
+    <span class="n">admin</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/admin"</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">"admin"</span><span class="p">,</span> <span class="s2">"admin_pass"</span><span class="p">))</span>
 </pre></div>
 </div>
 <section id="constructor">
@@ -618,8 +618,8 @@ authentication:</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.com&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">s</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">"https://api.example.com"</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">s</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/users"</span><span class="p">)</span>
         <span class="c1"># Cookies from async responses are persisted too</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
@@ -635,7 +635,7 @@ authentication:</p>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncCycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
@@ -656,7 +656,7 @@ authentication:</p>
     <span class="n">SAFARI_IOS</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -666,10 +666,10 @@ authentication:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">TLSFingerprint</span>
 
 <span class="n">profile</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my_browser&quot;</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4866-4867-49195...&quot;</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 ...&quot;</span><span class="p">,</span>
-    <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">&quot;1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"my_browser"</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195..."</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 ..."</span><span class="p">,</span>
+    <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">"1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -737,7 +737,7 @@ authentication:</p>
 <span class="n">registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">my_profile</span><span class="p">)</span>
 
 <span class="c1"># Look up by name</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chrome_120&quot;</span><span class="p">)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"chrome_120"</span><span class="p">)</span>
 
 <span class="c1"># List all registered profile names</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">registry</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
@@ -754,10 +754,10 @@ authentication:</p>
 <span class="p">)</span>
 
 <span class="c1"># Load a single profile from a JSON file</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">&quot;profiles/chrome_125.json&quot;</span><span class="p">)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">"profiles/chrome_125.json"</span><span class="p">)</span>
 
 <span class="c1"># Load all profiles from a directory (auto-registers them)</span>
-<span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">&quot;profiles/&quot;</span><span class="p">)</span>
+<span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">"profiles/"</span><span class="p">)</span>
 
 <span class="c1"># Load from CYCLETLS_FINGERPRINT_DIR environment variable</span>
 <span class="n">load_fingerprints_from_env</span><span class="p">()</span>
@@ -772,9 +772,9 @@ everything with a single <code class="docutils literal notranslate"><span class=
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLSError</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">CycleTLSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Request failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Request failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="exception-hierarchy">
@@ -801,9 +801,9 @@ everything with a single <code class="docutils literal notranslate"><span class=
 <h2>WebSocket Client<a class="headerlink" href="#websocket-client" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSocketConnection</span>
 
-<span class="n">ws</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">&quot;wss://echo.websocket.org&quot;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">"wss://echo.websocket.org"</span><span class="p">)</span>
 <span class="n">ws</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span>
 <span class="n">message</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="n">ws</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -813,9 +813,9 @@ everything with a single <code class="docutils literal notranslate"><span class=
 <h2>Server-Sent Events (SSE)<a class="headerlink" href="#server-sent-events-sse" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEConnection</span>
 
-<span class="n">sse</span> <span class="o">=</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">&quot;https://example.com/events&quot;</span><span class="p">)</span>
+<span class="n">sse</span> <span class="o">=</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">"https://example.com/events"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">sse</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -827,8 +827,8 @@ everything with a single <code class="docutils literal notranslate"><span class=
 access:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CaseInsensitiveDict</span>
 
-<span class="n">headers</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">({</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">})</span>
-<span class="n">headers</span><span class="p">[</span><span class="s2">&quot;content-type&quot;</span><span class="p">]</span>  <span class="c1"># &quot;application/json&quot;</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">({</span><span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">})</span>
+<span class="n">headers</span><span class="p">[</span><span class="s2">"content-type"</span><span class="p">]</span>  <span class="c1"># "application/json"</span>
 </pre></div>
 </div>
 </section>
@@ -838,7 +838,7 @@ access:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CookieJar</span>
 
 <span class="n">jar</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">([</span><span class="o">...</span><span class="p">])</span>
-<span class="s2">&quot;session_id&quot;</span> <span class="ow">in</span> <span class="n">jar</span>      <span class="c1"># True/False</span>
+<span class="s2">"session_id"</span> <span class="ow">in</span> <span class="n">jar</span>      <span class="c1"># True/False</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">jar</span><span class="p">)</span>                 <span class="c1"># number of cookies</span>
 <span class="nb">repr</span><span class="p">(</span><span class="n">jar</span><span class="p">)</span>                <span class="c1"># &lt;CookieJar(3 cookies)&gt;</span>
 </pre></div>
@@ -958,7 +958,7 @@ access:</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="_static/documentation_options.js?v=0c446633"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

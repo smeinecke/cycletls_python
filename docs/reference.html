@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Changelog" href="CHANGELOG.html"><link rel="prev" title="Advanced Usage" href="advanced.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Module Reference - cycletls v0.0.10</title>
+        <title>Module Reference - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -184,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -462,9 +462,9 @@ executed in parallel on the Go side.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">responses</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">batch</span><span class="p">([</span>
-<span class="gp">... </span>        <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://api.example.com/users&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">},</span>
-<span class="gp">... </span>        <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://api.example.com/posts&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">},</span>
-<span class="gp">... </span>        <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://api.example.com/data&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;json_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">}},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="s2">"https://api.example.com/users"</span><span class="p">,</span> <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="s2">"https://api.example.com/posts"</span><span class="p">,</span> <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="s2">"https://api.example.com/data"</span><span class="p">,</span> <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span> <span class="s2">"json_data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"key"</span><span class="p">:</span> <span class="s2">"value"</span><span class="p">}},</span>
 <span class="gp">... </span>    <span class="p">])</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">resp</span> <span class="ow">in</span> <span class="n">responses</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
@@ -603,12 +603,12 @@ connection to (useful on multi-homed hosts)</p></li>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use a built-in fingerprint profile</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="s2">&quot;chrome_120&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="s2">"chrome_120"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or use a custom TLSFingerprint instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls.fingerprints</span><span class="w"> </span><span class="kn">import</span> <span class="n">TLSFingerprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">custom</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Custom/1.0&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">custom</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"custom"</span><span class="p">,</span> <span class="n">ja3</span><span class="o">=</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Custom/1.0"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -776,14 +776,14 @@ automatic cookie and header persistence across requests.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="c1"># Set persistent headers</span>
-<span class="gp">... </span>    <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Bearer token123&#39;</span>
+<span class="gp">... </span>    <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'Bearer token123'</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># Login - cookies are automatically saved</span>
-<span class="gp">... </span>    <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">:</span> <span class="s1">&#39;secret&#39;</span><span class="p">})</span>
+<span class="gp">... </span>    <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">'/login'</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">'user'</span><span class="p">:</span> <span class="s1">'admin'</span><span class="p">,</span> <span class="s1">'pass'</span><span class="p">:</span> <span class="s1">'secret'</span><span class="p">})</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># Subsequent requests include cookies and headers automatically</span>
-<span class="gp">... </span>    <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/profile&#39;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">assert</span> <span class="s1">&#39;session_id&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span>
+<span class="gp">... </span>    <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="s1">'session_id'</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -905,7 +905,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'https://example.com'</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -930,7 +930,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -958,7 +958,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;https://api.example.com&#39;</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">'https://api.example.com'</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">'key'</span><span class="p">:</span> <span class="s1">'value'</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1090,7 +1090,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or use the original function with await:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="c1"># Will auto-detect async context</span>
 </pre></div>
@@ -1119,7 +1119,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="s1">&#39;https://api.example.com&#39;</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="s1">'https://api.example.com'</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="p">{</span><span class="s1">'key'</span><span class="p">:</span> <span class="s1">'value'</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1200,7 +1200,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">async_request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">async_request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'https://example.com'</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1286,11 +1286,11 @@ Request-specific values take precedence over session values.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">proxy</span><span class="o">=</span><span class="s1">&#39;socks5://127.0.0.1:9050&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">proxy</span><span class="o">=</span><span class="s1">'socks5://127.0.0.1:9050'</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">ja3</span><span class="o">=</span><span class="s1">&#39;771,4865-4866...&#39;</span>
+<span class="gp">... </span>    <span class="n">ja3</span><span class="o">=</span><span class="s1">'771,4865-4866...'</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>  <span class="c1"># Uses defaults</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">)</span>  <span class="c1"># Uses defaults</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1313,7 +1313,7 @@ Request-specific values take precedence over session values.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="s1">'timeout'</span><span class="p">)</span>
 <span class="go">10</span>
 </pre></div>
 </div>
@@ -1330,7 +1330,7 @@ Request-specific values take precedence over session values.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">proxy</span><span class="o">=</span><span class="s1">&#39;socks5://127.0.0.1:9050&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">proxy</span><span class="o">=</span><span class="s1">'socks5://127.0.0.1:9050'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">reset_defaults</span><span class="p">()</span>  <span class="c1"># Clear all defaults</span>
 </pre></div>
 </div>
@@ -1344,9 +1344,9 @@ Request-specific values take precedence over session values.</p>
 reset the global session with different settings.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cycletls</span><span class="o">.</span><span class="n">close_global_session</span><span class="p">()</span>  <span class="c1"># Explicit cleanup</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>  <span class="c1"># New session</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">)</span>  <span class="c1"># New session</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1487,9 +1487,9 @@ key to be set, and iter(instance), keys(), items(), iterkeys(), and iteritems()
 will contain case-sensitive keys. However, querying and contains testing is case
 insensitive:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cid</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">()</span>
-<span class="n">cid</span><span class="p">[</span><span class="s1">&#39;Accept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
-<span class="n">cid</span><span class="p">[</span><span class="s1">&#39;aCCEPT&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;application/json&#39;</span>  <span class="c1"># True</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;Accept&#39;</span><span class="p">]</span>  <span class="c1"># True</span>
+<span class="n">cid</span><span class="p">[</span><span class="s1">'Accept'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+<span class="n">cid</span><span class="p">[</span><span class="s1">'aCCEPT'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'application/json'</span>  <span class="c1"># True</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">'Accept'</span><span class="p">]</span>  <span class="c1"># True</span>
 </pre></div>
 </div>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">headers['content-encoding']</span></code> will return the value of a
@@ -1512,10 +1512,10 @@ that have equal <code class="docutils literal notranslate"><span class="pre">.lo
 <p>This class provides a convenient interface for working with Cookie objects,
 allowing both dict-like access and Cookie object manipulation.</p>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jar</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">([</span><span class="n">Cookie</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;session&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;abc123&#39;</span><span class="p">)])</span>
-<span class="n">jar</span><span class="p">[</span><span class="s1">&#39;session&#39;</span><span class="p">]</span>  <span class="c1"># Returns &#39;abc123&#39;</span>
-<span class="n">jar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;john&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s1">&#39;.example.com&#39;</span><span class="p">)</span>
-<span class="n">jar</span><span class="o">.</span><span class="n">get_dict</span><span class="p">()</span>  <span class="c1"># Returns {&#39;session&#39;: &#39;abc123&#39;, &#39;user&#39;: &#39;john&#39;}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jar</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">([</span><span class="n">Cookie</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'session'</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">'abc123'</span><span class="p">)])</span>
+<span class="n">jar</span><span class="p">[</span><span class="s1">'session'</span><span class="p">]</span>  <span class="c1"># Returns 'abc123'</span>
+<span class="n">jar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'user'</span><span class="p">,</span> <span class="s1">'john'</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s1">'.example.com'</span><span class="p">)</span>
+<span class="n">jar</span><span class="o">.</span><span class="n">get_dict</span><span class="p">()</span>  <span class="c1"># Returns {'session': 'abc123', 'user': 'john'}</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -1776,8 +1776,8 @@ as a TLSFingerprint. Invalid files are logged and skipped.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">&quot;/path/to/fingerprints&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> fingerprint profiles&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">"/path/to/fingerprints"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> fingerprint profiles"</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1798,7 +1798,7 @@ If the variable is not set, does nothing.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CYCLETLS_FINGERPRINTS_DIR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/my/fingerprints&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"CYCLETLS_FINGERPRINTS_DIR"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"/my/fingerprints"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">load_fingerprints_from_env</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1855,20 +1855,20 @@ communication. It supports context managers for automatic cleanup.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Synchronous usage</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">&quot;wss://echo.websocket.org&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">"wss://echo.websocket.org"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Context manager</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">&quot;wss://echo.websocket.org&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">"wss://echo.websocket.org"</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">msg</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Async context manager</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="k">with</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">&quot;wss://stream.example.com&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">await</span> <span class="n">ws</span><span class="o">.</span><span class="n">send_async</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="k">with</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="s2">"wss://stream.example.com"</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">await</span> <span class="n">ws</span><span class="o">.</span><span class="n">send_async</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">msg</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ws</span><span class="o">.</span><span class="n">receive_async</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2091,15 +2091,15 @@ streams. It supports automatic reconnection and Last-Event-ID tracking.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Synchronous iteration</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">&quot;https://api.example.com/events&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sse</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">"https://api.example.com/events"</span><span class="p">)</span> <span class="k">as</span> <span class="n">sse</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">sse</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event</span> <span class="o">==</span> <span class="s2">&quot;update&quot;</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event</span> <span class="o">==</span> <span class="s2">"update"</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Async iteration</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="k">with</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">&quot;https://api.example.com/events&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sse</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="k">with</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">"https://api.example.com/events"</span><span class="p">)</span> <span class="k">as</span> <span class="n">sse</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">sse</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -2407,7 +2407,7 @@ or value.</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="_static/documentation_options.js?v=0c446633"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.sessions - cycletls v0.0.10</title>
+        <title>cycletls.sessions - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,12 +248,12 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.sessions</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Session support for CycleTLS.</span>
 
 <span class="sd">This module provides a Session class that maintains persistent cookies</span>
 <span class="sd">and headers across multiple requests, similar to requests.Session.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -264,7 +264,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_merge_cookie</span><span class="p">(</span><span class="n">merged_cookies</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cookie</span><span class="p">],</span> <span class="n">new_cookie</span><span class="p">:</span> <span class="n">Cookie</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge a cookie into the list, replacing by name if exists.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Merge a cookie into the list, replacing by name if exists."""</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">existing</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">merged_cookies</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">existing</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">new_cookie</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="n">merged_cookies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cookie</span>
@@ -275,7 +275,7 @@
 <div class="viewcode-block" id="Session">
 <a class="viewcode-back" href="../../reference.html#cycletls.Session">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Session</span><span class="p">(</span><span class="n">CycleTLS</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A session object that maintains persistent cookies and headers.</span>
 
 <span class="sd">    Similar to requests.Session, this class extends CycleTLS to provide</span>
@@ -290,15 +290,15 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; with Session() as session:</span>
 <span class="sd">        ...     # Set persistent headers</span>
-<span class="sd">        ...     session.headers[&#39;Authorization&#39;] = &#39;Bearer token123&#39;</span>
+<span class="sd">        ...     session.headers['Authorization'] = 'Bearer token123'</span>
 <span class="sd">        ...</span>
 <span class="sd">        ...     # Login - cookies are automatically saved</span>
-<span class="sd">        ...     session.post(&#39;/login&#39;, json_data={&#39;user&#39;: &#39;admin&#39;, &#39;pass&#39;: &#39;secret&#39;})</span>
+<span class="sd">        ...     session.post('/login', json_data={'user': 'admin', 'pass': 'secret'})</span>
 <span class="sd">        ...</span>
 <span class="sd">        ...     # Subsequent requests include cookies and headers automatically</span>
-<span class="sd">        ...     response = session.get(&#39;/profile&#39;)</span>
-<span class="sd">        ...     assert &#39;session_id&#39; in response.cookies</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        ...     response = session.get('/profile')</span>
+<span class="sd">        ...     assert 'session_id' in response.cookies</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Session.__init__">
 <a class="viewcode-back" href="../../reference.html#cycletls.Session.__init__">[docs]</a>
@@ -310,17 +310,17 @@
         <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
         <span class="n">flush_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a Session.</span>
+<span class="w">        </span><span class="sd">"""Initialize a Session.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            base_url: Base URL prepended to relative URLs (e.g. &#39;https://api.example.com&#39;)</span>
+<span class="sd">            base_url: Base URL prepended to relative URLs (e.g. 'https://api.example.com')</span>
 <span class="sd">            auth: Default (username, password) tuple for HTTP Basic authentication</span>
 <span class="sd">            use_batching: If True, route individual requests through the batch</span>
 <span class="sd">                FFI path for higher throughput.</span>
 <span class="sd">            batch_size: Maximum number of requests to accumulate per batch.</span>
 <span class="sd">            flush_interval: Maximum time (seconds) to wait before flushing a</span>
 <span class="sd">                partial batch.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">use_batching</span><span class="o">=</span><span class="n">use_batching</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
@@ -328,46 +328,46 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cookies</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">({})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">base_url</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span> <span class="k">if</span> <span class="n">base_url</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="n">auth</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepend base_url to relative URLs.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">url</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="sd">"""Prepend base_url to relative URLs."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">url</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">return</span> <span class="n">url</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_merge_session_state</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge session-level headers, cookies, and auth into request kwargs.</span>
+<span class="w">        </span><span class="sd">"""Merge session-level headers, cookies, and auth into request kwargs.</span>
 
 <span class="sd">        Returns the effective auth tuple (request-level overrides session-level).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Merge session headers with request headers</span>
         <span class="n">merged_headers</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;headers&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">]:</span>
-            <span class="n">merged_headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">])</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">merged_headers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"headers"</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"headers"</span><span class="p">]:</span>
+            <span class="n">merged_headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"headers"</span><span class="p">])</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">"headers"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">merged_headers</span><span class="p">)</span>
 
         <span class="c1"># Merge session cookies with request cookies</span>
         <span class="n">merged_cookies</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">())</span>
 
         <span class="c1"># Add request-specific cookies (overriding session cookies by name)</span>
-        <span class="n">request_cookies</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cookies&quot;</span><span class="p">)</span>
+        <span class="n">request_cookies</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cookies"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">request_cookies</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">request_cookies</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">request_cookies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">_merge_cookie</span><span class="p">(</span><span class="n">merged_cookies</span><span class="p">,</span> <span class="n">Cookie</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request_cookies</span><span class="p">,</span> <span class="s2">&quot;get_cookies&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request_cookies</span><span class="p">,</span> <span class="s2">"get_cookies"</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">cookie</span> <span class="ow">in</span> <span class="n">request_cookies</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">():</span>
                     <span class="n">_merge_cookie</span><span class="p">(</span><span class="n">merged_cookies</span><span class="p">,</span> <span class="n">cookie</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">request_cookies</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">cookie</span> <span class="ow">in</span> <span class="n">request_cookies</span><span class="p">:</span>
                     <span class="n">_merge_cookie</span><span class="p">(</span><span class="n">merged_cookies</span><span class="p">,</span> <span class="n">cookie</span><span class="p">)</span>
 
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cookies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_cookies</span> <span class="k">if</span> <span class="n">merged_cookies</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">"cookies"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_cookies</span> <span class="k">if</span> <span class="n">merged_cookies</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="c1"># Apply session-level auth if no request-level auth provided</span>
         <span class="k">if</span> <span class="n">auth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -375,7 +375,7 @@
         <span class="k">return</span> <span class="n">auth</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_update_cookies_from_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update session cookies from a response.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Update session cookies from a response."""</span>
         <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">:</span>
                 <span class="n">cookie_value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -396,7 +396,7 @@
         <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Send an HTTP request with session persistence.</span>
 
 <span class="sd">        Session cookies, headers, auth, and base_url are all applied automatically.</span>
@@ -416,7 +416,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Response: Response object with status, headers, body, etc.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">effective_auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_session_state</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
 
@@ -455,7 +455,7 @@
         <span class="n">use_callback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Send an async HTTP request with session persistence.</span>
 
 <span class="sd">        Async counterpart of :meth:`request`. Session cookies, headers,</span>
@@ -478,7 +478,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Response: Response object</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">effective_auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_session_state</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
 
@@ -505,12 +505,12 @@
 <div class="viewcode-block" id="Session.close">
 <a class="viewcode-back" href="../../reference.html#cycletls.Session.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Close the session and cleanup resources.</span>
 
 <span class="sd">        This clears the session cookies and headers, then closes the</span>
 <span class="sd">        underlying CycleTLS connection.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Clear session state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cookies</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">CaseInsensitiveDict</span><span class="p">({})</span>
@@ -558,7 +558,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

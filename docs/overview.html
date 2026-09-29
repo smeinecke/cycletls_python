@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="API Usage" href="api.html"><link rel="prev" title="Installation" href="installation.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Overview - cycletls v0.0.10</title>
+        <title>Overview - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -184,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -395,7 +395,7 @@ is all you need – no Go toolchain required at runtime.</p>
 <h3>Pattern 1: Simple API (zero boilerplate)<a class="headerlink" href="#pattern-1-simple-api-zero-boilerplate" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -408,7 +408,7 @@ is all you need – no Go toolchain required at runtime.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLS</span>
 
 <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Gives you an explicit client lifetime via context manager.</p>
@@ -417,10 +417,10 @@ is all you need – no Go toolchain required at runtime.</p>
 <h3>Pattern 3: Session (persistent cookies and headers)<a class="headerlink" href="#pattern-3-session-persistent-cookies-and-headers" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 
-<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.com&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Bearer token&quot;</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">:</span> <span class="s2">&quot;secret&quot;</span><span class="p">})</span>
-    <span class="n">profile</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/profile&quot;</span><span class="p">)</span>  <span class="c1"># cookies and headers persist</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">"https://api.example.com"</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Bearer token"</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/login"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"user"</span><span class="p">:</span> <span class="s2">"admin"</span><span class="p">,</span> <span class="s2">"pass"</span><span class="p">:</span> <span class="s2">"secret"</span><span class="p">})</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/profile"</span><span class="p">)</span>  <span class="c1"># cookies and headers persist</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Session</span></code> extends <code class="docutils literal notranslate"><span class="pre">CycleTLS</span></code> with a cookie jar, persistent headers, optional
@@ -442,7 +442,7 @@ strings (<code class="docutils literal notranslate"><span class="pre">ja3=</span
 single reusable object:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CHROME_120</span><span class="p">,</span> <span class="n">FIREFOX_121</span><span class="p">,</span> <span class="n">SAFARI_17</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Available built-in profiles: <code class="docutils literal notranslate"><span class="pre">CHROME_120</span></code>, <code class="docutils literal notranslate"><span class="pre">CHROME_121</span></code>, <code class="docutils literal notranslate"><span class="pre">FIREFOX_121</span></code>,
@@ -457,7 +457,7 @@ them in a directory. See the <a class="reference internal" href="advanced.html">
 <span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
@@ -558,7 +558,7 @@ them in a directory. See the <a class="reference internal" href="advanced.html">
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="_static/documentation_options.js?v=0c446633"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

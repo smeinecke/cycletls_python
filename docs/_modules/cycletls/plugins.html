@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.plugins - cycletls v0.0.10</title>
+        <title>cycletls.plugins - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.plugins</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Plugin loading utilities for CycleTLS fingerprints.</span>
+<span></span><span class="sd">"""Plugin loading utilities for CycleTLS fingerprints.</span>
 
 <span class="sd">This module provides utilities for loading fingerprint profiles from external</span>
 <span class="sd">sources like JSON files and directories.</span>
@@ -257,11 +257,11 @@
 <span class="sd">    &gt;&gt;&gt; from cycletls.plugins import load_fingerprints_from_dir, load_fingerprints_from_env</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Load from a specific directory</span>
-<span class="sd">    &gt;&gt;&gt; load_fingerprints_from_dir(&quot;/path/to/fingerprints&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; load_fingerprints_from_dir("/path/to/fingerprints")</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Or automatically load from CYCLETLS_FINGERPRINTS_DIR env var</span>
 <span class="sd">    &gt;&gt;&gt; load_fingerprints_from_env()</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -277,7 +277,7 @@
 <div class="viewcode-block" id="load_fingerprints_from_dir">
 <a class="viewcode-back" href="../../reference.html#cycletls.load_fingerprints_from_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_fingerprints_from_dir</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load all JSON fingerprint files from a directory.</span>
+<span class="w">    </span><span class="sd">"""Load all JSON fingerprint files from a directory.</span>
 
 <span class="sd">    Scans the given directory for .json files and attempts to load each</span>
 <span class="sd">    as a TLSFingerprint. Invalid files are logged and skipped.</span>
@@ -289,29 +289,29 @@
 <span class="sd">        Number of fingerprints successfully loaded</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; count = load_fingerprints_from_dir(&quot;/path/to/fingerprints&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; print(f&quot;Loaded {count} fingerprint profiles&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; count = load_fingerprints_from_dir("/path/to/fingerprints")</span>
+<span class="sd">        &gt;&gt;&gt; print(f"Loaded {count} fingerprint profiles")</span>
+<span class="sd">    """</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fingerprint directory does not exist: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fingerprint directory does not exist: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path is not a directory: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Path is not a directory: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="n">loaded</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">json_file</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.json&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">json_file</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.json"</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">profile</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
             <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded fingerprint profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; from </span><span class="si">{</span><span class="n">json_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded fingerprint profile '</span><span class="si">{</span><span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">' from </span><span class="si">{</span><span class="n">json_file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">loaded</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load fingerprint from </span><span class="si">{</span><span class="n">json_file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to load fingerprint from </span><span class="si">{</span><span class="n">json_file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="n">loaded</span><span class="si">}</span><span class="s2"> fingerprint profiles from </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded </span><span class="si">{</span><span class="n">loaded</span><span class="si">}</span><span class="s2"> fingerprint profiles from </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">loaded</span></div>
 
 
@@ -319,7 +319,7 @@
 <div class="viewcode-block" id="load_fingerprints_from_env">
 <a class="viewcode-back" href="../../reference.html#cycletls.load_fingerprints_from_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_fingerprints_from_env</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load fingerprints from directory specified in CYCLETLS_FINGERPRINTS_DIR.</span>
+<span class="w">    </span><span class="sd">"""Load fingerprints from directory specified in CYCLETLS_FINGERPRINTS_DIR.</span>
 
 <span class="sd">    If the environment variable is set, loads all .json files from that directory.</span>
 <span class="sd">    If the variable is not set, does nothing.</span>
@@ -329,10 +329,10 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import os</span>
-<span class="sd">        &gt;&gt;&gt; os.environ[&quot;CYCLETLS_FINGERPRINTS_DIR&quot;] = &quot;/my/fingerprints&quot;</span>
+<span class="sd">        &gt;&gt;&gt; os.environ["CYCLETLS_FINGERPRINTS_DIR"] = "/my/fingerprints"</span>
 <span class="sd">        &gt;&gt;&gt; count = load_fingerprints_from_env()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CYCLETLS_FINGERPRINTS_DIR&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CYCLETLS_FINGERPRINTS_DIR"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dir_path</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="mi">0</span></div>
@@ -342,7 +342,7 @@
 <div class="viewcode-block" id="load_fingerprint_from_file">
 <a class="viewcode-back" href="../../reference.html#cycletls.load_fingerprint_from_file">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_fingerprint_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TLSFingerprint</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a single fingerprint from a JSON file and register it.</span>
+<span class="w">    </span><span class="sd">"""Load a single fingerprint from a JSON file and register it.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path: Path to the JSON fingerprint file</span>
@@ -351,57 +351,57 @@
 <span class="sd">        The loaded TLSFingerprint</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        FileNotFoundError: If file doesn&#39;t exist</span>
+<span class="sd">        FileNotFoundError: If file doesn't exist</span>
 <span class="sd">        json.JSONDecodeError: If file is not valid JSON</span>
 <span class="sd">        KeyError: If required fields are missing</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">profile</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded and registered fingerprint profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded and registered fingerprint profile '</span><span class="si">{</span><span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">profile</span></div>
 
 
 
 <div class="viewcode-block" id="create_fingerprint_template">
 <a class="viewcode-back" href="../../reference.html#cycletls.create_fingerprint_template">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">create_fingerprint_template</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;custom_browser&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a template fingerprint JSON file for users to customize.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_fingerprint_template</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"custom_browser"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Create a template fingerprint JSON file for users to customize.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path: Path to save the template file</span>
 <span class="sd">        name: Name for the fingerprint profile</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
         <span class="n">ja3</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-&quot;</span>
-            <span class="s2">&quot;47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0&quot;</span>
+            <span class="s2">"771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-"</span>
+            <span class="s2">"47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"</span>
         <span class="p">),</span>
-        <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">&quot;1:65536,2:0,3:1000,4:6291456,6:262144|15663105|0|m,a,s,p&quot;</span><span class="p">,</span>
+        <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">"1:65536,2:0,3:1000,4:6291456,6:262144|15663105|0|m,a,s,p"</span><span class="p">,</span>
         <span class="n">user_agent</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 &quot;</span>
-            <span class="s2">&quot;(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36&quot;</span>
+            <span class="s2">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "</span>
+            <span class="s2">"(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"</span>
         <span class="p">),</span>
         <span class="n">header_order</span><span class="o">=</span><span class="p">[</span>
-            <span class="s2">&quot;host&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;connection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;user-agent&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;accept&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;accept-encoding&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;accept-language&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;cookie&quot;</span><span class="p">,</span>
+            <span class="s2">"host"</span><span class="p">,</span>
+            <span class="s2">"connection"</span><span class="p">,</span>
+            <span class="s2">"user-agent"</span><span class="p">,</span>
+            <span class="s2">"accept"</span><span class="p">,</span>
+            <span class="s2">"accept-encoding"</span><span class="p">,</span>
+            <span class="s2">"accept-language"</span><span class="p">,</span>
+            <span class="s2">"cookie"</span><span class="p">,</span>
         <span class="p">],</span>
     <span class="p">)</span>
     <span class="n">template</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created fingerprint template at </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Created fingerprint template at </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;load_fingerprints_from_dir&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_fingerprints_from_env&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load_fingerprint_from_file&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;create_fingerprint_template&quot;</span><span class="p">,</span>
+    <span class="s2">"load_fingerprints_from_dir"</span><span class="p">,</span>
+    <span class="s2">"load_fingerprints_from_env"</span><span class="p">,</span>
+    <span class="s2">"load_fingerprint_from_file"</span><span class="p">,</span>
+    <span class="s2">"create_fingerprint_template"</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>
@@ -442,7 +442,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

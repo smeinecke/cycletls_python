@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.async_api - cycletls v0.0.10</title>
+        <title>cycletls.async_api - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.async_api</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Async API for CycleTLS - backward compatibility shim.</span>
+<span></span><span class="sd">"""Async API for CycleTLS - backward compatibility shim.</span>
 
 <span class="sd">AsyncCycleTLS is now a thin subclass of CycleTLS that maps sync method names</span>
 <span class="sd">to their async equivalents (e.g. .get() -&gt; .aget()). This allows existing code</span>
@@ -257,7 +257,7 @@
 <span class="sd">For new code, use CycleTLS directly with a-prefixed async methods:</span>
 <span class="sd">    async with CycleTLS() as client:</span>
 <span class="sd">        response = await client.aget(url)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -271,10 +271,10 @@
 <div class="viewcode-block" id="AsyncCycleTLS">
 <a class="viewcode-back" href="../../reference.html#cycletls.AsyncCycleTLS">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AsyncCycleTLS</span><span class="p">(</span><span class="n">CycleTLS</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backward-compatible async client.</span>
+<span class="w">    </span><span class="sd">"""Backward-compatible async client.</span>
 
 <span class="sd">    Use ``CycleTLS`` directly for new code — it supports both sync and async.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="AsyncCycleTLS.request">
 <a class="viewcode-back" href="../../reference.html#cycletls.AsyncCycleTLS.request">[docs]</a>
@@ -291,7 +291,7 @@
         <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async request -- delegates to CycleTLS.arequest().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async request -- delegates to CycleTLS.arequest()."""</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">arequest</span><span class="p">(</span>
             <span class="n">method</span><span class="p">,</span>
             <span class="n">url</span><span class="p">,</span>
@@ -413,7 +413,7 @@
 <div class="viewcode-block" id="AsyncCycleTLS.close">
 <a class="viewcode-back" href="../../reference.html#cycletls.AsyncCycleTLS.close">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async close -- delegates to sync close (which is trivial).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async close -- delegates to sync close (which is trivial)."""</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </div>
 
@@ -423,7 +423,7 @@
 <div class="viewcode-block" id="async_get">
 <a class="viewcode-back" href="../../reference.html#cycletls.async_get">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ParamsType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an async GET request (convenience function).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Send an async GET request (convenience function)."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -438,7 +438,7 @@
     <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an async POST request (convenience function).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Send an async POST request (convenience function)."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">apost</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -453,7 +453,7 @@
     <span class="n">json_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an async PUT request (convenience function).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Send an async PUT request (convenience function)."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">aput</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -462,18 +462,18 @@
 <div class="viewcode-block" id="async_delete">
 <a class="viewcode-back" href="../../reference.html#cycletls.async_delete">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_delete</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ParamsType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an async DELETE request (convenience function).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Send an async DELETE request (convenience function)."""</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">adelete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;AsyncCycleTLS&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_get&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_post&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_put&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;async_delete&quot;</span><span class="p">,</span>
+    <span class="s2">"AsyncCycleTLS"</span><span class="p">,</span>
+    <span class="s2">"async_get"</span><span class="p">,</span>
+    <span class="s2">"async_post"</span><span class="p">,</span>
+    <span class="s2">"async_put"</span><span class="p">,</span>
+    <span class="s2">"async_delete"</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>
@@ -514,7 +514,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

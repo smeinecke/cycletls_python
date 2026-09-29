@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.sse - cycletls v0.0.10</title>
+        <title>cycletls.sse - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.sse</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Server-Sent Events (SSE) client for CycleTLS.</span>
+<span></span><span class="sd">"""Server-Sent Events (SSE) client for CycleTLS.</span>
 
 <span class="sd">This module provides an SSE client that uses the same TLS fingerprinting</span>
 <span class="sd">capabilities as the HTTP client for streaming event connections.</span>
@@ -257,15 +257,15 @@
 <span class="sd">    &gt;&gt;&gt; from cycletls.sse import SSEConnection</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Using context manager</span>
-<span class="sd">    &gt;&gt;&gt; with SSEConnection(&quot;https://api.example.com/events&quot;) as sse:</span>
+<span class="sd">    &gt;&gt;&gt; with SSEConnection("https://api.example.com/events") as sse:</span>
 <span class="sd">    ...     for event in sse:</span>
-<span class="sd">    ...         print(f&quot;{event.event}: {event.data}&quot;)</span>
+<span class="sd">    ...         print(f"{event.event}: {event.data}")</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Async iteration</span>
-<span class="sd">    &gt;&gt;&gt; async with SSEConnection(&quot;https://api.example.com/events&quot;) as sse:</span>
+<span class="sd">    &gt;&gt;&gt; async with SSEConnection("https://api.example.com/events") as sse:</span>
 <span class="sd">    ...     async for event in sse:</span>
-<span class="sd">    ...         print(f&quot;{event.event}: {event.data}&quot;)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ...         print(f"{event.event}: {event.data}")</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -288,30 +288,30 @@
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEEvent">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SSEEvent</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Server-Sent Event.</span>
+<span class="w">    </span><span class="sd">"""A Server-Sent Event.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        data: Event data</span>
-<span class="sd">        event: Event type (defaults to &quot;message&quot;)</span>
+<span class="sd">        event: Event type (defaults to "message")</span>
 <span class="sd">        id: Optional event ID for reconnection</span>
 <span class="sd">        retry: Optional retry time in milliseconds</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">data</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;message&quot;</span>
+    <span class="n">event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"message"</span>
     <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the event.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SSEEvent(event=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="si">!r}</span><span class="s2">, data=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">!r}</span><span class="s2">...)&quot;</span></div>
+<span class="w">        </span><span class="sd">"""Return a string representation of the event."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"SSEEvent(event=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="si">!r}</span><span class="s2">, data=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">!r}</span><span class="s2">...)"</span></div>
 
 
 
 <div class="viewcode-block" id="SSEError">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SSEError</span><span class="p">(</span><span class="n">CycleTLSError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when an SSE operation fails.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Raised when an SSE operation fails."""</span>
 
     <span class="k">pass</span></div>
 
@@ -320,7 +320,7 @@
 <div class="viewcode-block" id="SSEConnection">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SSEConnection</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Server-Sent Events connection with TLS fingerprinting support.</span>
+<span class="w">    </span><span class="sd">"""A Server-Sent Events connection with TLS fingerprinting support.</span>
 
 <span class="sd">    This class provides both synchronous and asynchronous APIs for SSE</span>
 <span class="sd">    streams. It supports automatic reconnection and Last-Event-ID tracking.</span>
@@ -336,16 +336,16 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; # Synchronous iteration</span>
-<span class="sd">        &gt;&gt;&gt; with SSEConnection(&quot;https://api.example.com/events&quot;) as sse:</span>
+<span class="sd">        &gt;&gt;&gt; with SSEConnection("https://api.example.com/events") as sse:</span>
 <span class="sd">        ...     for event in sse:</span>
-<span class="sd">        ...         if event.event == &quot;update&quot;:</span>
+<span class="sd">        ...         if event.event == "update":</span>
 <span class="sd">        ...             print(event.data)</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Async iteration</span>
-<span class="sd">        &gt;&gt;&gt; async with SSEConnection(&quot;https://api.example.com/events&quot;) as sse:</span>
+<span class="sd">        &gt;&gt;&gt; async with SSEConnection("https://api.example.com/events") as sse:</span>
 <span class="sd">        ...     async for event in sse:</span>
-<span class="sd">        ...         print(f&quot;[{event.event}] {event.data}&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        ...         print(f"[{event.event}] {event.data}")</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SSEConnection.__init__">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.__init__">[docs]</a>
@@ -375,89 +375,89 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the SSE connection is active.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if the SSE connection is active."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">retry_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current retry time in milliseconds.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the current retry time in milliseconds."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_time</span>
 
 <div class="viewcode-block" id="SSEConnection.connect">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.connect">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Establish the SSE connection.</span>
+<span class="w">        </span><span class="sd">"""Establish the SSE connection.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            SSEError: If connection fails</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
         <span class="c1"># Check if sseConnect is available</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;sseConnect&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"sseConnect"</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span>
-                <span class="s2">&quot;SSE support requires rebuilding the Go library with SSE exports. &quot;</span>
-                <span class="s2">&quot;The current library does not have sseConnect exported.&quot;</span>
+                <span class="s2">"SSE support requires rebuilding the Go library with SSE exports. "</span>
+                <span class="s2">"The current library does not have sseConnect exported."</span>
             <span class="p">)</span>
 
         <span class="c1"># Build connection options</span>
         <span class="n">headers_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/event-stream&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Cache-Control&quot;</span><span class="p">:</span> <span class="s2">&quot;no-cache&quot;</span><span class="p">,</span>
+            <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"text/event-stream"</span><span class="p">,</span>
+            <span class="s2">"Cache-Control"</span><span class="p">:</span> <span class="s2">"no-cache"</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_event_id</span><span class="p">:</span>
-            <span class="n">headers_dict</span><span class="p">[</span><span class="s2">&quot;Last-Event-ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_event_id</span>
+            <span class="n">headers_dict</span><span class="p">[</span><span class="s2">"Last-Event-ID"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_event_id</span>
 
         <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
-            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="n">headers_dict</span><span class="p">,</span>
-            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="s2">"url"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="s2">"headers"</span><span class="p">:</span> <span class="n">headers_dict</span><span class="p">,</span>
+            <span class="s2">"timeout"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ja3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"ja3"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;userAgent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"userAgent"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">:</span>
-            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">"proxy"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span>
 
         <span class="c1"># Serialize and send</span>
         <span class="n">msgpack_data</span> <span class="o">=</span> <span class="n">ormsgpack</span><span class="o">.</span><span class="n">packb</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
         <span class="n">b64_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">msgpack_data</span><span class="p">)</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;char[]&quot;</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">_ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"char[]"</span><span class="p">,</span> <span class="n">b64_data</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connecting to SSE endpoint: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connecting to SSE endpoint: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">handle</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">sseConnect</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">handle</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to connect to SSE endpoint: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to connect to SSE endpoint: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SSE connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SSE connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SSEConnection.next_event">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.next_event">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">next_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SSEEvent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the next event from the stream.</span>
+<span class="w">        </span><span class="sd">"""Read the next event from the stream.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            SSEEvent if an event was received, None if stream ended</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            SSEError: If not connected or read fails</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="s2">&quot;SSE connection is not active&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="s2">"SSE connection is not active"</span><span class="p">)</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;sseNextEvent&quot;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="s2">&quot;SSE next_event not supported in this library build&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"sseNextEvent"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="s2">"SSE next_event not supported in this library build"</span><span class="p">)</span>
 
         <span class="n">response_ptr</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">sseNextEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 
@@ -476,20 +476,20 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">ormsgpack</span><span class="o">.</span><span class="n">unpackb</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
 
         <span class="c1"># Check for end of stream</span>
-        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eof&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"eof"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># Check for error</span>
-        <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"error"</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SSEError</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"error"</span><span class="p">])</span>
 
         <span class="c1"># Build event</span>
         <span class="n">event</span> <span class="o">=</span> <span class="n">SSEEvent</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-            <span class="n">event</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">),</span>
-            <span class="nb">id</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
-            <span class="n">retry</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retry&quot;</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+            <span class="n">event</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"event"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">),</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">),</span>
+            <span class="n">retry</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"retry"</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Update tracking</span>
@@ -498,32 +498,32 @@
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">retry</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_retry_time</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">retry</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received SSE event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Received SSE event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">event</span></div>
 
 
 <div class="viewcode-block" id="SSEConnection.close">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the SSE connection.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Close the SSE connection."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="n">lib</span> <span class="o">=</span> <span class="n">_load_library</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;sseClose&quot;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Closing SSE connection&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"sseClose"</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Closing SSE connection"</span><span class="p">)</span>
             <span class="n">lib</span><span class="o">.</span><span class="n">sseClose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SSE connection closed&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"SSE connection closed"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SSEConnection.connect_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.connect_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of connect().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of connect()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">)</span></div>
 
@@ -531,7 +531,7 @@
 <div class="viewcode-block" id="SSEConnection.next_event_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.next_event_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">next_event_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SSEEvent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of next_event().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of next_event()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_event</span><span class="p">)</span></div>
 
@@ -539,31 +539,31 @@
 <div class="viewcode-block" id="SSEConnection.close_async">
 <a class="viewcode-back" href="../../reference.html#cycletls.SSEConnection.close_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async version of close().&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async version of close()."""</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
         <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SSEConnection&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager entry.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SSEConnection"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Context manager entry."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager exit.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Context manager exit."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SSEConnection&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async context manager entry.&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SSEConnection"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Async context manager entry."""</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_async</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Async context manager exit.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Async context manager exit."""</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_async</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">SSEEvent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over events synchronously.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Iterate over events synchronously."""</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_event</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -571,7 +571,7 @@
             <span class="k">yield</span> <span class="n">event</span>
 
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">SSEEvent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over events asynchronously.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Iterate over events asynchronously."""</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_event_async</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -581,9 +581,9 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;SSEEvent&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SSEError&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SSEConnection&quot;</span><span class="p">,</span>
+    <span class="s2">"SSEEvent"</span><span class="p">,</span>
+    <span class="s2">"SSEError"</span><span class="p">,</span>
+    <span class="s2">"SSEConnection"</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>
@@ -624,7 +624,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

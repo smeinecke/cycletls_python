@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls._global - cycletls v0.0.10</title>
+        <title>cycletls._global - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,7 +248,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls._global</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Global session management for CycleTLS module-level functions.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Global session management for CycleTLS module-level functions."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">atexit</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -263,7 +263,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_import_cycletls</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lazy import to avoid circular dependency.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Lazy import to avoid circular dependency."""</span>
     <span class="k">global</span> <span class="n">_CycleTLS</span>
     <span class="k">if</span> <span class="n">_CycleTLS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLS</span>
@@ -272,14 +272,14 @@
 
 
 <span class="c1"># Global state</span>
-<span class="n">_global_session</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;CycleTLS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_global_session</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"CycleTLS"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">_global_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 <span class="n">_cleanup_registered</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">_parent_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_global_session</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get or create the global CycleTLS session.</span>
 
 <span class="sd">    The session is lazily initialized on first use and automatically</span>
@@ -287,13 +287,13 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        CycleTLS: The global session instance</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_global_session</span><span class="p">,</span> <span class="n">_cleanup_registered</span><span class="p">,</span> <span class="n">_parent_pid</span>
 
-    <span class="c1"># Check if we&#39;re in a forked child process</span>
+    <span class="c1"># Check if we're in a forked child process</span>
     <span class="n">current_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">current_pid</span> <span class="o">!=</span> <span class="n">_parent_pid</span><span class="p">:</span>
-        <span class="c1"># We&#39;re in a forked child - reset to avoid sharing WebSocket</span>
+        <span class="c1"># We're in a forked child - reset to avoid sharing WebSocket</span>
         <span class="n">_global_session</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">_parent_pid</span> <span class="o">=</span> <span class="n">current_pid</span>
 
@@ -312,11 +312,11 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_cleanup_global_session</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Cleanup function called by atexit.</span>
 
 <span class="sd">    Closes the global session and cleans up resources.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_global_session</span>
     <span class="k">if</span> <span class="n">_global_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -331,7 +331,7 @@
 <div class="viewcode-block" id="close_global_session">
 <a class="viewcode-back" href="../../reference.html#cycletls.close_global_session">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">close_global_session</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Manually close the global session.</span>
 
 <span class="sd">    Useful for explicit cleanup in notebooks or when you want to</span>
@@ -339,10 +339,10 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import cycletls</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')</span>
 <span class="sd">        &gt;&gt;&gt; cycletls.close_global_session()  # Explicit cleanup</span>
-<span class="sd">        &gt;&gt;&gt; response = cycletls.get(&#39;https://example.com&#39;)  # New session</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; response = cycletls.get('https://example.com')  # New session</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_global_session</span>
     <span class="k">if</span> <span class="n">_global_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">_global_lock</span><span class="p">:</span>
@@ -393,7 +393,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

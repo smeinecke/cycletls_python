@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.structures - cycletls v0.0.10</title>
+        <title>cycletls.structures - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,12 +248,12 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.structures</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Data structures for CycleTLS.</span>
 
 <span class="sd">This module contains utility classes for handling HTTP-related data structures</span>
-<span class="sd">in a way that&#39;s consistent with the requests library.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">in a way that's consistent with the requests library.</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
@@ -263,7 +263,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_cookie_class</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import Cookie lazily to avoid circular imports.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Import Cookie lazily to avoid circular imports."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cookie</span>
 
     <span class="k">return</span> <span class="n">Cookie</span>
@@ -272,26 +272,26 @@
 <div class="viewcode-block" id="CaseInsensitiveDict">
 <a class="viewcode-back" href="../../reference.html#cycletls.CaseInsensitiveDict">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CaseInsensitiveDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A case-insensitive dict-like object.</span>
+<span class="w">    </span><span class="sd">"""A case-insensitive dict-like object.</span>
 
-<span class="sd">    Implements all methods and operations of MutableMapping as well as dict&#39;s .copy().</span>
+<span class="sd">    Implements all methods and operations of MutableMapping as well as dict's .copy().</span>
 <span class="sd">    All keys are expected to be strings. The structure remembers the case of the last</span>
 <span class="sd">    key to be set, and iter(instance), keys(), items(), iterkeys(), and iteritems()</span>
 <span class="sd">    will contain case-sensitive keys. However, querying and contains testing is case</span>
 <span class="sd">    insensitive::</span>
 
 <span class="sd">        cid = CaseInsensitiveDict()</span>
-<span class="sd">        cid[&#39;Accept&#39;] = &#39;application/json&#39;</span>
-<span class="sd">        cid[&#39;aCCEPT&#39;] == &#39;application/json&#39;  # True</span>
-<span class="sd">        list(cid) == [&#39;Accept&#39;]  # True</span>
+<span class="sd">        cid['Accept'] = 'application/json'</span>
+<span class="sd">        cid['aCCEPT'] == 'application/json'  # True</span>
+<span class="sd">        list(cid) == ['Accept']  # True</span>
 
-<span class="sd">    For example, ``headers[&#39;content-encoding&#39;]`` will return the value of a</span>
-<span class="sd">    ``&#39;Content-Encoding&#39;`` response header, regardless of how the header name</span>
+<span class="sd">    For example, ``headers['content-encoding']`` will return the value of a</span>
+<span class="sd">    ``'Content-Encoding'`` response header, regardless of how the header name</span>
 <span class="sd">    was originally stored.</span>
 
 <span class="sd">    If the constructor, .update, or equality comparison operations are given keys</span>
 <span class="sd">    that have equal ``.lower()`` values, the behavior is undefined.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_store</span> <span class="o">=</span> <span class="p">{}</span>
@@ -319,7 +319,7 @@
 <div class="viewcode-block" id="CaseInsensitiveDict.lower_items">
 <a class="viewcode-back" href="../../reference.html#cycletls.CaseInsensitiveDict.lower_items">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">lower_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Like iteritems(), but with all lowercase keys.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Like iteritems(), but with all lowercase keys."""</span>
         <span class="k">return</span> <span class="p">((</span><span class="n">lowerkey</span><span class="p">,</span> <span class="n">keyval</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="p">(</span><span class="n">lowerkey</span><span class="p">,</span> <span class="n">keyval</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
 
 
@@ -343,32 +343,32 @@
 <div class="viewcode-block" id="CookieJar">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CookieJar</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A dict-like container for managing cookies.</span>
+<span class="w">    </span><span class="sd">"""A dict-like container for managing cookies.</span>
 
 <span class="sd">    This class provides a convenient interface for working with Cookie objects,</span>
 <span class="sd">    allowing both dict-like access and Cookie object manipulation.</span>
 
 <span class="sd">    Example::</span>
 
-<span class="sd">        jar = CookieJar([Cookie(name=&#39;session&#39;, value=&#39;abc123&#39;)])</span>
-<span class="sd">        jar[&#39;session&#39;]  # Returns &#39;abc123&#39;</span>
-<span class="sd">        jar.set(&#39;user&#39;, &#39;john&#39;, domain=&#39;.example.com&#39;)</span>
-<span class="sd">        jar.get_dict()  # Returns {&#39;session&#39;: &#39;abc123&#39;, &#39;user&#39;: &#39;john&#39;}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        jar = CookieJar([Cookie(name='session', value='abc123')])</span>
+<span class="sd">        jar['session']  # Returns 'abc123'</span>
+<span class="sd">        jar.set('user', 'john', domain='.example.com')</span>
+<span class="sd">        jar.get_dict()  # Returns {'session': 'abc123', 'user': 'john'}</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Cookie&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a CookieJar with an optional list of Cookie objects.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">"Cookie"</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Initialize a CookieJar with an optional list of Cookie objects.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            cookies: A list of Cookie objects to initialize the jar with.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">cookies</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">cookie</span> <span class="ow">in</span> <span class="n">cookies</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">[</span><span class="n">cookie</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a cookie&#39;s value by name.</span>
+<span class="w">        </span><span class="sd">"""Get a cookie's value by name.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: The name of the cookie.</span>
@@ -377,32 +377,32 @@
 <span class="sd">            The value of the cookie.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            KeyError: If the cookie doesn&#39;t exist.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            KeyError: If the cookie doesn't exist.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a cookie with just a name and value.</span>
+<span class="w">        </span><span class="sd">"""Set a cookie with just a name and value.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: The name of the cookie.</span>
 <span class="sd">            value: The value of the cookie.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">cookie_cls</span> <span class="o">=</span> <span class="n">_get_cookie_class</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie_cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CookieJar.get">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar.get">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a cookie&#39;s value by name, returning a default if not found.</span>
+<span class="w">        </span><span class="sd">"""Get a cookie's value by name, returning a default if not found.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: The name of the cookie.</span>
-<span class="sd">            default: The value to return if the cookie doesn&#39;t exist.</span>
+<span class="sd">            default: The value to return if the cookie doesn't exist.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            The cookie&#39;s value, or the default value if not found.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            The cookie's value, or the default value if not found.</span>
+<span class="sd">        """</span>
         <span class="n">cookie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cookie</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">cookie</span> <span class="k">else</span> <span class="n">default</span></div>
 
@@ -410,13 +410,13 @@
 <div class="viewcode-block" id="CookieJar.set">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar.set">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a cookie with full attributes.</span>
+<span class="w">        </span><span class="sd">"""Set a cookie with full attributes.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: The name of the cookie.</span>
 <span class="sd">            value: The value of the cookie.</span>
 <span class="sd">            **kwargs: Additional Cookie attributes (path, domain, expires, etc.).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">cookie_cls</span> <span class="o">=</span> <span class="n">_get_cookie_class</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie_cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -424,11 +424,11 @@
 <div class="viewcode-block" id="CookieJar.items">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar.items">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator of (name, value) tuples for all cookies.</span>
+<span class="w">        </span><span class="sd">"""Return an iterator of (name, value) tuples for all cookies.</span>
 
 <span class="sd">        Yields:</span>
 <span class="sd">            Tuples of (cookie_name, cookie_value).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">cookie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">yield</span> <span class="p">(</span><span class="n">cookie</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">cookie</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
@@ -436,61 +436,61 @@
 <div class="viewcode-block" id="CookieJar.get_dict">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar.get_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a simple dict of cookie names to values.</span>
+<span class="w">        </span><span class="sd">"""Return a simple dict of cookie names to values.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A dictionary mapping cookie names to their values.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">cookie</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">cookie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
 
 
 <div class="viewcode-block" id="CookieJar.get_cookies">
 <a class="viewcode-back" href="../../reference.html#cycletls.CookieJar.get_cookies">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Cookie&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list of all Cookie objects.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">"Cookie"</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return a list of all Cookie objects.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of all Cookie objects in the jar.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over cookie names.</span>
+<span class="w">        </span><span class="sd">"""Iterate over cookie names.</span>
 
 <span class="sd">        Yields:</span>
 <span class="sd">            Cookie names.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of cookies in the jar.</span>
+<span class="w">        </span><span class="sd">"""Return the number of cookies in the jar.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The number of cookies.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a cookie exists in the jar.</span>
+<span class="w">        </span><span class="sd">"""Check if a cookie exists in the jar.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: The name of the cookie.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if the cookie exists, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compare two CookieJars for equality.</span>
+<span class="w">        </span><span class="sd">"""Compare two CookieJars for equality.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other: Another CookieJar or dict to compare with.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if the cookies are equal, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">CookieJar</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dict</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">get_dict</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -498,19 +498,19 @@
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the CookieJar.</span>
+<span class="w">        </span><span class="sd">"""Return a string representation of the CookieJar.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A string representation showing all cookies.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CookieJar(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> cookies)&gt;&quot;</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;CookieJar(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> cookies)&gt;"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a user-friendly string representation.</span>
+<span class="w">        </span><span class="sd">"""Return a user-friendly string representation.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A string showing the cookie dict.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dict</span><span class="p">())</span></div>
 
 </pre></div>
@@ -552,7 +552,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

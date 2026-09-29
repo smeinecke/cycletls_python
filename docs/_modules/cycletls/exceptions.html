@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>cycletls.exceptions - cycletls v0.0.10</title>
+        <title>cycletls.exceptions - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="../../index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -248,12 +248,12 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cycletls.exceptions</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">CycleTLS custom exceptions.</span>
 
 <span class="sd">This module provides a hierarchy of exceptions for CycleTLS,</span>
 <span class="sd">following the pattern established by the requests library.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
 
@@ -264,12 +264,12 @@
 <div class="viewcode-block" id="CycleTLSError">
 <a class="viewcode-back" href="../../reference.html#cycletls.CycleTLSError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CycleTLSError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Base exception for all CycleTLS errors.</span>
 
 <span class="sd">    All CycleTLS-specific exceptions inherit from this class,</span>
 <span class="sd">    making it easy to catch any CycleTLS-related error.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -278,12 +278,12 @@
 <div class="viewcode-block" id="RequestException">
 <a class="viewcode-back" href="../../reference.html#cycletls.RequestException">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RequestException</span><span class="p">(</span><span class="n">CycleTLSError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Base class for all request-related exceptions.</span>
 
 <span class="sd">    This is the base exception for errors that occur during</span>
 <span class="sd">    the request/response cycle.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -292,7 +292,7 @@
 <div class="viewcode-block" id="HTTPError">
 <a class="viewcode-back" href="../../reference.html#cycletls.HTTPError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HTTPError</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    An HTTP error occurred (4xx or 5xx status code).</span>
 
 <span class="sd">    This exception is raised when raise_for_status() is called</span>
@@ -300,16 +300,16 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        response: The Response object (if available)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Response&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"Response"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize HTTPError.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            message: Error message</span>
 <span class="sd">            response: Response object that triggered the error</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span></div>
 
@@ -318,12 +318,12 @@
 <div class="viewcode-block" id="ConnectionError">
 <a class="viewcode-back" href="../../reference.html#cycletls.ConnectionError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConnectionError</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A connection error occurred.</span>
 
 <span class="sd">    Raised when a request fails due to network connectivity issues,</span>
 <span class="sd">    such as DNS lookup failures or connection refused errors.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -332,12 +332,12 @@
 <div class="viewcode-block" id="Timeout">
 <a class="viewcode-back" href="../../reference.html#cycletls.Timeout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Timeout</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The request timed out.</span>
 
 <span class="sd">    Raised when a request exceeds the specified timeout duration.</span>
 <span class="sd">    This includes both connection timeouts and read timeouts.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -346,11 +346,11 @@
 <div class="viewcode-block" id="TooManyRedirects">
 <a class="viewcode-back" href="../../reference.html#cycletls.TooManyRedirects">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TooManyRedirects</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Too many redirects occurred.</span>
 
 <span class="sd">    Raised when the maximum number of redirects is exceeded.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -359,12 +359,12 @@
 <div class="viewcode-block" id="InvalidURL">
 <a class="viewcode-back" href="../../reference.html#cycletls.InvalidURL">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">InvalidURL</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The URL provided was invalid.</span>
 
 <span class="sd">    Raised when attempting to make a request with a malformed</span>
 <span class="sd">    or invalid URL.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -373,12 +373,12 @@
 <div class="viewcode-block" id="TLSError">
 <a class="viewcode-back" href="../../reference.html#cycletls.TLSError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TLSError</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A TLS/SSL error occurred.</span>
 
 <span class="sd">    Raised when there are issues with TLS/SSL certificates,</span>
 <span class="sd">    protocol version mismatches, or other TLS-related errors.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -387,12 +387,12 @@
 <div class="viewcode-block" id="ProxyError">
 <a class="viewcode-back" href="../../reference.html#cycletls.ProxyError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ProxyError</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A proxy error occurred.</span>
 
 <span class="sd">    Raised when there are issues connecting to or communicating</span>
 <span class="sd">    through a proxy server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -401,12 +401,12 @@
 <div class="viewcode-block" id="InvalidHeader">
 <a class="viewcode-back" href="../../reference.html#cycletls.InvalidHeader">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">InvalidHeader</span><span class="p">(</span><span class="n">RequestException</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Invalid header name or value.</span>
 
 <span class="sd">    Raised when attempting to use an invalid HTTP header name</span>
 <span class="sd">    or value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span></div>
 
@@ -454,7 +454,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="../../_static/documentation_options.js?v=0c446633"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

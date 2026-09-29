@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.11] - 2026-09-29
+
+### Fixed
+- Fingerprinted requests (any `ja4r` profile) no longer fail the TLS handshake against strict servers (Google, Cloudflare, Fastly): extension `0xfe0d` (ECH) is now emitted as a valid randomized GREASE ECH instead of an all-zero placeholder that triggered `tls: error decoding message` alerts.
+- `supported_groups` on the JA4R path no longer lists X25519 twice; TLS 1.3 hellos now lead with the post-quantum hybrid X25519MLKEM768, matching real browser fingerprints.
+
+### Changed
+- Bumped `github.com/quic-go/quic-go` to 0.63.0, `golang.org/x/net` to 0.59.0 and `github.com/andybalholm/brotli` to 1.2.5 in the Go backend; `github.com/valyala/fasthttp` to 1.74.0 in benchmarks.
+- Bulk-updated Python dependencies in `uv.lock`.
+- Bumped `github/codeql-action` to 4.38.2, `astral-sh/setup-uv` to 10.2.0 and `actions/download-artifact` to v8 in CI.
+- Fingerprint registry refreshed from scheduled CI captures.
 
 ## [0.0.9] - 2026-08-31
 

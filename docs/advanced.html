@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Module Reference" href="reference.html"><link rel="prev" title="API Usage" href="api.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Advanced Usage - cycletls v0.0.10</title>
+        <title>Advanced Usage - cycletls v0.0.11</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cycletls v0.0.10</div></a>
+      <a href="index.html"><div class="brand">cycletls v0.0.11</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -184,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">cycletls v0.0.10</span>
+  <span class="sidebar-brand-text">cycletls v0.0.11</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -267,7 +267,7 @@
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="c1"># 10 requests execute concurrently</span>
     <span class="n">responses</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
-        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://httpbin.org/get?id=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="sa">f</span><span class="s2">"https://httpbin.org/get?id=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="p">])</span>
     <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">responses</span><span class="p">:</span>
@@ -291,7 +291,7 @@
             <span class="k">return</span> <span class="k">await</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="n">responses</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
-        <span class="n">limited</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://httpbin.org/get?id=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">limited</span><span class="p">(</span><span class="sa">f</span><span class="s2">"https://httpbin.org/get?id=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
     <span class="p">])</span>
 
@@ -307,16 +307,16 @@
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
-        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/status/200&quot;</span><span class="p">),</span>
-        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/status/404&quot;</span><span class="p">),</span>
+        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">"https://httpbin.org/status/200"</span><span class="p">),</span>
+        <span class="n">cycletls</span><span class="o">.</span><span class="n">aget</span><span class="p">(</span><span class="s2">"https://httpbin.org/status/404"</span><span class="p">),</span>
         <span class="n">return_exceptions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OK: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"OK: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
@@ -335,11 +335,11 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-    <span class="s2">&quot;https://ja3er.com/json&quot;</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0&quot;</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36&quot;</span><span class="p">,</span>
+    <span class="s2">"https://ja3er.com/json"</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36"</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;ja3_hash&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"ja3_hash"</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -352,14 +352,14 @@ input.</p>
 
 <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;https://tlsfingerprint.com/api/all&quot;</span><span class="p">,</span>
-        <span class="n">ja4r</span><span class="o">=</span><span class="s2">&quot;t13d1516h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0000,0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,fe0d,ff01_0403,0804,0401,0503,0805,0501,0806,0601&quot;</span><span class="p">,</span>
+        <span class="s2">"https://tlsfingerprint.com/api/all"</span><span class="p">,</span>
+        <span class="n">ja4r</span><span class="o">=</span><span class="s2">"t13d1516h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0000,0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,fe0d,ff01_0403,0804,0401,0503,0805,0501,0806,0601"</span><span class="p">,</span>
         <span class="n">disable_grease</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36&quot;</span><span class="p">,</span>
+        <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;JA4:   </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tls&#39;</span><span class="p">][</span><span class="s1">&#39;ja4&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;JA4_r: </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tls&#39;</span><span class="p">][</span><span class="s1">&#39;ja4_r&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"JA4:   </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">'tls'</span><span class="p">][</span><span class="s1">'ja4'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"JA4_r: </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">'tls'</span><span class="p">][</span><span class="s1">'ja4_r'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>JA4R format breakdown:</p>
@@ -383,10 +383,10 @@ input.</p>
 <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="c1"># Firefox HTTP/2 fingerprint</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;https://tlsfingerprint.com/api/all&quot;</span><span class="p">,</span>
-        <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">&quot;1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s&quot;</span><span class="p">,</span>
-        <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0&quot;</span><span class="p">,</span>
-        <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0&quot;</span><span class="p">,</span>
+        <span class="s2">"https://tlsfingerprint.com/api/all"</span><span class="p">,</span>
+        <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">"1:65536;2:0;4:131072;5:16384|12517377|0|m,p,a,s"</span><span class="p">,</span>
+        <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0"</span><span class="p">,</span>
+        <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0"</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -419,10 +419,10 @@ input.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">TLSFingerprint</span><span class="p">,</span> <span class="n">FingerprintRegistry</span>
 
 <span class="n">my_profile</span> <span class="o">=</span> <span class="n">TLSFingerprint</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom_chrome&quot;</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4866-4867-49195...&quot;</span><span class="p">,</span>
-    <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">&quot;1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p&quot;</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 ...&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"custom_chrome"</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195..."</span><span class="p">,</span>
+    <span class="n">http2_fingerprint</span><span class="o">=</span><span class="s2">"1:65536;2:0;4:6291456;6:262144|15663105|0|m,a,s,p"</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 ..."</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Register for lookup by name</span>
@@ -430,9 +430,9 @@ input.</p>
 <span class="n">registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">my_profile</span><span class="p">)</span>
 
 <span class="c1"># Use anywhere</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">my_profile</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">my_profile</span><span class="p">)</span>
 <span class="c1"># or by name:</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="s2">&quot;custom_chrome&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="s2">"custom_chrome"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -440,20 +440,20 @@ input.</p>
 <h3>Loading Profiles from Files<a class="headerlink" href="#loading-profiles-from-files" title="Link to this heading">¶</a></h3>
 <p>Store profiles as JSON and load them at startup:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chrome_125&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ja3&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;771,4865-4866-4867-49195...&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;user_agent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mozilla/5.0 ...&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;http2_fingerprint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1:65536;2:0;4:6291456...&quot;</span>
+<span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chrome_125"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"ja3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"771,4865-4866-4867-49195..."</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 ..."</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"http2_fingerprint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1:65536;2:0;4:6291456..."</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_fingerprint_from_file</span><span class="p">,</span> <span class="n">load_fingerprints_from_dir</span>
 
 <span class="c1"># Single file</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">&quot;profiles/chrome_125.json&quot;</span><span class="p">)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">"profiles/chrome_125.json"</span><span class="p">)</span>
 
 <span class="c1"># Entire directory (auto-registers all found profiles)</span>
-<span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">&quot;profiles/&quot;</span><span class="p">)</span>
+<span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">"profiles/"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Set the <code class="docutils literal notranslate"><span class="pre">CYCLETLS_FINGERPRINT_DIR</span></code> environment variable to auto-load a
@@ -472,8 +472,8 @@ directory of profiles:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-    <span class="s2">&quot;https://httpbin.org/ip&quot;</span><span class="p">,</span>
-    <span class="n">proxy</span><span class="o">=</span><span class="s2">&quot;socks5://127.0.0.1:9050&quot;</span><span class="p">,</span>
+    <span class="s2">"https://httpbin.org/ip"</span><span class="p">,</span>
+    <span class="n">proxy</span><span class="o">=</span><span class="s2">"socks5://127.0.0.1:9050"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -482,10 +482,10 @@ directory of profiles:</p>
 <h3>Default Proxy for All Requests<a class="headerlink" href="#default-proxy-for-all-requests" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
-<span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">proxy</span><span class="o">=</span><span class="s2">&quot;socks5://user:pass@proxy.example.com:1080&quot;</span><span class="p">)</span>
+<span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">proxy</span><span class="o">=</span><span class="s2">"socks5://user:pass@proxy.example.com:1080"</span><span class="p">)</span>
 
 <span class="c1"># All requests now go through the proxy</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/ip&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/ip"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -527,11 +527,11 @@ directory of profiles:</p>
 
 <span class="k">with</span> <span class="n">CycleTLS</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;https://cloudflare-quic.com/&quot;</span><span class="p">,</span>
+        <span class="s2">"https://cloudflare-quic.com/"</span><span class="p">,</span>
         <span class="n">force_http3</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">insecure_skip_verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response over HTTP/3: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Response over HTTP/3: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -541,14 +541,14 @@ directory of profiles:</p>
 <h3>Checking Response Status<a class="headerlink" href="#checking-response-status" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/status/404&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/status/404"</span><span class="p">)</span>
 
 <span class="c1"># Boolean checks</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">is_error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not OK: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Not OK: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -557,10 +557,10 @@ directory of profiles:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLSError</span><span class="p">,</span> <span class="n">HTTPError</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/status/500&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/status/500"</span><span class="p">)</span>
     <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTP </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"HTTP </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -570,9 +570,9 @@ directory of profiles:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CycleTLSError</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://invalid-host.example&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://invalid-host.example"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">CycleTLSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CycleTLS error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CycleTLS error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -583,13 +583,13 @@ directory of profiles:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSocketConnection</span>
 
 <span class="n">ws</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span>
-    <span class="s2">&quot;wss://echo.websocket.org&quot;</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">&quot;771,4865-4866-4867-49195...&quot;</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0 ...&quot;</span><span class="p">,</span>
+    <span class="s2">"wss://echo.websocket.org"</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195..."</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 ..."</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">ws</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Hello, WebSocket!&quot;</span><span class="p">)</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Hello, WebSocket!"</span><span class="p">)</span>
 
 <span class="n">message</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -603,12 +603,12 @@ directory of profiles:</p>
 <p>Stream server-sent events:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEConnection</span>
 
-<span class="n">sse</span> <span class="o">=</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">&quot;https://example.com/events&quot;</span><span class="p">)</span>
+<span class="n">sse</span> <span class="o">=</span> <span class="n">SSEConnection</span><span class="p">(</span><span class="s2">"https://example.com/events"</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">sse</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data:  </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID:    </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Data:  </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ID:    </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -621,10 +621,10 @@ see request and response details:</p>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/get&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/get"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Output:</p>
@@ -663,8 +663,8 @@ see request and response details:</p>
 <h3>Downloading Binary Content<a class="headerlink" href="#downloading-binary-content" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com/image.png&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;image.png&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com/image.png"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"image.png"</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -674,8 +674,8 @@ see request and response details:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-    <span class="s2">&quot;https://httpbin.org/post&quot;</span><span class="p">,</span>
-    <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;report.pdf&quot;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">),</span> <span class="s2">&quot;application/pdf&quot;</span><span class="p">)},</span>
+    <span class="s2">"https://httpbin.org/post"</span><span class="p">,</span>
+    <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">"file"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"report.pdf"</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"report.pdf"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">),</span> <span class="s2">"application/pdf"</span><span class="p">)},</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -689,14 +689,14 @@ see request and response details:</p>
 
 <span class="k">with</span> <span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
     <span class="c1"># Login sets cookies</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://example.com/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">:</span> <span class="s2">&quot;secret&quot;</span><span class="p">})</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"https://example.com/login"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"user"</span><span class="p">:</span> <span class="s2">"admin"</span><span class="p">,</span> <span class="s2">"pass"</span><span class="p">:</span> <span class="s2">"secret"</span><span class="p">})</span>
 
     <span class="c1"># Cookies are sent automatically on subsequent requests</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://example.com/dashboard&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com/dashboard"</span><span class="p">)</span>
 
     <span class="c1"># Inspect cookies</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">cookies</span><span class="p">)</span>  <span class="c1"># {&#39;session_id&#39;: &#39;abc123&#39;, ...}</span>
-    <span class="s2">&quot;session_id&quot;</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">cookies</span>  <span class="c1"># True</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">cookies</span><span class="p">)</span>  <span class="c1"># {'session_id': 'abc123', ...}</span>
+    <span class="s2">"session_id"</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">cookies</span>  <span class="c1"># True</span>
 </pre></div>
 </div>
 </section>
@@ -705,8 +705,8 @@ see request and response details:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cycletls</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-    <span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span>
-    <span class="n">cookies</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="s2">&quot;abc123&quot;</span><span class="p">,</span> <span class="s2">&quot;pref&quot;</span><span class="p">:</span> <span class="s2">&quot;dark_mode&quot;</span><span class="p">},</span>
+    <span class="s2">"https://example.com"</span><span class="p">,</span>
+    <span class="n">cookies</span><span class="o">=</span><span class="p">{</span><span class="s2">"session_id"</span><span class="p">:</span> <span class="s2">"abc123"</span><span class="p">,</span> <span class="s2">"pref"</span><span class="p">:</span> <span class="s2">"dark_mode"</span><span class="p">},</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -828,7 +828,7 @@ see request and response details:</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=a83ce22a"></script>
+</div><script src="_static/documentation_options.js?v=0c446633"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
