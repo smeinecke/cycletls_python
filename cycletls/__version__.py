@@ -1,7 +1,7 @@
 __title__ = "cycletls"
 __description__ = "Python HTTP for Humans."
 __url__ = "https://cycletls.readthedocs.io"
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 __author__ = "Danny Dasilva"
 __author_email__ = "dannydasilva.solutions@gmail.com"
 __license__ = "MIT"

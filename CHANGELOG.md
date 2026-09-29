@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2026-09-29
+
+### Fixed
+- 3xx responses without a `Location` header no longer collapse to status 0 with all headers dropped; the real status, headers and body are returned for GET and POST whether or not redirect following is enabled (upstream #406).
+- Fingerprint fidelity: `ja4r` profiles now emit ciphers, extensions and `supported_groups` in the browser's captured wire order (restored from the profile's `ja3`), so the emitted JA3 and JA4_r match the profile byte-for-byte instead of JA4_r's sorted order.
+- Chromium-family profiles emit the GREASE placeholders real Chrome sends (cipher, supported version, group, key share and first/last extensions); Firefox stays grease-free and `disableGrease` suppresses all of them.
+- TLS 1.3 `key_share` now offers an X25519MLKEM768 share, fixing handshakes against servers that select the advertised post-quantum group via HelloRetryRequest.
+- `compress_certificate` uses the real uTLS extension so `CompressedCertificate` responses can actually be decoded; Firefox profiles advertise its real zlib/brotli/zstd algorithm list.
+
+### Changed
+- `ja3` is sent to the Go backend alongside `ja4r` (previously suppressed); `ja4r` remains authoritative while `ja3` provides wire-order hints.
+- Removed unused `websockets` and `websocket-client` core dependencies; README now documents installation via the fork's PEP 503 index.
+- CI now runs a strict-server handshake smoke test (Google, Cloudflare, Fastly, AWS) on every push/PR and daily.
+
 ## [0.0.11] - 2026-09-29
 
 ### Fixed
