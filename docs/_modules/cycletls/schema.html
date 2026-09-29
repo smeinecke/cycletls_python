@@ -457,9 +457,11 @@
             <span class="s2">"enableConnectionReuse"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_connection_reuse</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="c1"># Handle TLS fingerprint options: ja4r takes precedence over ja3 when both are set.</span>
+        <span class="c1"># Handle TLS fingerprint options: ja4r takes precedence over ja3 on the</span>
+        <span class="c1"># Go side, but ja3 is still sent alongside it — its cipher/extension</span>
+        <span class="c1"># lists preserve the browser's wire order, which JA4_r loses to sorting.</span>
         <span class="c1"># http2_fingerprint and quic_fingerprint are independent and should not suppress ja3.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja4r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">"ja3"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ja3</span>
 
         <span class="c1"># Add optional fields only if set (minimize conditionals)</span>
