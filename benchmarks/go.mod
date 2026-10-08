@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/Danny-Dasilva/CycleTLS/cycletls v1.0.30
-	github.com/valyala/fasthttp v1.74.0
+	github.com/valyala/fasthttp v1.75.0
 )
 
 require (
@@ -17,8 +17,8 @@ require (
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/pprof v0.0.0-20260604005048-7023385849c0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
-	github.com/klauspost/compress v1.20.0 // indirect
-	github.com/molecule-man/go-brrr v1.0.1 // indirect
+	github.com/klauspost/compress v1.20.1 // indirect
+	github.com/molecule-man/go-brrr v1.1.1 // indirect
 	github.com/onsi/ginkgo/v2 v2.32.0 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
 	github.com/quic-go/quic-go v0.63.0 // indirect
