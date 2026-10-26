@@ -420,6 +420,11 @@
     <span class="c1"># Header options</span>
     <span class="n">header_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">order_headers_as_provided</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Multi-value request headers with exact key casing. Takes precedence</span>
+    <span class="c1"># over `headers` for the same key: {"x-dup": ["one", "two"]} sends two</span>
+    <span class="c1"># header lines verbatim. Values in `headers` still apply for keys not</span>
+    <span class="c1"># listed here.</span>
+    <span class="n">header_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Return detailed string representation of the Request."""</span>
@@ -485,6 +490,13 @@
             <span class="n">result</span><span class="p">[</span><span class="s2">"headerOrder"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_order</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_headers_as_provided</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">"orderHeadersAsProvided"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_headers_as_provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Go decodes map[string][]string - a bare string value would fail</span>
+            <span class="c1"># msgpack decode, so normalize scalars to single-element lists.</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"headerValues"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_values</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 </div>
@@ -523,6 +535,9 @@
     <span class="n">body_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">raw_cookies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cookie</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">final_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Negotiated HTTP protocol version reported by the transport, e.g.</span>
+    <span class="c1"># "HTTP/1.1", "HTTP/2.0". Empty/None when no response was received.</span>
+    <span class="n">proto</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># Cached properties (not part of constructor)</span>
     <span class="n">_headers_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CaseInsensitiveDict</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_cookie_jar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CookieJar</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -923,6 +938,7 @@
         <span class="n">body_bytes</span><span class="o">=</span><span class="n">body_bytes</span><span class="p">,</span>
         <span class="n">raw_cookies</span><span class="o">=</span><span class="n">raw_cookies</span><span class="p">,</span>
         <span class="n">final_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"FinalUrl"</span><span class="p">),</span>
+        <span class="n">proto</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Proto"</span><span class="p">),</span>
     <span class="p">)</span>
 </pre></div>
         </article>

@@ -94,6 +94,7 @@ All request methods (`get`, `post`, etc.) accept these keyword arguments:
 | `disable_redirect` | `bool` | Disable automatic redirects |
 | `header_order` | `list[str]` | Custom header ordering |
 | `order_headers_as_provided` | `bool` | Preserve header insertion order |
+| `header_values` | `dict[str, list[str]]` | Multi-value headers with exact casing |
 | `enable_connection_reuse` | `bool` | Enable connection pooling |
 | `server_name` | `str` | Custom SNI (Server Name Indication) |
 
@@ -124,6 +125,9 @@ response.cookies["session_id"]
 
 # URL after redirects
 response.url
+
+# Negotiated HTTP protocol version
+response.proto         # "HTTP/1.1", "HTTP/2.0", etc.
 
 # Encoding
 response.encoding      # "utf-8"

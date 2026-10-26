@@ -424,11 +424,15 @@ automatically – no setup or teardown required.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
 <td><p>Preserve header insertion order</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enable_connection_reuse</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">header_values</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">list[str]]</span></code></p></td>
+<td><p>Multi-value headers with exact casing</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_connection_reuse</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
 <td><p>Enable connection pooling</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">server_name</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">server_name</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
 <td><p>Custom SNI (Server Name Indication)</p></td>
 </tr>
@@ -461,6 +465,9 @@ automatically – no setup or teardown required.</p>
 
 <span class="c1"># URL after redirects</span>
 <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+
+<span class="c1"># Negotiated HTTP protocol version</span>
+<span class="n">response</span><span class="o">.</span><span class="n">proto</span>         <span class="c1"># "HTTP/1.1", "HTTP/2.0", etc.</span>
 
 <span class="c1"># Encoding</span>
 <span class="n">response</span><span class="o">.</span><span class="n">encoding</span>      <span class="c1"># "utf-8"</span>
