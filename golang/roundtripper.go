@@ -658,32 +658,33 @@ func (rt *roundTripper) CloseIdleConnections(selectedAddr ...string) {
 	rt.Lock()
 	defer rt.Unlock()
 
-	// If we have a specific address to keep, only close other connections
-	if len(selectedAddr) > 0 && selectedAddr[0] != "" {
-		addr := selectedAddr[0]
-		// Keep the connection for the provided address, close others
-		for connAddr, conn := range rt.cachedConnections {
-			if connAddr != addr {
-				if conn != nil {
-					// Ignore errors from closing - connection might already be closed
-					_ = conn.Close()
-				}
-				delete(rt.cachedConnections, connAddr)
-				// Also clean up the transport cache for this address
-				delete(rt.cachedTransports, connAddr)
-			}
+	keep := ""
+	if len(selectedAddr) > 0 {
+		keep = selectedAddr[0]
+	}
+
+	// Let each cached transport drain its own idle connections first - on
+	// HTTP/2 this performs a graceful GOAWAY instead of just cutting the
+	// underlying socket.
+	for trAddr, tr := range rt.cachedTransports {
+		if trAddr == keep {
+			continue
 		}
-	} else {
-		// No address specified, close all connections (original behavior)
-		for addr, conn := range rt.cachedConnections {
-			if conn != nil {
-				// Ignore errors from closing - connection might already be closed
-				_ = conn.Close()
-			}
-			delete(rt.cachedConnections, addr)
-			// Also clean up the transport cache for this address
-			delete(rt.cachedTransports, addr)
+		if idleCloser, ok := tr.(interface{ CloseIdleConnections() }); ok {
+			idleCloser.CloseIdleConnections()
 		}
+		delete(rt.cachedTransports, trAddr)
+	}
+
+	for connAddr, conn := range rt.cachedConnections {
+		if connAddr == keep {
+			continue
+		}
+		if conn != nil {
+			// Ignore errors from closing - connection might already be closed
+			_ = conn.Close()
+		}
+		delete(rt.cachedConnections, connAddr)
 	}
 }
 

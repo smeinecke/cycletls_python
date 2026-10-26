@@ -728,11 +728,18 @@ func dispatcherAsync(res fullRequest, chanWrite *safeChannelWriter) {
 	}
 
 	// Don't close connections when finished - they'll be reused for the same host
-	// Instead, tell the roundtripper to keep this connection but close others
+	// Instead, tell the roundtripper to keep this connection but close others.
+	// A client built outside the pool (connection reuse disabled) is not
+	// shared with any other request, so close all of its connections instead
+	// of keeping this one - otherwise each request strands a socket.
 	defer func() {
 		// Use type assertion to access the roundTripper
 		if transport, ok := res.client.Transport.(*roundTripper); ok {
-			transport.CloseIdleConnections(hostPort)
+			if res.options.Options.EnableConnectionReuse {
+				transport.CloseIdleConnections(hostPort)
+			} else {
+				transport.CloseIdleConnections()
+			}
 		}
 	}()
 
@@ -1770,6 +1777,18 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 	)
 	if err != nil {
 		return Response{}, err
+	}
+
+	if !enableConnectionReuse {
+		// The client was built outside the pool, so no other request shares
+		// it and Do() reads the body to completion before returning. Close
+		// all of its connections on the way out - otherwise every request
+		// strands a socket (and, on HTTP/2, the conn's read/write loops).
+		defer func() {
+			if transport, ok := httpClient.Transport.(*roundTripper); ok {
+				transport.CloseIdleConnections()
+			}
+		}()
 	}
 
 	// Create request using fhttp
