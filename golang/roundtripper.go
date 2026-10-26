@@ -271,8 +271,14 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 	rt.Lock()
 	defer rt.Unlock()
 
-	// Return cached connection if available
+	// Hand a cached connection to the transport exactly once. The map
+	// entry is only a hand-off from the pre-dial below (which must
+	// handshake up front to learn the negotiated protocol) to the
+	// transport's own dial callback. Re-serving it on later redials
+	// hands back the same socket, so once the peer closes it the pooled
+	// client fails with "use of closed network connection" forever.
 	if conn := rt.cachedConnections[addr]; conn != nil {
+		delete(rt.cachedConnections, addr)
 		return conn, nil
 	}
 
@@ -311,22 +317,24 @@ func (rt *roundTripper) dialTLS(ctx context.Context, network, addr string) (net.
 		if err != nil {
 			return nil, err
 		}
-	} else if rt.JA3 != "" {
+	} else {
+		// Fall back to the default Chrome fingerprint when no JA3 was
+		// provided, and run it through the same dispatch as an explicit
+		// JA3 - otherwise the default emitted a TLS 1.2-only ClientHello
+		// (no TLS13AutoRetry upgrade), which anti-bot systems flag.
+		ja3 := rt.JA3
+		if ja3 == "" {
+			ja3 = DefaultChrome_JA3
+		}
 		// Check if we should proactively upgrade TLS 1.2 to TLS 1.3
-		if rt.TLS13AutoRetry && strings.HasPrefix(rt.JA3, "771,") {
+		if rt.TLS13AutoRetry && strings.HasPrefix(ja3, "771,") {
 			// Use TLS 1.3 compatible spec to avoid retry cycle
-			spec, err = StringToTLS13CompatibleSpec(rt.JA3, rt.UserAgent, rt.ForceHTTP1)
+			spec, err = StringToTLS13CompatibleSpec(ja3, rt.UserAgent, rt.ForceHTTP1)
 			proactivelyUpgraded = true
 		} else {
 			// Use original JA3 fingerprint
-			spec, err = StringToSpec(rt.JA3, rt.UserAgent, rt.ForceHTTP1)
+			spec, err = StringToSpec(ja3, rt.UserAgent, rt.ForceHTTP1)
 		}
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		// Default to Chrome fingerprint
-		spec, err = StringToSpec(DefaultChrome_JA3, rt.UserAgent, rt.ForceHTTP1)
 		if err != nil {
 			return nil, err
 		}
@@ -532,12 +540,14 @@ func (rt *roundTripper) retryWithTLS13CompatibleCurves(ctx context.Context, netw
 		}
 	}
 
-	// Cache the successful TLS 1.3 connection
-	rt.cachedConnections[addr] = conn
-
+	// On a redial the existing transport receives this conn from its dial
+	// callback - return it without caching so a dead conn is never
+	// re-served. Otherwise cache it as the same one-time hand-off
+	// dialTLS uses.
 	if transportAlreadyExists {
 		return conn, nil
 	}
+	rt.cachedConnections[addr] = conn
 	return nil, errProtocolNegotiated
 }
 
@@ -624,12 +634,12 @@ func (rt *roundTripper) retryWithOriginalTLS12JA3(ctx context.Context, network, 
 		}
 	}
 
-	// Cache the successful TLS 1.2 fallback connection
-	rt.cachedConnections[addr] = conn
-
+	// Same as the TLS 1.3 retry path: on a redial the conn goes straight
+	// to the existing transport's dial callback and must not be cached.
 	if transportAlreadyExists {
 		return conn, nil
 	}
+	rt.cachedConnections[addr] = conn
 	return nil, errProtocolNegotiated
 }
 
@@ -814,5 +824,8 @@ func (rt *roundTripper) makeHTTP3Request(req *http.Request, conn *HTTP3Connectio
 	}, nil
 }
 
-// Default JA3 fingerprint for Chrome
-const DefaultChrome_JA3 = "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"
+// Default JA3 fingerprint for Chrome (captured Chrome 149 on Linux).
+// Includes ECH-GREASE (65037), ALPS (17613) and an X25519MLKEM768 (4588)
+// key-share group - the previous pre-permutation Chrome hello this
+// replaced is a widely-blocklisted scraper signature.
+const DefaultChrome_JA3 = "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0"

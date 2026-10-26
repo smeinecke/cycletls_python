@@ -154,7 +154,7 @@ class Request:
     protocol: Optional[Protocol] = None
 
     # Connection options
-    user_agent: str = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
+    user_agent: str = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
     proxy: str = ""
     local_address: Optional[str] = None  # Bind outgoing TCP connections to this local IP address
     cookies: Optional[List[Cookie]] = None

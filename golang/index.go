@@ -333,6 +333,12 @@ func processRequest(request cycleTLSRequest) (result fullRequest) {
 		log.Fatal(err)
 	}
 
+	// Per-request cookie jar so redirect hops carry Set-Cookie values
+	// forward - same wiring as CycleTLS.Do for the channel API.
+	if jar, jerr := newRecordingJar(); jerr == nil {
+		client.Jar = jar
+	}
+
 	// Handle both string body and byte body
 	var bodyReader io.Reader
 	if len(request.Options.BodyBytes) > 0 {
@@ -1814,6 +1820,16 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 		return Response{}, err
 	}
 
+	// Attach a request-scoped cookie jar. Without one the client drops
+	// Set-Cookie values from intermediate redirect hops, so multi-hop
+	// cookie flows (bot-check beacons, login redirects) can never
+	// accumulate state. httpClient is a struct copy of the pooled
+	// client, so the jar stays private to this request.
+	jar, _ := newRecordingJar()
+	if jar != nil {
+		httpClient.Jar = jar
+	}
+
 	if !enableConnectionReuse {
 		// The client was built outside the pool, so no other request shares
 		// it and Do() reads the body to completion before returning. Close
@@ -1910,9 +1926,12 @@ func (client CycleTLS) Do(URL string, options Options, Method string) (Response,
 		finalUrl = resp.Request.URL.String()
 	}
 
-	// Convert fhttp cookies to net/http cookies
+	// resp.Cookies() only lists cookies set by the final response. The
+	// request-scoped jar accumulated Set-Cookie values across every
+	// redirect hop, so report the merged set (a browser session jar
+	// holds the same accumulated state).
 	var netCookies []*nhttp.Cookie
-	for _, cookie := range resp.Cookies() {
+	for _, cookie := range mergedResponseCookies(jar, resp) {
 		netCookie := &nhttp.Cookie{
 			Name:       cookie.Name,
 			Value:      cookie.Value,
