@@ -304,8 +304,8 @@ automatically – no setup or teardown required.</p>
 <span class="n">cycletls</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span>
     <span class="n">proxy</span><span class="o">=</span><span class="s2">"socks5://127.0.0.1:9050"</span><span class="p">,</span>
     <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0"</span><span class="p">,</span>
-    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"</span><span class="p">,</span>
+    <span class="n">ja3</span><span class="o">=</span><span class="s2">"771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0"</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="o">=</span><span class="s2">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Read a default back</span>
@@ -414,7 +414,7 @@ automatically – no setup or teardown required.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">disable_redirect</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
-<td><p>Disable automatic redirects</p></td>
+<td><p>Disable automatic redirects (when enabled, cookies set on each hop are carried forward like a browser jar)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">header_order</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span></code></p></td>
@@ -430,7 +430,7 @@ automatically – no setup or teardown required.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_connection_reuse</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
-<td><p>Enable connection pooling</p></td>
+<td><p>Enable connection pooling (pooled connections redial automatically after a peer close)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">server_name</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
@@ -462,6 +462,8 @@ automatically – no setup or teardown required.</p>
 
 <span class="c1"># Cookies</span>
 <span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s2">"session_id"</span><span class="p">]</span>
+<span class="c1"># Note: response.cookies accumulates Set-Cookie values from every</span>
+<span class="c1"># response in a redirect chain, not just the final one.</span>
 
 <span class="c1"># URL after redirects</span>
 <span class="n">response</span><span class="o">.</span><span class="n">url</span>
@@ -552,6 +554,7 @@ authentication:</p>
     <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">"X-Custom"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"value"</span>
 
     <span class="c1"># Login -- response cookies are saved automatically</span>
+    <span class="c1"># (including Set-Cookie headers on intermediate redirect hops)</span>
     <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/login"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"user"</span><span class="p">:</span> <span class="s2">"admin"</span><span class="p">})</span>
 
     <span class="c1"># Subsequent requests include saved cookies and headers</span>
@@ -654,16 +657,15 @@ authentication:</p>
 <section id="built-in-profiles">
 <h3>Built-in Profiles<a class="headerlink" href="#built-in-profiles" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CHROME_120</span><span class="p">,</span>
-    <span class="n">CHROME_121</span><span class="p">,</span>
+    <span class="n">CHROME_156</span><span class="p">,</span>
     <span class="n">CHROME_ANDROID</span><span class="p">,</span>
-    <span class="n">EDGE_120</span><span class="p">,</span>
-    <span class="n">FIREFOX_121</span><span class="p">,</span>
-    <span class="n">SAFARI_17</span><span class="p">,</span>
+    <span class="n">EDGE_156_WIN</span><span class="p">,</span>
+    <span class="n">FIREFOX_157_LINUX</span><span class="p">,</span>
+    <span class="n">SAFARI_27</span><span class="p">,</span>
     <span class="n">SAFARI_IOS</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_156</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -743,8 +745,8 @@ authentication:</p>
 <span class="c1"># Register a custom profile</span>
 <span class="n">registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">my_profile</span><span class="p">)</span>
 
-<span class="c1"># Look up by name</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"chrome_120"</span><span class="p">)</span>
+<span class="c1"># Look up by name (149 captured profiles ship with the package)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">FingerprintRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"chrome_156_0_0_0_linux"</span><span class="p">)</span>
 
 <span class="c1"># List all registered profile names</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">registry</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
@@ -761,7 +763,7 @@ authentication:</p>
 <span class="p">)</span>
 
 <span class="c1"># Load a single profile from a JSON file</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">"profiles/chrome_125.json"</span><span class="p">)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">load_fingerprint_from_file</span><span class="p">(</span><span class="s2">"profiles/chrome_149.json"</span><span class="p">)</span>
 
 <span class="c1"># Load all profiles from a directory (auto-registers them)</span>
 <span class="n">load_fingerprints_from_dir</span><span class="p">(</span><span class="s2">"profiles/"</span><span class="p">)</span>

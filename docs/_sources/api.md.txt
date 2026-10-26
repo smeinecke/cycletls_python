@@ -51,8 +51,8 @@ import cycletls
 cycletls.set_default(
     proxy="socks5://127.0.0.1:9050",
     timeout=10,
-    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
-    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0",
+    user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
 )
 
 # Read a default back
@@ -91,11 +91,11 @@ All request methods (`get`, `post`, etc.) accept these keyword arguments:
 | `force_http1` | `bool` | Force HTTP/1.1 |
 | `force_http3` | `bool` | Force HTTP/3 |
 | `insecure_skip_verify` | `bool` | Skip TLS certificate verification |
-| `disable_redirect` | `bool` | Disable automatic redirects |
+| `disable_redirect` | `bool` | Disable automatic redirects (when enabled, cookies set on each hop are carried forward like a browser jar) |
 | `header_order` | `list[str]` | Custom header ordering |
 | `order_headers_as_provided` | `bool` | Preserve header insertion order |
 | `header_values` | `dict[str, list[str]]` | Multi-value headers with exact casing |
-| `enable_connection_reuse` | `bool` | Enable connection pooling |
+| `enable_connection_reuse` | `bool` | Enable connection pooling (pooled connections redial automatically after a peer close) |
 | `server_name` | `str` | Custom SNI (Server Name Indication) |
 
 ## Response Object
@@ -122,6 +122,8 @@ response.headers.get("content-type")  # same key, case-insensitive
 
 # Cookies
 response.cookies["session_id"]
+# Note: response.cookies accumulates Set-Cookie values from every
+# response in a redirect chain, not just the final one.
 
 # URL after redirects
 response.url
@@ -183,6 +185,7 @@ with Session(base_url="https://api.example.com", auth=("user", "pass")) as s:
     s.headers["X-Custom"] = "value"
 
     # Login -- response cookies are saved automatically
+    # (including Set-Cookie headers on intermediate redirect hops)
     s.post("/login", json={"user": "admin"})
 
     # Subsequent requests include saved cookies and headers
@@ -250,16 +253,15 @@ asyncio.run(main())
 
 ```python
 from cycletls import (
-    CHROME_120,
-    CHROME_121,
+    CHROME_156,
     CHROME_ANDROID,
-    EDGE_120,
-    FIREFOX_121,
-    SAFARI_17,
+    EDGE_156_WIN,
+    FIREFOX_157_LINUX,
+    SAFARI_27,
     SAFARI_IOS,
 )
 
-response = cycletls.get("https://example.com", fingerprint=CHROME_120)
+response = cycletls.get("https://example.com", fingerprint=CHROME_156)
 ```
 
 ### TLSFingerprint
@@ -302,8 +304,8 @@ registry = FingerprintRegistry()
 # Register a custom profile
 registry.register(my_profile)
 
-# Look up by name
-profile = FingerprintRegistry.get("chrome_120")
+# Look up by name (149 captured profiles ship with the package)
+profile = FingerprintRegistry.get("chrome_156_0_0_0_linux")
 
 # List all registered profile names
 for name in registry.all():
@@ -320,7 +322,7 @@ from cycletls import (
 )
 
 # Load a single profile from a JSON file
-profile = load_fingerprint_from_file("profiles/chrome_125.json")
+profile = load_fingerprint_from_file("profiles/chrome_149.json")
 
 # Load all profiles from a directory (auto-registers them)
 load_fingerprints_from_dir("profiles/")

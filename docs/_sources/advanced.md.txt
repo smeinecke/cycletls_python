@@ -78,15 +78,15 @@ JA3 captures the TLS Client Hello parameters as a single string. Format:
 TLSVersion,Ciphers,Extensions,EllipticCurves,EllipticCurvePointFormats
 ```
 
-Example with a Chrome 83 JA3:
+Example with a Chrome 149 JA3:
 
 ```python
 import cycletls
 
 response = cycletls.get(
     "https://ja3er.com/json",
-    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
-    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36",
+    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0",
+    user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
 )
 print(response.json()["ja3_hash"])
 ```
@@ -185,7 +185,7 @@ Store profiles as JSON and load them at startup:
 
 ```json
 {
-    "name": "chrome_125",
+    "name": "chrome_149",
     "ja3": "771,4865-4866-4867-49195...",
     "user_agent": "Mozilla/5.0 ...",
     "http2_fingerprint": "1:65536;2:0;4:6291456..."
@@ -196,7 +196,7 @@ Store profiles as JSON and load them at startup:
 from cycletls import load_fingerprint_from_file, load_fingerprints_from_dir
 
 # Single file
-profile = load_fingerprint_from_file("profiles/chrome_125.json")
+profile = load_fingerprint_from_file("profiles/chrome_149.json")
 
 # Entire directory (auto-registers all found profiles)
 load_fingerprints_from_dir("profiles/")
@@ -430,3 +430,29 @@ response = cycletls.get(
     cookies={"session_id": "abc123", "pref": "dark_mode"},
 )
 ```
+
+### Cookies Across Redirects
+
+When redirects are followed automatically (the default), CycleTLS runs a
+request-scoped RFC 6265 cookie jar like a browser: `Set-Cookie` headers on
+each redirect hop are stored and sent to later hops, and `response.cookies`
+reports the merged set accumulated across the whole chain - not just the
+final response. `Session.cookies` persists those cookies for subsequent
+requests, so multi-step flows that validate through a redirect beacon work
+without manual cookie plumbing.
+
+## Connection Pooling
+
+`enable_connection_reuse=True` (the default) pools TLS connections per
+target. Pooled connections are self-healing: if the server closes a pooled
+connection (`Connection: close` or an idle timeout), the next request
+transparently redials instead of failing with `use of closed network
+connection`. With `enable_connection_reuse=False`, each request opens a
+fresh connection and closes it when the response completes.
+
+## Response Size Limit
+
+Compressed response bodies (`gzip`, `deflate`, `br`) are capped at 64 MiB
+after decompression. Requests that would exceed the limit fail with a
+`decompressed body exceeds size limit` error instead of unbounded memory
+growth.

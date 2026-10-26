@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `header_values` request parameter accepts `dict[str, list[str]]` so duplicate header names and exact casing (e.g. lowercase HTTP/2-style names) can be sent - `headers`/`Header.Set()` previously canonicalized casing and made duplicate names impossible (upstream #423).
+- `response.proto` exposes the negotiated HTTP protocol (`"HTTP/1.1"`, `"HTTP/2.0"`) on every response (upstream #379).
+- Every built-in fingerprint profile now has a package-level constant. The registry ships 149 captured profiles (Chrome 113-156, Chromium, Firefox 121-157, Edge/MS Edge 120-156, Safari 17-27.2, plus Brave, Opera, Samsung and Android/iOS variants); all are importable as constants like `CHROME_156`, `CHROME_156_WIN`, `FIREFOX_157_LINUX`, `SAFARI_27`, `EDGE_156_WIN`, or usable by name via `fingerprint="chrome_156_0_0_0_linux"`.
+
+### Fixed
+- Default ClientHello is no longer a stale pre-permutation Chrome hello: `DefaultChrome_JA3` is now a captured Chrome 149 fingerprint (ECH-GREASE, ALPS, X25519MLKEM768 key share), and requests that don't pass `ja3`/`ja4r` go through the same TLS-1.3-compatible spec dispatch as explicit JA3s instead of emitting a TLS 1.2-only hello. Fixes bot-check hard-rejects (e.g. Yahoo Search's `_bv` challenge returning HTTP 500 instead of the 307 cookie flow).
+- Default `user_agent` is now a matching Chrome 149 Linux UA (was Firefox/87.0), so GREASE placeholders and HTTP/2 pseudo-header order are consistent with the default hello.
+- A pooled client (`enable_connection_reuse=true`, the default) no longer dies permanently after the peer closes its connection. The cached connection is now a one-time hand-off to the transport's dial callback instead of being re-served on every redial; a peer close previously poisoned the pool entry with `use of closed network connection` on every subsequent request.
+- `Set-Cookie` values on intermediate redirect hops are no longer dropped. Each request now carries a request-scoped RFC 6265 cookie jar (the pooled `fhttp.Client` is a struct copy, so no cookies leak between requests), redirect hops receive accumulated cookies like a browser session jar, and `response.cookies` reports the merged set from the whole chain - `Session.cookies` therefore persists cookies set mid-redirect (e.g. Yahoo's `YBV` upgrade).
+- Non-pooled clients (`enable_connection_reuse=false`) now close the connections they open instead of leaking a socket per request into `cachedConnections` (upstream #426).
+- The HTTP/1 wire no longer leaks the `PHeader-Order` pseudo-header; header ordering is applied at request construction instead.
+- Decompression bombs are rejected: gzip/deflate/brotli bodies are capped at 64 MiB decompressed and `github.com/andybalholm/brotli` is bumped to v1.2.7 to fix a block-switch panic a hostile server could trigger via `Content-Encoding: br` or `compress_certificate` (CVE-2026-111497 / HTTP2Shell, upstream #430).
+
 ## [0.0.12] - 2026-09-29
 
 ### Fixed

@@ -424,7 +424,10 @@ is all you need – no Go toolchain required at runtime.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Session</span></code> extends <code class="docutils literal notranslate"><span class="pre">CycleTLS</span></code> with a cookie jar, persistent headers, optional
-<code class="docutils literal notranslate"><span class="pre">base_url</span></code>, and <code class="docutils literal notranslate"><span class="pre">auth=(user,</span> <span class="pre">password)</span></code> for HTTP Basic authentication.</p>
+<code class="docutils literal notranslate"><span class="pre">base_url</span></code>, and <code class="docutils literal notranslate"><span class="pre">auth=(user,</span> <span class="pre">password)</span></code> for HTTP Basic authentication. The
+jar also captures <code class="docutils literal notranslate"><span class="pre">Set-Cookie</span></code> headers from intermediate redirect hops, and
+<code class="docutils literal notranslate"><span class="pre">response.cookies</span></code> reports the accumulated cookie set across a redirect
+chain.</p>
 </section>
 </section>
 <section id="key-concepts">
@@ -434,19 +437,23 @@ is all you need – no Go toolchain required at runtime.</p>
 <p>A TLS fingerprint is a compact description of the parameters a client
 advertises during the TLS handshake. CycleTLS lets you supply these as
 strings (<code class="docutils literal notranslate"><span class="pre">ja3=</span></code>, <code class="docutils literal notranslate"><span class="pre">ja4r=</span></code>, <code class="docutils literal notranslate"><span class="pre">http2_fingerprint=</span></code>) or as a named
-<code class="docutils literal notranslate"><span class="pre">TLSFingerprint</span></code> profile object (<code class="docutils literal notranslate"><span class="pre">fingerprint=CHROME_120</span></code>).</p>
+<code class="docutils literal notranslate"><span class="pre">TLSFingerprint</span></code> profile object (<code class="docutils literal notranslate"><span class="pre">fingerprint=CHROME_149</span></code>).</p>
 </section>
 <section id="browser-fingerprint-profiles">
 <h3>Browser Fingerprint Profiles<a class="headerlink" href="#browser-fingerprint-profiles" title="Link to this heading">¶</a></h3>
 <p>Built-in profiles bundle JA3, HTTP/2 fingerprint, and User-Agent into a
 single reusable object:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CHROME_120</span><span class="p">,</span> <span class="n">FIREFOX_121</span><span class="p">,</span> <span class="n">SAFARI_17</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cycletls</span><span class="w"> </span><span class="kn">import</span> <span class="n">CHROME_156</span><span class="p">,</span> <span class="n">FIREFOX_157_LINUX</span><span class="p">,</span> <span class="n">SAFARI_27</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_120</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">cycletls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://example.com"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="o">=</span><span class="n">CHROME_156</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Available built-in profiles: <code class="docutils literal notranslate"><span class="pre">CHROME_120</span></code>, <code class="docutils literal notranslate"><span class="pre">CHROME_121</span></code>, <code class="docutils literal notranslate"><span class="pre">FIREFOX_121</span></code>,
-<code class="docutils literal notranslate"><span class="pre">SAFARI_17</span></code>, <code class="docutils literal notranslate"><span class="pre">EDGE_120</span></code>, <code class="docutils literal notranslate"><span class="pre">CHROME_ANDROID</span></code>, <code class="docutils literal notranslate"><span class="pre">SAFARI_IOS</span></code>.</p>
+<p>Every captured profile has a constant: <code class="docutils literal notranslate"><span class="pre">CHROME_156</span></code>, <code class="docutils literal notranslate"><span class="pre">CHROME_156_WIN</span></code>,
+<code class="docutils literal notranslate"><span class="pre">FIREFOX_157_LINUX</span></code>, <code class="docutils literal notranslate"><span class="pre">SAFARI_27</span></code>, <code class="docutils literal notranslate"><span class="pre">EDGE_156_WIN</span></code>, <code class="docutils literal notranslate"><span class="pre">CHROME_ANDROID</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SAFARI_IOS</span></code>, and so on for all 149 registered profiles (Chrome 113-156,
+Firefox 121-157, Edge 120-156, Safari 17-27.2, Chromium, Brave, Opera,
+Samsung, Android/iOS). You can also pass a registry name directly:
+<code class="docutils literal notranslate"><span class="pre">fingerprint=&quot;chrome_156_0_0_0_linux&quot;</span></code>.</p>
 <p>You can also create custom profiles, load them from JSON files, or register
 them in a directory. See the <a class="reference internal" href="advanced.html"><span class="doc">Advanced Usage</span></a> guide for details.</p>
 </section>

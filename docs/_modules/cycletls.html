@@ -312,17 +312,13 @@
     <span class="n">TLSError</span><span class="p">,</span>
     <span class="n">TooManyRedirects</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.fingerprints</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa: F403</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.fingerprints</span><span class="w"> </span><span class="kn">import</span> <span class="n">_PROFILE_EXPORT_NAMES</span> <span class="k">as</span> <span class="n">_PROFILE_CONSTANT_NAMES</span>
 
-<span class="c1"># Import fingerprint plugin system</span>
+<span class="c1"># Import fingerprint plugin system (classes/helpers + all profile constants</span>
+<span class="c1"># such as CHROME_156, FIREFOX_157_LINUX, SAFARI_27_2_MAC)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.fingerprints</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CHROME_120</span><span class="p">,</span>
-    <span class="n">CHROME_121</span><span class="p">,</span>
-    <span class="n">CHROME_ANDROID</span><span class="p">,</span>
     <span class="n">DEFAULT_FINGERPRINTS_FILE</span><span class="p">,</span>
-    <span class="n">EDGE_120</span><span class="p">,</span>
-    <span class="n">FIREFOX_121</span><span class="p">,</span>
-    <span class="n">SAFARI_17</span><span class="p">,</span>
-    <span class="n">SAFARI_IOS</span><span class="p">,</span>
     <span class="n">BrowserFamily</span><span class="p">,</span>
     <span class="n">FingerprintRegistry</span><span class="p">,</span>
     <span class="n">Platform</span><span class="p">,</span>
@@ -699,13 +695,7 @@
     <span class="s2">"TLSFingerprint"</span><span class="p">,</span>
     <span class="s2">"FingerprintRegistry"</span><span class="p">,</span>
     <span class="s2">"DEFAULT_FINGERPRINTS_FILE"</span><span class="p">,</span>
-    <span class="s2">"CHROME_120"</span><span class="p">,</span>
-    <span class="s2">"CHROME_121"</span><span class="p">,</span>
-    <span class="s2">"FIREFOX_121"</span><span class="p">,</span>
-    <span class="s2">"SAFARI_17"</span><span class="p">,</span>
-    <span class="s2">"EDGE_120"</span><span class="p">,</span>
-    <span class="s2">"CHROME_ANDROID"</span><span class="p">,</span>
-    <span class="s2">"SAFARI_IOS"</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">_PROFILE_CONSTANT_NAMES</span><span class="p">,</span>
     <span class="s2">"load_trackme_fingerprints"</span><span class="p">,</span>
     <span class="s2">"load_fingerprints_from_dir"</span><span class="p">,</span>
     <span class="s2">"load_fingerprints_from_env"</span><span class="p">,</span>
