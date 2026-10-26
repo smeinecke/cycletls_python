@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.13] - 2026-10-26
+
 ### Added
 - `header_values` request parameter accepts `dict[str, list[str]]` so duplicate header names and exact casing (e.g. lowercase HTTP/2-style names) can be sent - `headers`/`Header.Set()` previously canonicalized casing and made duplicate names impossible (upstream #423).
 - `response.proto` exposes the negotiated HTTP protocol (`"HTTP/1.1"`, `"HTTP/2.0"`) on every response (upstream #379).
@@ -20,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Non-pooled clients (`enable_connection_reuse=false`) now close the connections they open instead of leaking a socket per request into `cachedConnections` (upstream #426).
 - The HTTP/1 wire no longer leaks the `PHeader-Order` pseudo-header; header ordering is applied at request construction instead.
 - Decompression bombs are rejected: gzip/deflate/brotli bodies are capped at 64 MiB decompressed and `github.com/andybalholm/brotli` is bumped to v1.2.7 to fix a block-switch panic a hostile server could trigger via `Content-Encoding: br` or `compress_certificate` (CVE-2026-111497 / HTTP2Shell, upstream #430).
+- JA3 profiles advertising `X25519MLKEM768` in `supported_groups` now send a matching key share (GREASE, X25519MLKEM768, X25519, like real Chrome). Previously only the `ja4r` path offered the share, so MLKEM-capable servers answered with a HelloRetryRequest for group 4588 that uTLS could not fulfill ("tls: CurvePreferences includes unsupported curve").
+- Brotli responses with trailing bytes (e.g. Brave Search framing) decompress again: the andybalholm/brotli v1.2.x decoder keeps output in its internal ring buffer on the "excessive input" error, so the reader is now drained until the buffered output is fully emitted instead of falling back to the raw compressed body.
 
 ## [0.0.12] - 2026-09-29
 
