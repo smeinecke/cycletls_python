@@ -192,7 +192,9 @@ func StringToSpec(ja3 string, userAgent string, forceHTTP1 bool) (*utls.ClientHe
 		}
 		if keyShareExt, ok := extMap["51"]; ok {
 			if keyShare, ok := keyShareExt.(*utls.KeyShareExtension); ok {
-				keyShare.KeyShares = append([]utls.KeyShare{{Group: utls.CurveID(utls.GREASE_PLACEHOLDER), Data: []byte{0}}}, keyShare.KeyShares...)
+				if len(keyShare.KeyShares) == 0 || keyShare.KeyShares[0].Group != utls.CurveID(utls.GREASE_PLACEHOLDER) {
+					keyShare.KeyShares = append([]utls.KeyShare{{Group: utls.CurveID(utls.GREASE_PLACEHOLDER), Data: []byte{0}}}, keyShare.KeyShares...)
+				}
 			}
 		}
 	} else {
@@ -230,6 +232,29 @@ func StringToSpec(ja3 string, userAgent string, forceHTTP1 bool) (*utls.ClientHe
 	}
 
 	extMap["10"] = &utls.SupportedCurvesExtension{Curves: targetCurves}
+
+	// If supported_groups advertises X25519MLKEM768, send a key share for it
+	// like real browsers do (GREASE, X25519MLKEM768, X25519). Without the share
+	// a server that prefers the hybrid group answers with HelloRetryRequest,
+	// and uTLS cannot generate an MLKEM share on the fly
+	// ("tls: CurvePreferences includes unsupported curve").
+	if keyShareExt, ok := extMap["51"].(*utls.KeyShareExtension); ok {
+		for _, c := range targetCurves {
+			if c == utls.X25519MLKEM768 {
+				shares := keyShareExt.KeyShares
+				i := 0
+				for i < len(shares) && shares[i].Group == utls.CurveID(utls.GREASE_PLACEHOLDER) {
+					i++
+				}
+				newShares := make([]utls.KeyShare, 0, len(shares)+1)
+				newShares = append(newShares, shares[:i]...)
+				newShares = append(newShares, utls.KeyShare{Group: utls.X25519MLKEM768})
+				newShares = append(newShares, shares[i:]...)
+				keyShareExt.KeyShares = newShares
+				break
+			}
+		}
+	}
 
 	// parse point formats
 	var targetPointFormats []byte

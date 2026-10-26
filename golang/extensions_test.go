@@ -79,6 +79,57 @@ func TestSupportedGroupsNoDuplicates(t *testing.T) {
 	}
 }
 
+// TestJA3KeyShareIncludesMLKEM is a regression test for
+// "tls: CurvePreferences includes unsupported curve" handshakes: a JA3 that
+// advertises X25519MLKEM768 (4588) in supported_groups must also send a key
+// share for it. Otherwise servers that prefer the hybrid group answer with
+// HelloRetryRequest for 4588, which uTLS cannot generate on the fly.
+func TestJA3KeyShareIncludesMLKEM(t *testing.T) {
+	ja3 := "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0"
+	chromeUA := "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+
+	spec, err := StringToTLS13CompatibleSpec(ja3, chromeUA, false)
+	if err != nil {
+		t.Fatalf("StringToTLS13CompatibleSpec failed: %v", err)
+	}
+
+	var ks *utls.KeyShareExtension
+	for _, e := range spec.Extensions {
+		if k, ok := e.(*utls.KeyShareExtension); ok {
+			ks = k
+		}
+	}
+	if ks == nil {
+		t.Fatal("spec has no KeyShareExtension")
+	}
+
+	var groups []utls.CurveID
+	for _, s := range ks.KeyShares {
+		groups = append(groups, s.Group)
+	}
+	found := false
+	for _, g := range groups {
+		if g == utls.X25519MLKEM768 {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("key_share has no X25519MLKEM768 share, groups: %v", groups)
+	}
+
+	// Real Chrome sends GREASE, X25519MLKEM768, X25519 - no duplicate GREASE
+	// and no P256 share.
+	greaseCount := 0
+	for _, g := range groups {
+		if g == utls.CurveID(utls.GREASE_PLACEHOLDER) {
+			greaseCount++
+		}
+	}
+	if greaseCount != 1 {
+		t.Fatalf("expected exactly one GREASE key share, groups: %v", groups)
+	}
+}
+
 // TestJA4RSpecMarshalsCleanly builds a full ClientHelloSpec from a JA4_r
 // string that includes fe0d and marshals every extension, asserting the
 // extension list is internally consistent (no zero-length garbage that
