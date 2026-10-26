@@ -204,8 +204,19 @@ func (rt *roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 		}
 	}
 
+	transport := rt.cachedTransports[addr]
+	if _, isH2 := transport.(*http2.Transport); !isH2 && req.Header[http.PHeaderOrderKey] != nil {
+		// PHeaderOrderKey is an h2 pseudo-header ordering hint. fhttp's
+		// h1 writer only excludes it when HeaderOrderKey is also set, so
+		// a bare PHeaderOrderKey would hit the wire verbatim - a header
+		// real browsers never send. Clone so the caller's Header map
+		// keeps the key for a later h2 hop (redirects re-clone headers).
+		req = req.Clone(req.Context())
+		delete(req.Header, http.PHeaderOrderKey)
+	}
+
 	// Perform the request
-	return rt.cachedTransports[addr].RoundTrip(req)
+	return transport.RoundTrip(req)
 }
 
 func (rt *roundTripper) getTransport(req *http.Request, addr string) error {

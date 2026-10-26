@@ -102,6 +102,11 @@ func TestHTTP1RequestHeadersOnWire(t *testing.T) {
 	if got := countHeaderLines(rawRequest, "x-MULTI-value:"); got != 2 {
 		t.Fatalf("x-MULTI-value line count = %d, want 2\nraw request:\n%s", got, rawRequest)
 	}
+	// Do() sets PHeaderOrderKey for the h2 pseudo-header order, but on an
+	// h1 transport fhttp writes a bare PHeaderOrderKey verbatim - it must
+	// never reach the wire.
+	assertNoHeaderLine(t, rawRequest, "PHeader-Order:")
+	assertNoHeaderLine(t, rawRequest, "Header-Order:")
 }
 
 func captureRawHTTP1Request(t *testing.T, options Options) string {
