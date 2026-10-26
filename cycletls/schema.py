@@ -165,6 +165,11 @@ class Request:
     # Header options
     header_order: Optional[List[str]] = None
     order_headers_as_provided: Optional[bool] = None
+    # Multi-value request headers with exact key casing. Takes precedence
+    # over `headers` for the same key: {"x-dup": ["one", "two"]} sends two
+    # header lines verbatim. Values in `headers` still apply for keys not
+    # listed here.
+    header_values: Optional[dict[str, List[str]]] = None
 
     def __repr__(self) -> str:
         """Return detailed string representation of the Request."""
@@ -228,6 +233,13 @@ class Request:
             result["headerOrder"] = self.header_order
         if self.order_headers_as_provided is not None:
             result["orderHeadersAsProvided"] = self.order_headers_as_provided
+        if self.header_values is not None:
+            # Go decodes map[string][]string - a bare string value would fail
+            # msgpack decode, so normalize scalars to single-element lists.
+            result["headerValues"] = {
+                k: list(v) if isinstance(v, (list, tuple)) else [v]
+                for k, v in self.header_values.items()
+            }
 
         return result
 
@@ -262,6 +274,9 @@ class Response:
     body_bytes: Optional[bytes] = None
     raw_cookies: Optional[List[Cookie]] = None
     final_url: Optional[str] = None
+    # Negotiated HTTP protocol version reported by the transport, e.g.
+    # "HTTP/1.1", "HTTP/2.0". Empty/None when no response was received.
+    proto: Optional[str] = None
     # Cached properties (not part of constructor)
     _headers_dict: Optional[CaseInsensitiveDict] = field(default=None, init=False, repr=False)
     _cookie_jar: Optional[CookieJar] = field(default=None, init=False, repr=False)
@@ -655,4 +670,5 @@ def _dict_to_response(data: dict, raise_on_error: bool = True) -> Response:
         body_bytes=body_bytes,
         raw_cookies=raw_cookies,
         final_url=data.get("FinalUrl"),
+        proto=data.get("Proto"),
     )

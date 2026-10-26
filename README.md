@@ -522,6 +522,7 @@ response3 = cycletls.get('https://api.example.com/endpoint3', timeout=30)
 | `disable_redirect` | bool | Disable automatic redirects |
 | `header_order` | list | Custom header ordering |
 | `order_headers_as_provided` | bool | Use provided header order |
+| `header_values` | dict | Multi-value headers with exact casing, `{"x-dup": ["a", "b"]}` |
 
 ### Read Configuration
 
@@ -1589,6 +1590,7 @@ asyncio.run(main())
 | **Header Options** | | |
 | `header_order` | `list[str]` | Custom header ordering |
 | `order_headers_as_provided` | `bool` | Use provided header order |
+| `header_values` | `dict[str, list[str]]` | Multi-value headers with exact casing |
 
 ### Response Object
 

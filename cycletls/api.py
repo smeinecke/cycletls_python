@@ -810,6 +810,12 @@ class CycleTLS:
 
         if body_bytes_value is not None:
             options["bodyBytes"] = body_bytes_value
+        if req.get("header_values") is not None:
+            # Go decodes map[string][]string - normalize scalars to lists.
+            options["headerValues"] = {
+                k: list(v) if isinstance(v, (list, tuple)) else [v]
+                for k, v in req["header_values"].items()
+            }
 
         return {
             "requestId": request_id,
