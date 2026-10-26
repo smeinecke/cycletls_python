@@ -145,18 +145,38 @@ func enflateData(data []byte) (resData []byte, err error) {
 }
 func unBrotliData(data []byte) (resData []byte, err error) {
 	br := brotli.NewReader(bytes.NewReader(data))
-	respBody, err := readLimited(br)
-	if err != nil {
-		// The andybalholm/brotli decoder is strict: if bytes remain after the
-		// Brotli stream ends, it returns "brotli: excessive input". Some servers
-		// append a trailing newline or other framing bytes after an otherwise
-		// valid stream. In that case the decompressed bytes are usable, so
-		// return them instead of failing.
-		if err.Error() == "brotli: excessive input" && len(respBody) > 0 {
-			return respBody, nil
+	// The andybalholm/brotli decoder is strict: if bytes remain after the
+	// Brotli stream ends, it returns "brotli: excessive input". Some servers
+	// append a trailing newline or other framing bytes after an otherwise
+	// valid stream. Since v1.2.x the decoder keeps decoded bytes in an
+	// internal ring buffer on that error and returns n=0, so io.ReadAll
+	// yields nothing. Keep reading until the buffer is drained (n==0),
+	// treating the error as end of stream.
+	var out bytes.Buffer
+	buf := make([]byte, 32*1024)
+	for {
+		n, rerr := br.Read(buf)
+		out.Write(buf[:n])
+		if int64(out.Len()) > maxDecompressedBody {
+			return nil, errors.New("decompressed body exceeds size limit")
 		}
+		if rerr == nil {
+			continue
+		}
+		if rerr == io.EOF {
+			return out.Bytes(), nil
+		}
+		if rerr.Error() == "brotli: excessive input" {
+			if n == 0 {
+				if out.Len() > 0 {
+					return out.Bytes(), nil
+				}
+				return nil, rerr
+			}
+			continue
+		}
+		return out.Bytes(), rerr
 	}
-	return respBody, err
 }
 
 // StringToSpec creates a ClientHelloSpec based on a JA3 string

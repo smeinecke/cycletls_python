@@ -62,6 +62,29 @@ func TestUnBrotliDataInvalidDoesNotPanic(t *testing.T) {
 	}
 }
 
+// TestUnBrotliDataTrailingBytes is the andybalholm/brotli v1.2.x regression:
+// on "brotli: excessive input" the decoder keeps decoded output in its
+// internal ring buffer and returns n=0, so a plain io.ReadAll yields
+// nothing. unBrotliData must keep reading until the buffer drains.
+func TestUnBrotliDataTrailingBytes(t *testing.T) {
+	var buf bytes.Buffer
+	w := brotli.NewWriter(&buf)
+	if _, err := w.Write([]byte("hello cycle")); err != nil {
+		t.Fatal(err)
+	}
+	if err := w.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := unBrotliData(append(buf.Bytes(), 0x0a))
+	if err != nil {
+		t.Fatalf("trailing-byte brotli: %v", err)
+	}
+	if string(got) != "hello cycle" {
+		t.Fatalf("got %q", got)
+	}
+}
+
 // TestGzipBombRejected caps decompression at maxDecompressedBody so a small
 // malicious stream cannot inflate without bound.
 func TestGzipBombRejected(t *testing.T) {
