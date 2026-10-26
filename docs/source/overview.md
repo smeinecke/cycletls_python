@@ -102,7 +102,10 @@ with Session(base_url="https://api.example.com") as s:
 ```
 
 `Session` extends `CycleTLS` with a cookie jar, persistent headers, optional
-`base_url`, and `auth=(user, password)` for HTTP Basic authentication.
+`base_url`, and `auth=(user, password)` for HTTP Basic authentication. The
+jar also captures `Set-Cookie` headers from intermediate redirect hops, and
+`response.cookies` reports the accumulated cookie set across a redirect
+chain.
 
 ## Key Concepts
 
@@ -111,7 +114,7 @@ with Session(base_url="https://api.example.com") as s:
 A TLS fingerprint is a compact description of the parameters a client
 advertises during the TLS handshake. CycleTLS lets you supply these as
 strings (`ja3=`, `ja4r=`, `http2_fingerprint=`) or as a named
-`TLSFingerprint` profile object (`fingerprint=CHROME_120`).
+`TLSFingerprint` profile object (`fingerprint=CHROME_149`).
 
 ### Browser Fingerprint Profiles
 
@@ -119,13 +122,17 @@ Built-in profiles bundle JA3, HTTP/2 fingerprint, and User-Agent into a
 single reusable object:
 
 ```python
-from cycletls import CHROME_120, FIREFOX_121, SAFARI_17
+from cycletls import CHROME_156, FIREFOX_157_LINUX, SAFARI_27
 
-response = cycletls.get("https://example.com", fingerprint=CHROME_120)
+response = cycletls.get("https://example.com", fingerprint=CHROME_156)
 ```
 
-Available built-in profiles: `CHROME_120`, `CHROME_121`, `FIREFOX_121`,
-`SAFARI_17`, `EDGE_120`, `CHROME_ANDROID`, `SAFARI_IOS`.
+Every captured profile has a constant: `CHROME_156`, `CHROME_156_WIN`,
+`FIREFOX_157_LINUX`, `SAFARI_27`, `EDGE_156_WIN`, `CHROME_ANDROID`,
+`SAFARI_IOS`, and so on for all 149 registered profiles (Chrome 113-156,
+Firefox 121-157, Edge 120-156, Safari 17-27.2, Chromium, Brave, Opera,
+Samsung, Android/iOS). You can also pass a registry name directly:
+`fingerprint="chrome_156_0_0_0_linux"`.
 
 You can also create custom profiles, load them from JSON files, or register
 them in a directory. See the {doc}`advanced` guide for details.

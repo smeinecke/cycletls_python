@@ -104,8 +104,8 @@ import cycletls
 cycletls.set_default(
     proxy='socks5://127.0.0.1:9050',
     timeout=10,
-    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0',
-    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0',
+    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36'
 )
 
 # All future requests use these defaults
@@ -143,11 +143,11 @@ with Session() as session:
 ```python
 import cycletls
 
-# Chrome 83 fingerprint - Simple API
+# Chrome 149 fingerprint - Simple API
 response = cycletls.get(
     'https://ja3er.com/json',
-    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0',
-    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0',
+    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36'
 )
 print(f"JA3 Hash: {response.json()['ja3_hash']}")
 ```
@@ -354,7 +354,7 @@ async def main():
     response = await cycletls.aget(
         'https://ja3er.com/json',
         ja3=chrome_ja3,
-        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36'
     )
 
     # Concurrent requests with fingerprints
@@ -487,8 +487,8 @@ import cycletls
 cycletls.set_default(
     proxy='socks5://127.0.0.1:9050',
     timeout=10,
-    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0',
-    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    ja3='771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0',
+    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
     enable_connection_reuse=True,
     insecure_skip_verify=False
 )
@@ -583,22 +583,22 @@ import cycletls
 
 # Browser fingerprints
 BROWSER_FINGERPRINTS = {
-    'chrome_83': {
-        'ja3': '771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0',
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36'
+    'chrome_149': {
+        'ja3': '771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0',
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36'
     },
-    'firefox_87': {
-        'ja3': '771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0',
-        'user_agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0'
+    'firefox_150': {
+        'ja3': '771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-34-18-51-43-13-45-28-27-65037,4588-29-23-24-25-256-257,0',
+        'user_agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0'
     },
-    'safari_15': {
-        'ja3': '771,4865-4867-4866-49196-49195-52393-49200-49199-52392-49162-49161-49172-49171-157-156-53-47-49160-49170-10,0-23-65281-10-11-35-16-5-13-45-28-21,29-23-24-25,0',
-        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15'
+    'safari_26': {
+        'ja3': '771,4865-4866-4867-49196-49195-52393-49200-49199-52392-49162-49161-49172-49171-157-156-53-47-49160-49170-10,0-23-65281-10-11-16-5-13-18-51-45-43-27-21,29-23-24-25,0',
+        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15'
     }
 }
 
-# Use Chrome 83 fingerprint
-chrome_fp = BROWSER_FINGERPRINTS['chrome_83']
+# Use Chrome 149 fingerprint
+chrome_fp = BROWSER_FINGERPRINTS['chrome_149']
 response = cycletls.get(
     'https://ja3er.com/json',
     ja3=chrome_fp['ja3'],
@@ -615,7 +615,7 @@ print(f"User Agent: {data['User-Agent']}")
 from cycletls import CycleTLS
 
 with CycleTLS() as client:
-    chrome_fp = BROWSER_FINGERPRINTS['chrome_83']
+    chrome_fp = BROWSER_FINGERPRINTS['chrome_149']
     response = client.get(
         'https://ja3er.com/json',
         ja3=chrome_fp['ja3'],
@@ -715,26 +715,30 @@ Use built-in browser profiles instead of manually configuring JA3/JA4/HTTP2 stri
 
 ```python
 import cycletls
-from cycletls import CHROME_120, FIREFOX_121, SAFARI_17, FingerprintRegistry
+from cycletls import (
+    CHROME_149, CHROME_156, CHROME_156_WIN, CHROME_ANDROID,
+    EDGE_156_WIN, FIREFOX_157_LINUX, SAFARI_27, SAFARI_IOS,
+    FingerprintRegistry,
+)
 
 # Use built-in browser profile
 response = cycletls.get(
     'https://ja3er.com/json',
-    fingerprint=CHROME_120  # Pre-configured Chrome 120 fingerprint
+    fingerprint=CHROME_149  # Pre-configured Chrome 149 fingerprint
 )
 
-# Available built-in profiles
+# A few of the built-in profiles
 profiles = [
-    CHROME_120,      # Chrome 120 on Windows
-    CHROME_121,      # Chrome 121 on Windows
-    FIREFOX_121,     # Firefox 121 on Linux
-    SAFARI_17,       # Safari 17 on macOS
-    EDGE_120,        # Edge 120 on Windows
-    CHROME_ANDROID,  # Chrome on Android
-    SAFARI_IOS,      # Safari on iOS
+    CHROME_156,        # Chrome 156 on Linux (latest capture)
+    CHROME_156_WIN,    # Chrome 156 on Windows
+    FIREFOX_157_LINUX, # Firefox 157 on Linux
+    SAFARI_27,         # Safari 27.2 on macOS
+    EDGE_156_WIN,      # Edge 156 on Windows
+    CHROME_ANDROID,    # Chrome on Android
+    SAFARI_IOS,        # Safari on iOS
 ]
 
-# List all registered profiles
+# List all registered profiles (149 captured profiles ship with the package)
 registry = FingerprintRegistry()
 for name in registry.all():
     print(f"Available: {name}")
@@ -767,7 +771,7 @@ response = cycletls.get('https://example.com', fingerprint=my_profile)
 from cycletls import load_fingerprints_from_dir, load_fingerprint_from_file
 
 # Load single profile from JSON/YAML
-profile = load_fingerprint_from_file('profiles/chrome_125.json')
+profile = load_fingerprint_from_file('profiles/chrome_149.json')
 
 # Load all profiles from a directory
 load_fingerprints_from_dir('profiles/')  # Auto-registers all found profiles
@@ -788,7 +792,7 @@ with CycleTLS() as client:
     response = client.get(
         'https://cloudflare-quic.com/',
         force_http3=True,
-        user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
         insecure_skip_verify=True
     )
 
@@ -931,6 +935,11 @@ with CycleTLS() as client:
     for name in response.cookies:
         print(f"{name}: {response.cookies[name]}")
 ```
+
+`response.cookies` accumulates `Set-Cookie` values from **every** response in a
+redirect chain, not just the final one - matching what a browser's cookie jar
+holds after the redirects complete. Intermediate-hop cookies are also sent to
+later hops automatically.
 
 ### Binary Data
 
@@ -1128,7 +1137,8 @@ with Session() as session:
 **Session Features:**
 - Persistent cookies across requests
 - Persistent headers across requests
-- Automatic cookie updates from responses
+- Automatic cookie updates from responses - including `Set-Cookie` headers on
+  intermediate redirect hops
 - Request-specific cookies/headers override session values
 - Context manager support for automatic cleanup
 
@@ -1167,6 +1177,16 @@ with CycleTLS() as client:
         enable_connection_reuse=True
     )
 ```
+
+Pooled connections are self-healing: if the server closes a pooled connection
+(e.g. `Connection: close` or an idle timeout), the next request on that client
+transparently redials instead of failing with `use of closed network
+connection`. With `enable_connection_reuse=False` each request opens a fresh
+connection and closes it when the response completes.
+
+Compressed response bodies (`gzip`, `deflate`, `br`) are capped at 64 MiB after
+decompression; larger responses fail with `decompressed body exceeds size
+limit` instead of unbounded memory growth.
 
 #### Custom SNI (Domain Fronting)
 
@@ -1214,6 +1234,11 @@ with CycleTLS() as client:
     print(response.status_code)  # 302
     print(response.headers['Location'])
 ```
+
+When redirects are followed automatically, cookies set by each hop are carried
+to the next hop like a browser session jar - multi-step flows that validate via
+a redirect beacon work without manual cookie plumbing. The accumulated cookies
+are exposed in `response.cookies`.
 
 #### Error Handling
 
@@ -1610,7 +1635,8 @@ class Response:
     text: str             # Response body as string
     content: bytes        # Response body as bytes
     headers: CaseInsensitiveDict  # Response headers
-    cookies: CookieJar    # Response cookies
+    cookies: CookieJar    # Response cookies (accumulated across redirect hops)
+    proto: str            # Negotiated HTTP protocol ("HTTP/1.1", "HTTP/2.0")
 
     # Methods
     def json(self) -> dict:
@@ -2018,15 +2044,15 @@ The `scripts/build.sh` script builds binaries for:
 from cycletls import CycleTLS
 
 FINGERPRINTS = {
-    'chrome_120': '771,4865-4866-4867...',
-    'firefox_115': '771,4865-4867-4866...',
-    'safari_17': '771,4865-4867-4866...'
+    'chrome_149': '771,4865-4866-4867...',
+    'firefox_150': '771,4865-4867-4866...',
+    'safari_26': '771,4865-4867-4866...'
 }
 
 with CycleTLS() as client:
     response = client.get(
         'https://ja3er.com/json',
-        ja3=FINGERPRINTS['chrome_120']
+        ja3=FINGERPRINTS['chrome_149']
     )
 ```
 </details>

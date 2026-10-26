@@ -60,8 +60,8 @@ import cycletls
 
 response = cycletls.get(
     "https://tlsfingerprint.com/api/all",
-    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0",
-    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36",
+    ja3="771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,65037-5-65281-16-45-10-13-0-18-23-35-43-11-27-51-17613,4588-29-23-24,0",
+    user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
 )
 print(response.json()["tls"]["ja3_hash"])
 ```
@@ -70,9 +70,9 @@ print(response.json()["tls"]["ja3_hash"])
 
 ```python
 import cycletls
-from cycletls import CHROME_120
+from cycletls import CHROME_149
 
-response = cycletls.get("https://example.com", fingerprint=CHROME_120)
+response = cycletls.get("https://example.com", fingerprint=CHROME_149)
 print(response.status_code)
 ```
 
