@@ -62,17 +62,13 @@ from .exceptions import (
     TLSError,
     TooManyRedirects,
 )
+from .fingerprints import *  # noqa: F403
+from .fingerprints import _PROFILE_EXPORT_NAMES as _PROFILE_CONSTANT_NAMES
 
-# Import fingerprint plugin system
+# Import fingerprint plugin system (classes/helpers + all profile constants
+# such as CHROME_156, FIREFOX_157_LINUX, SAFARI_27_2_MAC)
 from .fingerprints import (
-    CHROME_120,
-    CHROME_121,
-    CHROME_ANDROID,
     DEFAULT_FINGERPRINTS_FILE,
-    EDGE_120,
-    FIREFOX_121,
-    SAFARI_17,
-    SAFARI_IOS,
     BrowserFamily,
     FingerprintRegistry,
     Platform,
@@ -401,13 +397,7 @@ __all__ = [
     "TLSFingerprint",
     "FingerprintRegistry",
     "DEFAULT_FINGERPRINTS_FILE",
-    "CHROME_120",
-    "CHROME_121",
-    "FIREFOX_121",
-    "SAFARI_17",
-    "EDGE_120",
-    "CHROME_ANDROID",
-    "SAFARI_IOS",
+    *_PROFILE_CONSTANT_NAMES,
     "load_trackme_fingerprints",
     "load_fingerprints_from_dir",
     "load_fingerprints_from_env",
