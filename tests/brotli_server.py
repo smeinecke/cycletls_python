@@ -12,6 +12,11 @@ import tempfile
 import brotli
 
 class Handler(http.server.BaseHTTPRequestHandler):
+    # Serve HTTP/1.1 with Content-Length so clients do not rely on
+    # connection close to delimit the body: newer OpenSSL versions treat
+    # the missing TLS close_notify on a raw socket shutdown as an error.
+    protocol_version = "HTTP/1.1"
+
     def do_GET(self):
         if self.path == "/brotli":
             # Build response matching httpbin /brotli format
@@ -28,6 +33,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Encoding", "br")
+            self.send_header("Content-Length", str(len(compressed)))
             self.end_headers()
             self.wfile.write(compressed)
         else:
