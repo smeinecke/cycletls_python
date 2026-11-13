@@ -37,7 +37,7 @@ keywords = [
     # Ecosystem compatibility
     "requests", "akamai-fingerprint", "cloudflare-bypass",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
     "cffi>=1.15.0",
     "orjson>=3.9.0",
